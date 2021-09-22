@@ -1,6 +1,6 @@
 pages:
   script:
-    - ls relatorio_de_qualidade/build
+    - mv relatorio_de_qualidade/build public/
   artifacts:     
     paths:       
-      - relatorio_de_qualidade/build
+      - public

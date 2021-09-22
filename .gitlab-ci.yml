@@ -1,0 +1,6 @@
+pages:
+  script:
+    - ls relatorio_de_qualidade/build
+  artifacts:     
+    paths:       
+      - relatorio_de_qualidade/build

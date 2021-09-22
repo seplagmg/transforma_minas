@@ -10,8 +10,10 @@ programação utilizaremos como base o que a literura de engenharia de software 
 aborda sobre estes assuntos.
 
 A partir desta fotografia iremos propor um possível roadmap para o
-projeto. Este roadmap terá como foco a melhoria da manutenibilidade da plataforma para que orgãos
-publicos, empresas e desenvolvedores consigam contribuir com o projeto.
+projeto. Este terá como foco a melhoria da manutenibilidade da plataforma para que orgãos
+publicos, empresas e desenvolvedores consigam contribuir enviando _merge requests_ para novas
+funcionalidades e _patches_ de
+correção.
 
 
 ## Ferramentas

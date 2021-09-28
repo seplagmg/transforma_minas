@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt-br" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introdução &mdash; Transforma Minas 1.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analise do tamanho da plataforma com a ferramenta phploc" href="analise_tamanho.html" />
+    <link rel="prev" title="Relatório de qualidade de código da plataforma Transforma Minas" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Transforma Minas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Conteúdos:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introdução</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ferramentas-utilizadas-nas-analises">Ferramentas utilizadas nas análises</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="analise_tamanho.html">Analise do tamanho da plataforma com a ferramenta phploc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_qualidade.html">Analise da qualidade com a ferramenta PHP Insight</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Transforma Minas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Introdução</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/relatorio/inicio.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="introducao">
+<h1>Introdução<a class="headerlink" href="#introducao" title="Permalink to this headline">¶</a></h1>
+<p>Este relatório tem como objetivo construir uma fotografia da qualidade do código da plataforma
+Transforma Minas. Esta fotografia irá focar em métricas de qualidade, arquitetura de software e
+boas práticas de programação.</p>
+<p>Para a coleta de métricas de qualidade, utilizaremos um conjunto de ferramentas
+disponíveis no universo PHP. Para uma visão da arquitetura de software e boas práticas de
+programação utilizaremos como base o que a literura de engenharia de software e ciência da computação
+aborda sobre estes assuntos.</p>
+<p>A partir desta fotografia iremos propor um possível roadmap para o
+projeto. Este terá como foco a melhoria da manutenibilidade da plataforma para que orgãos
+publicos, empresas e desenvolvedores consigam contribuir enviando <em>merge requests</em> para novas
+funcionalidades e <em>patches</em> de
+correção.</p>
+<div class="section" id="ferramentas-utilizadas-nas-analises">
+<h2>Ferramentas utilizadas nas análises<a class="headerlink" href="#ferramentas-utilizadas-nas-analises" title="Permalink to this headline">¶</a></h2>
+<p>As seguintes ferramentas serão utilizadas para analisar o código da plataforma:</p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Ferramenta</p></th>
+<th class="head"><p>Descrição</p></th>
+<th class="head"><p>Tipo</p></th>
+<th class="head"><p>Link</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PHP-CS-Fixer</p></td>
+<td><p>Ferramenta que formata o código seguindo diversas convensões para PHP</p></td>
+<td><p><em>Estilo de código</em></p></td>
+<td><p><a class="reference external" href="https://github.com/FriendsOfPHP/PHP-CS-Fixer">https://github.com/FriendsOfPHP/PHP-CS-Fixer</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>PhpLoc</p></td>
+<td><p>Ferramenta para medir o tamanho e analisar a estrutura de projetos php</p></td>
+<td><p>Metricas de tamanho</p></td>
+<td><p><a class="reference external" href="https://github.com/sebastianbergmann/phploc">https://github.com/sebastianbergmann/phploc</a></p></td>
+</tr>
+<tr class="row-even"><td><p>PHP Insight</p></td>
+<td><p>Ferramenta para coletar metricas de qualidade como complexidade ciclomatica e arquitetura</p></td>
+<td><p>Metricas de qualidade</p></td>
+<td><p><a class="reference external" href="https://github.com/nunomaduro/phpinsights">https://github.com/nunomaduro/phpinsights</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Relatório de qualidade de código da plataforma Transforma Minas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="analise_tamanho.html" class="btn btn-neutral float-right" title="Analise do tamanho da plataforma com a ferramenta phploc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Carlos de Araújo Silva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

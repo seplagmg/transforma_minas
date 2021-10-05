@@ -1,0 +1,117 @@
+phpcpd 6.0.3 by Sebastian Bergmann.
+
+Found 36 clones with 2032 duplicated lines in 7 files:
+
+  - /transforma-minas/application/views/avaliacoes.php:1056-1260 (204 lines)
+    /transforma-minas/application/views/avaliacoes.php:1265-1469
+
+  - /transforma-minas/application/views/avaliacoes.php:5889-6079 (190 lines)
+    /transforma-minas/application/views/avaliacoes.php:6102-6292
+
+  - /transforma-minas/application/views/avaliacoes.php:385-570 (185 lines)
+    /transforma-minas/application/views/avaliacoes.php:1059-1244
+
+  - /transforma-minas/application/views/avaliacoes.php:203-371 (168 lines)
+    /transforma-minas/application/views/avaliacoes.php:4936-5104
+
+  - /transforma-minas/application/views/relatorios.php:1081-1213 (132 lines)
+    /transforma-minas/application/views/relatorios.php:1351-1483
+
+  - /transforma-minas/application/views/relatorios.php:835-923 (88 lines)
+    /transforma-minas/application/views/relatorios.php:2517-2605
+
+  - /transforma-minas/application/views/avaliacoes.php:817-896 (79 lines)
+    /transforma-minas/application/views/avaliacoes.php:2455-2534
+
+  - /transforma-minas/application/views/relatorios.php:733-805 (72 lines)
+    /transforma-minas/application/views/relatorios.php:2415-2487
+
+  - /transforma-minas/application/views/avaliacoes.php:372-435 (63 lines)
+    /transforma-minas/application/views/avaliacoes.php:5104-5167
+
+  - /transforma-minas/application/views/avaliacoes.php:5919-5981 (62 lines)
+    /transforma-minas/application/views/vagas.php:1362-1424
+
+  - /transforma-minas/application/views/avaliacoes.php:926-986 (60 lines)
+    /transforma-minas/application/views/avaliacoes.php:2589-2649
+
+  - /transforma-minas/application/views/dossie.php:164-223 (59 lines)
+    /transforma-minas/application/views/dossie.php:230-289
+
+  - /transforma-minas/application/views/avaliacoes.php:441-500 (59 lines)
+    /transforma-minas/application/views/avaliacoes.php:5171-5230
+
+  - /transforma-minas/application/views/avaliacoes.php:580-638 (58 lines)
+    /transforma-minas/application/views/avaliacoes.php:1472-1530
+
+  - /transforma-minas/application/views/avaliacoes.php:4935-4988 (53 lines)
+    /transforma-minas/application/views/avaliacoes.php:5924-5977
+
+  - /transforma-minas/application/views/avaliacoes.php:691-739 (48 lines)
+    /transforma-minas/application/views/avaliacoes.php:1585-1633
+
+  - /transforma-minas/application/views/dossie.php:447-493 (46 lines)
+    /transforma-minas/application/views/dossie.php:519-565
+
+  - /transforma-minas/application/views/avaliacoes.php:411-449 (38 lines)
+    /transforma-minas/application/views/avaliacoes.php:2811-2849
+
+  - /transforma-minas/application/views/gruposvagas.php:800-831 (31 lines)
+    /transforma-minas/application/views/gruposvagas.php:926-957
+
+  - /transforma-minas/application/views/gruposvagas.php:407-437 (30 lines)
+    /transforma-minas/application/views/gruposvagas.php:666-696
+
+  - /transforma-minas/application/views/avaliacoes.php:591-619 (28 lines)
+    /transforma-minas/application/views/avaliacoes.php:5290-5318
+
+  - /transforma-minas/application/views/relatorios.php:812-839 (27 lines)
+    /transforma-minas/application/views/relatorios.php:1620-1647
+
+  - /transforma-minas/application/views/dossie.php:176-201 (25 lines)
+    /transforma-minas/application/views/dossie.php:458-483
+
+  - /transforma-minas/application/views/relatorios.php:812-836 (24 lines)
+    /transforma-minas/application/views/relatorios.php:2494-2518
+
+  - /transforma-minas/application/views/base.php:599-622 (23 lines)
+    /transforma-minas/application/views/candidaturas.php:860-883
+
+  - /transforma-minas/application/views/base.php:783-804 (21 lines)
+    /transforma-minas/application/views/candidaturas.php:1060-1081
+
+  - /transforma-minas/application/views/base.php:571-590 (19 lines)
+    /transforma-minas/application/views/candidaturas.php:817-836
+
+  - /transforma-minas/application/views/dossie.php:139-157 (18 lines)
+    /transforma-minas/application/views/dossie.php:597-615
+
+  - /transforma-minas/application/views/base.php:468-484 (16 lines)
+    /transforma-minas/application/views/candidaturas.php:706-722
+
+  - /transforma-minas/application/views/dossie.php:144-159 (15 lines)
+    /transforma-minas/application/views/dossie.php:495-510
+    /transforma-minas/application/views/dossie.php:571-586
+
+  - /transforma-minas/application/views/base.php:498-512 (14 lines)
+    /transforma-minas/application/views/candidaturas.php:736-750
+
+  - /transforma-minas/application/views/base.php:521-535 (14 lines)
+    /transforma-minas/application/views/candidaturas.php:759-773
+
+  - /transforma-minas/application/views/dossie.php:41-55 (14 lines)
+    /transforma-minas/application/views/dossie.php:92-106
+
+  - /transforma-minas/application/views/base.php:545-558 (13 lines)
+    /transforma-minas/application/views/candidaturas.php:782-795
+
+  - /transforma-minas/application/views/base.php:758-769 (11 lines)
+    /transforma-minas/application/views/candidaturas.php:1025-1036
+
+  - /transforma-minas/application/views/relatorios.php:877-887 (10 lines)
+    /transforma-minas/application/views/relatorios.php:1146-1156
+
+8.32% duplicated lines out of 24424 total lines of code.
+Average size of duplication is 56 lines, largest clone has 204 of lines
+
+Time: 00:00.163, Memory: 28.50 MB

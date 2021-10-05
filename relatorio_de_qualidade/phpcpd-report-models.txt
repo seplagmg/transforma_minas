@@ -1,0 +1,17 @@
+phpcpd 6.0.3 by Sebastian Bergmann.
+
+Found 3 clones with 64 duplicated lines in 1 files:
+
+  - /transforma-minas/application/models/Candidaturas_model.php:873-895 (22 lines)
+    /transforma-minas/application/models/Candidaturas_model.php:899-921
+
+  - /transforma-minas/application/models/Candidaturas_model.php:1030-1051 (21 lines)
+    /transforma-minas/application/models/Candidaturas_model.php:1083-1104
+
+  - /transforma-minas/application/models/Candidaturas_model.php:1059-1080 (21 lines)
+    /transforma-minas/application/models/Candidaturas_model.php:1097-1118
+
+2.55% duplicated lines out of 2511 total lines of code.
+Average size of duplication is 21 lines, largest clone has 22 of lines
+
+Time: 00:00.029, Memory: 10.00 MB

@@ -1,0 +1,136 @@
+phpcpd 6.0.3 by Sebastian Bergmann.
+
+Found 41 clones with 1771 duplicated lines in 6 files:
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1634-1775 (141 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1860-2001
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1676-1790 (114 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:2600-2714
+
+  - /transforma-minas/application/controllers/Relatorios.php:481-573 (92 lines)
+    /transforma-minas/application/controllers/Relatorios.php:895-987
+    /transforma-minas/application/controllers/Relatorios.php:1102-1194
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1676-1764 (88 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:2953-3041
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1681-1751 (70 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:3458-3528
+
+  - /transforma-minas/application/controllers/Relatorios.php:501-569 (68 lines)
+    /transforma-minas/application/controllers/Relatorios.php:2160-2228
+
+  - /transforma-minas/application/controllers/Candidaturas.php:523-585 (62 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:932-994
+
+  - /transforma-minas/application/controllers/Candidaturas.php:213-264 (51 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1263-1314
+
+  - /transforma-minas/application/controllers/Relatorios.php:501-546 (45 lines)
+    /transforma-minas/application/controllers/Relatorios.php:709-754
+
+  - /transforma-minas/application/controllers/Candidatos.php:570-614 (44 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:845-889
+
+  - /transforma-minas/application/controllers/Candidaturas.php:164-207 (43 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1164-1207
+
+  - /transforma-minas/application/controllers/Relatorios.php:125-168 (43 lines)
+    /transforma-minas/application/controllers/Relatorios.php:278-321
+
+  - /transforma-minas/application/controllers/Candidaturas.php:163-205 (42 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:216-258
+
+  - /transforma-minas/application/controllers/Candidaturas.php:314-353 (39 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1729-1768
+
+  - /transforma-minas/application/controllers/Candidaturas.php:472-511 (39 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1068-1107
+
+  - /transforma-minas/application/controllers/Candidatos.php:1046-1083 (37 lines)
+    /transforma-minas/application/controllers/Usuarios.php:204-241
+
+  - /transforma-minas/application/controllers/Relatorios.php:388-423 (35 lines)
+    /transforma-minas/application/controllers/Relatorios.php:608-643
+    /transforma-minas/application/controllers/Relatorios.php:814-849
+    /transforma-minas/application/controllers/Relatorios.php:1021-1056
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1647-1679 (32 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:2569-2601
+
+  - /transforma-minas/application/controllers/Candidaturas.php:376-408 (32 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1503-1535
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1604-1634 (30 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1830-1860
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1776-1805 (29 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:2818-2847
+
+  - /transforma-minas/application/controllers/Candidaturas.php:2567-2595 (28 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:2923-2951
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1775-1801 (26 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:2001-2027
+
+  - /transforma-minas/application/controllers/Candidaturas.php:102-128 (26 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1035-1061
+
+  - /transforma-minas/application/controllers/Relatorios.php:445-470 (25 lines)
+    /transforma-minas/application/controllers/Relatorios.php:858-883
+    /transforma-minas/application/controllers/Relatorios.php:1065-1090
+
+  - /transforma-minas/application/controllers/Relatorios.php:652-677 (25 lines)
+    /transforma-minas/application/controllers/Relatorios.php:2096-2121
+
+  - /transforma-minas/application/controllers/Relatorios.php:39-62 (23 lines)
+    /transforma-minas/application/controllers/Relatorios.php:194-217
+
+  - /transforma-minas/application/controllers/Relatorios.php:100-123 (23 lines)
+    /transforma-minas/application/controllers/Relatorios.php:255-278
+
+  - /transforma-minas/application/controllers/Candidaturas.php:303-324 (21 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1408-1429
+
+  - /transforma-minas/application/controllers/Relatorios.php:481-501 (20 lines)
+    /transforma-minas/application/controllers/Relatorios.php:689-709
+
+  - /transforma-minas/application/controllers/Candidaturas.php:379-398 (19 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:1541-1560
+
+  - /transforma-minas/application/controllers/Relatorios.php:584-603 (19 lines)
+    /transforma-minas/application/controllers/Relatorios.php:2017-2036
+
+  - /transforma-minas/application/controllers/Candidaturas.php:1776-1795 (19 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:3063-3082
+
+  - /transforma-minas/application/controllers/Candidatos.php:538-556 (18 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:812-830
+
+  - /transforma-minas/application/controllers/Relatorios.php:584-602 (18 lines)
+    /transforma-minas/application/controllers/Relatorios.php:791-809
+    /transforma-minas/application/controllers/Relatorios.php:998-1016
+
+  - /transforma-minas/application/controllers/Questoes.php:67-83 (16 lines)
+    /transforma-minas/application/controllers/Questoes.php:150-166
+
+  - /transforma-minas/application/controllers/Candidatos.php:1178-1193 (15 lines)
+    /transforma-minas/application/controllers/Usuarios.php:335-350
+
+  - /transforma-minas/application/controllers/Vagas.php:1094-1108 (14 lines)
+    /transforma-minas/application/controllers/Vagas.php:1261-1275
+
+  - /transforma-minas/application/controllers/Relatorios.php:447-460 (13 lines)
+    /transforma-minas/application/controllers/Relatorios.php:654-667
+
+  - /transforma-minas/application/controllers/Candidatos.php:418-429 (11 lines)
+    /transforma-minas/application/controllers/Candidaturas.php:616-627
+
+  - /transforma-minas/application/controllers/Candidatos.php:73-84 (11 lines)
+    /transforma-minas/application/controllers/Candidatos.php:718-729
+
+15.57% duplicated lines out of 11372 total lines of code.
+Average size of duplication is 43 lines, largest clone has 141 of lines
+
+Time: 00:00.125, Memory: 26.50 MB

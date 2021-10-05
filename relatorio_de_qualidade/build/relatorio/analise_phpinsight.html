@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt-br" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analise da qualidade com a ferramenta PHP Insight &mdash; Transforma Minas 1.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Transforma Minas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Conteúdos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Introdução</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Transforma Minas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Analise da qualidade com a ferramenta PHP Insight</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/relatorio/analise_phpinsight.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="analise-da-qualidade-com-a-ferramenta-php-insight">
+<h1>Analise da qualidade com a ferramenta PHP Insight<a class="headerlink" href="#analise-da-qualidade-com-a-ferramenta-php-insight" title="Permalink to this headline">¶</a></h1>
+<p>Utilizaremos a ferramenta PHP Insight para coletar métricas e medidas relacionadas á qualidade do
+código da plataforma. Iremos analisar a métrica de complexidade ciclomatica, mal cheiro de código, arquitetura e estilo de programação em PHP. Iremos focar em arquivos que pertencem ao
+domínio da aplicação e excluiremos diretórios que pertençam ao Codeigniter ou a bibliotecas de
+terceiros.</p>
+<p>Iremos avaliar as métricas dos principais diretórios: <code class="docutils literal notranslate"><span class="pre">application/controllers</span></code>, <code class="docutils literal notranslate"><span class="pre">application/models/</span></code>,
+<code class="docutils literal notranslate"><span class="pre">application/helpers/</span></code> e <code class="docutils literal notranslate"><span class="pre">application/views/</span></code>. São eles que de fato implementam o domínio da aplicação.
+Faremos então uma análise <strong>top-down</strong>, ou seja, avaliaremos as métricas
+de forma geral e depois avaliaremos os diretórios individualmente.  A ferramenta atribui uma
+pontuação de 0 a 100 para cada uma das métricas
+(código, complexidade, arquitetura e estilo). Para cada métrica uma série de atributos são
+analisados e são eles quem compõe a nota final dada pela ferramenta. Iremos interpretar os
+percentuais que a ferramenta atribuiu para cada uma das métricas e tentar justificar, com exemplos
+no código, as razões para cada percentual.</p>
+<div class="section" id="visao-geral">
+<h2>Visão geral<a class="headerlink" href="#visao-geral" title="Permalink to this headline">¶</a></h2>
+<p>Para coletar as métricas, executamos o seguinte comando:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendor/bin/phpinsights analyse application/controllers application/models/ application/helpers/ application/views/
+</pre></div>
+</div>
+<p>e obtivemos o seguinte resultado:</p>
+<p><img alt="relatorio" src="../_images/phpinsight.png" /></p>
+<p>Todos as métricas coletadas nessa etapa ficaram a baixo de 80, que é o valor considerado como bom
+pela ferramenta.
+Para a métrica de código foi atribuido <strong>61</strong> pontos (de 0 a 100). Nessa métrica, são
+identificadas más práticas de programação em php como:
+variáveis sem uso, métodos sem retorno, estruturas de controle (if/else) mal utilizadas,
+escopo de funções (public/private) incorretas entre outros.</p>
+<p>A Complexidade média do transforma está em <strong>0</strong>, ou seja, o uso de estruturas condicionais ao longo
+do código não poderia ser pior, segundo os dados coletados pela ferramenta. Um dos resultados
+da ferramenta diz o seguinte:</p>
+<p><img alt="relatorio" src="../_images/phpinsight-complexity.png" /></p>
+<p>Ou seja, existem classes no código do transforma com complexidade altissima, o que impacta
+diretamente na manutenibilidade e estabilidade do código.</p>
+<p>A arquitetura média está em 64 pontos. Aqui são analisados praticas como: tamanho das classes, número de
+métodos por classe, gestão de dependencias, tamanho das funções entre outros. Também bem abaixo de
+80. O estilo médio do código está em 55.4 pontos. O código apresenta má formatação e está fora do padrão
+utilizado pela comunidade PHP.</p>
+<p>Na visão geral do código, utilizando como insumo os resultados obtidos com a ferramenta, o
+Transforma Minas apresenta uma série de pontos que precisam ser melhorados, principalmente no que
+se refere à complexidade ciclomática. Agora iremos avaliar individualmente os principais diretórios
+da aplicação.</p>
+</div>
+<div class="section" id="application-controllers">
+<h2>application/controllers<a class="headerlink" href="#application-controllers" title="Permalink to this headline">¶</a></h2>
+<p>Para coletar as métricas, executamos o seguinte comando:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendor/bin/phpinsights analyse application/controllers/
+</pre></div>
+</div>
+<p>e obtivemos o seguinte resultado:
+<img alt="relatorio" src="../_images/phpinsight-controllers.png" /></p>
+</div>
+<div class="section" id="application-models">
+<h2>application/models<a class="headerlink" href="#application-models" title="Permalink to this headline">¶</a></h2>
+<p>Para coletar as métricas, executamos o seguinte comando:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendor/bin/phpinsights analyse application/models/
+</pre></div>
+</div>
+<p>e obtivemos o seguinte resultado:</p>
+<p><img alt="relatorio" src="../_images/phpinsight-models.png" /></p>
+</div>
+<div class="section" id="application-helpers">
+<h2>application/helpers<a class="headerlink" href="#application-helpers" title="Permalink to this headline">¶</a></h2>
+<p>Para coletar as métricas, executamos o seguinte comando:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendor/bin/phpinsights analyse application/helpers/
+</pre></div>
+</div>
+<p>e obtivemos o seguinte resultado:</p>
+<p><img alt="relatorio" src="../_images/phpinsight-helpers.png" /></p>
+</div>
+<div class="section" id="application-views">
+<h2>application/views<a class="headerlink" href="#application-views" title="Permalink to this headline">¶</a></h2>
+<p>Para coletar as métricas, executamos o seguinte comando:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendor/bin/phpinsights analyse application/views/
+</pre></div>
+</div>
+<p>e obtivemos o seguinte resultado:</p>
+<p><img alt="relatorio" src="../_images/phpinsight-views.png" /></p>
+<p>A ferramenta PHP Insight calcula a complexidade ciclomatica <a class="reference external" href="https://phpinsights.com/insights/complexity.html">apenas</a> para classes.
+A implementação da camada de visualização(view) do transforma não utiliza classes, o que pode levar ao falso
+positivo que esses arquivos possuem baixa complexidade ciclomatica. Avaliaremos com mais
+profundidade a camada de visualização com as métricas coletadas com a ferramenta <a class="reference external" href="https://github.com/bmitch/churn-php">churn-php</a>.
+Ignorando a métrica de complexidade, o estilo do código nas views segue ruim, e irá precisar de
+melhorias e refatorações.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Carlos de Araújo Silva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

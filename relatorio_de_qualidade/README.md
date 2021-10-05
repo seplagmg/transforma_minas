@@ -2,3 +2,4 @@
 
 	pip install -U sphinx
 	pip install --upgrade myst-parser
+	make build

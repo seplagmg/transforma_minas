@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt-br" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; Transforma Minas 1.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Transforma Minas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Conteúdos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Analise do tamanho da plataforma com a ferramenta phploc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Analise da qualidade com a ferramenta PHP Insight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpchurn.html">Analise da qualidade com a ferramenta Churn PHP</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Transforma Minas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/relatorio/analise_codeigniter.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <p>As views de modo geral possuem pouco código php, o que explica o valor 100 para arquitetura e
+complexidade. O maior problema desses arquivos é a estrutura do html que é gerada do lado do
+servidor. A implementação abusa do uso da função <code class="docutils literal notranslate"><span class="pre">echo</span></code>, utilizando-a inclusive em diversos pontos
+desnecessários. Um exemplo retirado do arquivo <code class="docutils literal notranslate"><span class="pre">application/views/home.php</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo &quot;
+            &lt;section class=\&quot;login-block\&quot;&gt;
+                &lt;!-- Container-fluid starts --&gt;
+                &lt;div class=\&quot;container\&quot;&gt;
+                    &lt;div class=\&quot;row\&quot;&gt;
+                        &lt;div class=\&quot;col-sm-12 d-flex justify-content-center\&quot;&gt;
+                            &lt;!-- Authentication card start --&gt;&quot;;
+$attributes = array(&#39;class&#39; =&gt; &#39;md-float-material form-material&#39;);
+echo form_open($url, $attributes);
+echo &quot;
+                                    &lt;div class=\&quot;text-center\&quot;&gt;
+                                        &lt;img src=\&quot;&quot;.base_url(&#39;images/logo.png&#39;).&quot;\&quot; alt=\&quot;&quot;.$this -&gt; config -&gt; item(&#39;nome&#39;).&quot;\&quot; /&gt;
+                                    &lt;/div&gt;
+                                    &lt;!--&lt;div class=\&quot;row\&quot; style=\&quot;margin-top: 10px\&quot;&gt;&quot;;
+/*if($menu2 == &#39;index&#39;){
+        echo &quot;
+                                        &lt;div class=\&quot;alert background-danger\&quot; style=\&quot;width:90%;margin:0 auto;\&quot;&gt;
+                                               Prezado(a) candidato(a) dos editais de &lt;strong&gt;Processo Seletivo Simplificado Pró-Brumadinho&lt;/strong&gt;, estes processos foram migrados para o sistema Processos Seletivos MG: &lt;a href=\&quot;http://www.processoseletivo.mg.gov.br/\&quot;&gt;&lt;strong&gt;http://www.processoseletivo.mg.gov.br/&lt;/strong&gt;&lt;/a&gt;
+                                        &lt;/div&gt;
+                                        &quot;;
+}*/
+echo &quot;
+                                    &lt;/div&gt;--&gt;
+                                    &lt;div class=\&quot;card col-lg-8 mt-3 p-3 mx-auto\&quot;&gt;
+                                        &lt;div class=\&quot;card-block\&quot;&gt;
+                                            &lt;div class=\&quot;row m-b-20\&quot;&gt;
+                                                &lt;div class=\&quot;col-md-12\&quot;&gt;
+                                                    &lt;h3 class=\&quot;h3 text-gray-800 mb-4 text-center\&quot;&gt;{$nome_pagina}&lt;/h3&gt;
+                                                &lt;/div&gt;
+                                            &lt;/div&gt;&quot;;
+</pre></div>
+</div>
+<p>A função <code class="docutils literal notranslate"><span class="pre">echo</span></code> serve para incluir no html variaveis que são definidas em outras partes do código
+(como nas controllers). Mas note que boa parte do código acima não precisaria ser gerado via <code class="docutils literal notranslate"><span class="pre">echo</span></code>,
+poderia ser apenas um html simples, utilizando a função php apenas quando necessário. O uso
+indiscrimnado da função <code class="docutils literal notranslate"><span class="pre">echo</span></code> dificulta a manutenibilidade e o estilo do frontend da aplicação.</p>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Carlos de Araújo Silva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

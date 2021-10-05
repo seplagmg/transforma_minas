@@ -11,6 +11,7 @@ Relatório de qualidade de código da plataforma Transforma Minas
    :caption: Conteúdos:
 
    relatorio/inicio
-   relatorio/analise_tamanho
-   relatorio/analise_qualidade
+   relatorio/analise_phploc
+   relatorio/analise_phpinsight
+   relatorio/analise_phpchurn
 

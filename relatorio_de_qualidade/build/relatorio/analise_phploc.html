@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt-br" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analise do tamanho da plataforma com a ferramenta phploc &mdash; Transforma Minas 1.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Transforma Minas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Conteúdos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Introdução</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Transforma Minas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Analise do tamanho da plataforma com a ferramenta phploc</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/relatorio/analise_phploc.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="analise-do-tamanho-da-plataforma-com-a-ferramenta-phploc">
+<h1>Analise do tamanho da plataforma com a ferramenta phploc<a class="headerlink" href="#analise-do-tamanho-da-plataforma-com-a-ferramenta-phploc" title="Permalink to this headline">¶</a></h1>
+<p>Vamos iniciar nossa análise pela ferrramenta <strong>PhpLoc</strong>. Segundo estudos na área de metricas de
+qualidade, medir o tamanho das classes e módulos segue sendo umas das melhores métricas de
+qualidade e por isso iremos começar com esta medição.</p>
+<p>Considerando que a ferramenta foi instalada dentro de uma pasta <code class="docutils literal notranslate"><span class="pre">tools</span></code>,
+podemos realizar a analise do código:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>	php tools/phploc.phar application/
+</pre></div>
+</div>
+<p>A ferramenta coleta diversas medidas do código, mas iremos focar nossa análise nas métricas <strong>Lines
+of Code</strong>(LOC), <strong>Comment Lines of Code</strong>(CLOC), <strong>Non-comment Lines of Code</strong> (NCLOC), <strong>Logical
+Lines of Code</strong> (LLOC). Além dessas também avaliaremos as métricas relacionadas às classes e
+funções da plataforma. O relatório completo gerado pela ferramenta, pode ser encontrado em
+<code class="docutils literal notranslate"><span class="pre">relatorio_de_qualidade/phploc-report.txt</span></code></p>
+<p>De acordo com a ferramenta, as seguintes métricas foram coletadas:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Size</span>
+  <span class="n">Lines</span> <span class="n">of</span> <span class="n">Code</span> <span class="p">(</span><span class="n">LOC</span><span class="p">)</span>                           <span class="mi">111255</span>
+  <span class="n">Comment</span> <span class="n">Lines</span> <span class="n">of</span> <span class="n">Code</span> <span class="p">(</span><span class="n">CLOC</span><span class="p">)</span>                   <span class="mi">24547</span> <span class="p">(</span><span class="mf">22.06</span><span class="o">%</span><span class="p">)</span>
+  <span class="n">Non</span><span class="o">-</span><span class="n">Comment</span> <span class="n">Lines</span> <span class="n">of</span> <span class="n">Code</span> <span class="p">(</span><span class="n">NCLOC</span><span class="p">)</span>              <span class="mi">86708</span> <span class="p">(</span><span class="mf">77.94</span><span class="o">%</span><span class="p">)</span>
+  <span class="n">Logical</span> <span class="n">Lines</span> <span class="n">of</span> <span class="n">Code</span> <span class="p">(</span><span class="n">LLOC</span><span class="p">)</span>                   <span class="mi">29454</span> <span class="p">(</span><span class="mf">26.47</span><span class="o">%</span><span class="p">)</span>
+    <span class="n">Classes</span>                                      <span class="mi">21165</span> <span class="p">(</span><span class="mf">71.86</span><span class="o">%</span><span class="p">)</span>
+      <span class="n">Average</span> <span class="n">Class</span> <span class="n">Length</span>                         <span class="mi">289</span>
+        <span class="n">Minimum</span> <span class="n">Class</span> <span class="n">Length</span>                         <span class="mi">1</span>
+        <span class="n">Maximum</span> <span class="n">Class</span> <span class="n">Length</span>                      <span class="mi">9039</span>
+      <span class="n">Average</span> <span class="n">Method</span> <span class="n">Length</span>                         <span class="mi">18</span>
+        <span class="n">Minimum</span> <span class="n">Method</span> <span class="n">Length</span>                        <span class="mi">1</span>
+        <span class="n">Maximum</span> <span class="n">Method</span> <span class="n">Length</span>                      <span class="mi">722</span>
+      <span class="n">Average</span> <span class="n">Methods</span> <span class="n">Per</span> <span class="n">Class</span>                     <span class="mi">15</span>
+        <span class="n">Minimum</span> <span class="n">Methods</span> <span class="n">Per</span> <span class="n">Class</span>                    <span class="mi">0</span>
+        <span class="n">Maximum</span> <span class="n">Methods</span> <span class="n">Per</span> <span class="n">Class</span>                  <span class="mi">415</span>
+    <span class="n">Functions</span>                                      <span class="mi">444</span> <span class="p">(</span><span class="mf">1.51</span><span class="o">%</span><span class="p">)</span>
+      <span class="n">Average</span> <span class="n">Function</span> <span class="n">Length</span>                        <span class="mi">8</span>
+    <span class="n">Not</span> <span class="ow">in</span> <span class="n">classes</span> <span class="ow">or</span> <span class="n">functions</span>                   <span class="mi">7845</span> <span class="p">(</span><span class="mf">26.63</span><span class="o">%</span><span class="p">)</span>
+
+<span class="n">Cyclomatic</span> <span class="n">Complexity</span>
+  <span class="n">Average</span> <span class="n">Complexity</span> <span class="n">per</span> <span class="n">LLOC</span>                     <span class="mf">0.42</span>
+  <span class="n">Average</span> <span class="n">Complexity</span> <span class="n">per</span> <span class="n">Class</span>                  <span class="mf">126.18</span>
+    <span class="n">Minimum</span> <span class="n">Class</span> <span class="n">Complexity</span>                      <span class="mf">1.00</span>
+    <span class="n">Maximum</span> <span class="n">Class</span> <span class="n">Complexity</span>                   <span class="mf">4368.00</span>
+  <span class="n">Average</span> <span class="n">Complexity</span> <span class="n">per</span> <span class="n">Method</span>                   <span class="mf">8.99</span>
+    <span class="n">Minimum</span> <span class="n">Method</span> <span class="n">Complexity</span>                     <span class="mf">1.00</span>
+    <span class="n">Maximum</span> <span class="n">Method</span> <span class="n">Complexity</span>                   <span class="mf">502.00</span>
+
+</pre></div>
+</div>
+<p>A plataforma possui no total 111255 linhas de código, sendo que destas <strong>22%</strong> é codigo comentado.
+Estes comentários não são documentação para facilitar o entendimento de certas estruturas, é código
+comentado que não foi removido pelos desenvolvedores. A motivação para isso é incerta, mas esse tipo
+de prática impacta diretamente na leitura do código e na possibilidade de realizar alterações sem
+quebrar a aplicação.</p>
+<p>Ainda olhando outras métricas como NLOC e LLOC temos um cenário curioso. A ferramenta identificou
+que <strong>77%</strong> do código é composto por linhas não comentadas, mas apenas <strong>26%</strong> são linhas logicas
+(código PHP). Iremos refinar nossa analise para os principais módulos da aplicação, excluindo
+os diretórios application/config, application/libraries, application/third_party/, dentro de <code class="docutils literal notranslate"><span class="pre">application</span></code>. Esses diretórios ou pertencem ao CodeIgniter, ou são bibliotecas utilizadas pela aplicação. Olharemos essas diretórios com mais calma em outro momento.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>php tools/phploc.phar application/ --exclude application/config --exclude application/libraries/ --exclude application/third_party/
+</pre></div>
+</div>
+<p>De acordo com a ferramenta, as seguintes métricas foram coletadas:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Size</span>
+  <span class="n">Lines</span> <span class="n">of</span> <span class="n">Code</span> <span class="p">(</span><span class="n">LOC</span><span class="p">)</span>                            <span class="mi">40166</span>
+  <span class="n">Comment</span> <span class="n">Lines</span> <span class="n">of</span> <span class="n">Code</span> <span class="p">(</span><span class="n">CLOC</span><span class="p">)</span>                    <span class="mi">6997</span> <span class="p">(</span><span class="mf">17.42</span><span class="o">%</span><span class="p">)</span>
+  <span class="n">Non</span><span class="o">-</span><span class="n">Comment</span> <span class="n">Lines</span> <span class="n">of</span> <span class="n">Code</span> <span class="p">(</span><span class="n">NCLOC</span><span class="p">)</span>              <span class="mi">33169</span> <span class="p">(</span><span class="mf">82.58</span><span class="o">%</span><span class="p">)</span>
+  <span class="n">Logical</span> <span class="n">Lines</span> <span class="n">of</span> <span class="n">Code</span> <span class="p">(</span><span class="n">LLOC</span><span class="p">)</span>                   <span class="mi">12031</span> <span class="p">(</span><span class="mf">29.95</span><span class="o">%</span><span class="p">)</span>
+    <span class="n">Classes</span>                                       <span class="mi">5062</span> <span class="p">(</span><span class="mf">42.07</span><span class="o">%</span><span class="p">)</span>
+      <span class="n">Average</span> <span class="n">Class</span> <span class="n">Length</span>                         <span class="mi">281</span>
+        <span class="n">Minimum</span> <span class="n">Class</span> <span class="n">Length</span>                        <span class="mi">12</span>
+        <span class="n">Maximum</span> <span class="n">Class</span> <span class="n">Length</span>                      <span class="mi">1284</span>
+      <span class="n">Average</span> <span class="n">Method</span> <span class="n">Length</span>                         <span class="mi">24</span>
+        <span class="n">Minimum</span> <span class="n">Method</span> <span class="n">Length</span>                        <span class="mi">1</span>
+        <span class="n">Maximum</span> <span class="n">Method</span> <span class="n">Length</span>                      <span class="mi">384</span>
+      <span class="n">Average</span> <span class="n">Methods</span> <span class="n">Per</span> <span class="n">Class</span>                     <span class="mi">11</span>
+        <span class="n">Minimum</span> <span class="n">Methods</span> <span class="n">Per</span> <span class="n">Class</span>                    <span class="mi">2</span>
+        <span class="n">Maximum</span> <span class="n">Methods</span> <span class="n">Per</span> <span class="n">Class</span>                   <span class="mi">28</span>
+    <span class="n">Functions</span>                                      <span class="mi">424</span> <span class="p">(</span><span class="mf">3.52</span><span class="o">%</span><span class="p">)</span>
+      <span class="n">Average</span> <span class="n">Function</span> <span class="n">Length</span>                        <span class="mi">9</span>
+    <span class="n">Not</span> <span class="ow">in</span> <span class="n">classes</span> <span class="ow">or</span> <span class="n">functions</span>                   <span class="mi">6545</span> <span class="p">(</span><span class="mf">54.40</span><span class="o">%</span><span class="p">)</span>
+
+<span class="n">Cyclomatic</span> <span class="n">Complexity</span>
+  <span class="n">Average</span> <span class="n">Complexity</span> <span class="n">per</span> <span class="n">LLOC</span>                     <span class="mf">0.43</span>
+  <span class="n">Average</span> <span class="n">Complexity</span> <span class="n">per</span> <span class="n">Class</span>                  <span class="mf">118.06</span>
+    <span class="n">Minimum</span> <span class="n">Class</span> <span class="n">Complexity</span>                      <span class="mf">4.00</span>
+    <span class="n">Maximum</span> <span class="n">Class</span> <span class="n">Complexity</span>                    <span class="mf">564.00</span>
+  <span class="n">Average</span> <span class="n">Complexity</span> <span class="n">per</span> <span class="n">Method</span>                  <span class="mf">11.18</span>
+    <span class="n">Minimum</span> <span class="n">Method</span> <span class="n">Complexity</span>                     <span class="mf">1.00</span>
+    <span class="n">Maximum</span> <span class="n">Method</span> <span class="n">Complexity</span>                   <span class="mf">297.00</span>
+
+</pre></div>
+</div>
+<p>Excluindo os diretórios citados anteriormente, notamos uma redução drastica no tamanho da aplicação. De 111255 para 40166 linhas, uma redução de mais de 50%. Isso pode indicar que boa parte do código do transforma são bibliotecas, modulos e scripts de terceiros, que <strong>podem ou não estar sendo usados</strong>. Isso é um problema grave, já que mais que metade do código é dependência externa. O número de código comentado também segue bem alto, o que implica que a maior parte dos comentários estão no código escrito para o sistema e não código de terceiros.</p>
+<p>Ainda falando da porcentagem de código comentado, podemos exemplificar essa pratica olhando a
+controller <code class="docutils literal notranslate"><span class="pre">application/controllers/Candidatos.php</span></code>, na função <code class="docutils literal notranslate"><span class="pre">index</span></code>. Da linha 37 até 69 temos
+código comentado. Da linha 91 até 180 temos código comentado. Da linha 202 até 304 temos código
+comentado. Ou seja, um método de 329 linhas possui 223 linhas comentadas.</p>
+<p>Avaliando as métricas das classes, temos classes com 1284 linhas e métodos com 384 linhas.
+Independente do que eles fazem, são implementações muito longas para a natureza da aplicação, que atrapalham escrita de testes, evolução e manutenção. Iremos comparar as métricas de complexidade da ferramenta PhpLoc com a PHP Insight, já que esta é uma métrica que depende de como as ferramentas fazem o processsamento do código.</p>
+<p>TODO: Rodar phploc no código do codeigniter, para verificarmos se as 70 mil linhas de código
+restantes são do framework, ou de bibliotecas que o projeto utiliza.</p>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Carlos de Araújo Silva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

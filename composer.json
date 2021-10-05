@@ -19,6 +19,7 @@
 	"require-dev": {
 		"mikey179/vfsstream": "1.1.*",
 		"phpunit/phpunit": "4.* || 5.*",
-		"nunomaduro/phpinsights": "^2.0"
+		"nunomaduro/phpinsights": "^2.0",
+		"bmitch/churn-php": "^1.5"
 	}
 }

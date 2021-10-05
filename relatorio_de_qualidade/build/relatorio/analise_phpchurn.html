@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt-br" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analise da qualidade com a ferramenta Churn PHP &mdash; Transforma Minas 1.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Analise da qualidade com a ferramenta PHP Insight" href="analise_phpinsight.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Transforma Minas
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Conteúdos:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Analise do tamanho da plataforma com a ferramenta phploc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Analise da qualidade com a ferramenta PHP Insight</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Analise da qualidade com a ferramenta Churn PHP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#views-candidaturas-php">views/candidaturas.php</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#controllers-candidaturas-php">controllers/Candidaturas.php</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Transforma Minas</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Analise da qualidade com a ferramenta Churn PHP</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/relatorio/analise_phpchurn.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="tex2jax_ignore mathjax_ignore section" id="analise-da-qualidade-com-a-ferramenta-churn-php">
+<h1>Analise da qualidade com a ferramenta Churn PHP<a class="headerlink" href="#analise-da-qualidade-com-a-ferramenta-churn-php" title="Permalink to this headline">¶</a></h1>
+<p>Utilizaremos a ferramenta <a class="reference external" href="https://github.com/bmitch/churn-php">churn-php</a> para coletar metas de
+complexidade ciclomatica. Diferente da ferramenta <a class="reference external" href="https://github.com/nunomaduro/phpinsights">PHP Insight</a>
+que coleta métricas gerais, a churn-php indica os arquivos com maior complexidade que podem se
+beneficiar de práticas de refatoração. A ferramenta irá pontuar os arquivos de 0.1 a 1, sendo 0.1
+complexidade mínima e 1 complexidade máxima.</p>
+<p>Com a ferramenta instalada, executamos o seguinte comando:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendor/bin/churn run --configuration=tools/churn.yml application/models/ application/controllers/ application/views/ application/helpers/
+</pre></div>
+</div>
+<p>Segundo dados coletados pela ferramenta, os top 15 arquivos mais complexos do transforma são
+apresentados na imagem abaixo:</p>
+<p><img alt="relatorio" src="../_images/phpchurn.png" /></p>
+<p>Iremos avaliar alguns dos arquivos apontados pela ferramenta, discutindo possíveis motivos para
+terem uma taxa alta de complexidade ciclomatica.</p>
+<div class="section" id="views-candidaturas-php">
+<h2>views/candidaturas.php<a class="headerlink" href="#views-candidaturas-php" title="Permalink to this headline">¶</a></h2>
+<p>O arquivo <code class="docutils literal notranslate"><span class="pre">views/candidaturas.php</span></code> possui 3882 linhas de código fonte. Realizando uma contagem básica
+do número de estruturas condicionais (if, else) no arquivo, temos 473 if e 58 else.  Um arquivo com
+473 caminhos possíveis tem um custo enorme de manutenção e evolução, o que indica a alta taxa
+de complexidade atribuida pela ferramenta. O Code Igniter segue o padrão MVC, e nesse padrão
+a camada de visualização <strong>não pode implementar</strong> regras de negócio.
+Alguns desses 473 caminhos possíveis são verificações que deveriam estar ou nas modelos ou nas
+helpers. A seguir, um trecho de código que não deveria estar na view, e sim em uma helper para
+candidaturas, por exemplo.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        if($menu2 == &#39;Curriculo&#39;){
+                /*$attributes = array(&#39;class&#39; =&gt; &#39;kt-form kt-form--label-right&#39;,
+                                            &#39;id&#39; =&gt; &#39;form_candidatura&#39;);*/
+                /*if($num_formacao == 0 || $num_experiencia == 0){
+                         &quot;
+                                                                             type=\&quot;text/javascript\&quot;&gt;
+                                                                                    alert(&#39;Preencha a formação e experiência em dados pessoais para continuar.&#39;);
+                                                                                    window.location=&#39;/&#39;;
+                                                                            &lt;/script&gt;
+                    &quot;;
+                }*/
+                if(strlen(set_value(&#39;num_formacao&#39;)) &gt; 0){
+                       
+                        $num_formacao = set_value(&#39;num_formacao&#39;);
+                }
+                if(!($num_formacao&gt;0)){
+                        $num_formacao = 1;
+                }
+                if(strlen(set_value(&#39;num_experiencia&#39;)) &gt; 0){
+                        
+                        $num_experiencia = set_value(&#39;num_experiencia&#39;);
+                }
+                if(!($num_experiencia&gt;0)){
+                        $num_experiencia = 1;
+                }
+                 form_open_multipart($url, $attributes, array(&#39;vaga&#39; =&gt; $vaga, &#39;num_formacao&#39; =&gt; $num_formacao, &#39;num_experiencia&#39; =&gt; $num_experiencia));
+        }
+</pre></div>
+</div>
+<p>O fato desses caminhos e verificações estarem implementados diretamente na view, impede o reuso e a
+implementação de testes para essas regras. Muitas dessas condicionais também são utilizadas para
+controlar o estado da pagina. Além disso, o arquivo contem 21 linhas de código comentadas.</p>
+<p>Por serem arquivos que geram as paginas html, views devem ser o mais desacopladas do backend
+possível. Seguindo a própria documentação do <a class="reference external" href="https://codeigniter.com/userguide3/general/views.html">Code Igniter</a>,
+o construtor <code class="docutils literal notranslate"><span class="pre">echo</span></code> nas views deve ser utilizado apenas para apresentar variáveis que venham das controllers (carregamento dinamico),
+mas na plataforma o uso de <code class="docutils literal notranslate"><span class="pre">echo</span></code> vai para além disso, sendo utilizado para gerar  html a partir de strings.
+Isso polui demais a estrutura do código e dificulta a manutenção e evolução da página. No arquivo
+<code class="docutils literal notranslate"><span class="pre">views/candidaturas.php</span></code> o comando <code class="docutils literal notranslate"><span class="pre">echo</span></code> é utilizado 658 vezes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo &quot;
+            &lt;section class=\&quot;login-block\&quot;&gt;
+                &lt;!-- Container-fluid starts --&gt;
+                &lt;div class=\&quot;container\&quot;&gt;
+                    &lt;div class=\&quot;row\&quot;&gt;
+                        &lt;div class=\&quot;col-sm-12 d-flex justify-content-center\&quot;&gt;
+                            &lt;!-- Authentication card start --&gt;&quot;;
+$attributes = array(&#39;class&#39; =&gt; &#39;md-float-material form-material&#39;);
+echo form_open($url, $attributes);
+echo &quot;
+                                    &lt;div class=\&quot;text-center\&quot;&gt;
+                                        &lt;img src=\&quot;&quot;.base_url(&#39;images/logo.png&#39;).&quot;\&quot; alt=\&quot;&quot;.$this -&gt; config -&gt; item(&#39;nome&#39;).&quot;\&quot; /&gt;
+                                    &lt;/div&gt;
+                                    &lt;!--&lt;div class=\&quot;row\&quot; style=\&quot;margin-top: 10px\&quot;&gt;&quot;;
+/*if($menu2 == &#39;index&#39;){
+        echo &quot;
+                                        &lt;div class=\&quot;alert background-danger\&quot; style=\&quot;width:90%;margin:0 auto;\&quot;&gt;
+                                               Prezado(a) candidato(a) dos editais de &lt;strong&gt;Processo Seletivo Simplificado Pró-Brumadinho&lt;/strong&gt;, estes processos foram migrados para o sistema Processos Seletivos MG: &lt;a href=\&quot;http://www.processoseletivo.mg.gov.br/\&quot;&gt;&lt;strong&gt;http://www.processoseletivo.mg.gov.br/&lt;/strong&gt;&lt;/a&gt;
+                                        &lt;/div&gt;
+                                        &quot;;
+}*/
+echo &quot;
+                                    &lt;/div&gt;--&gt;
+                                    &lt;div class=\&quot;card col-lg-8 mt-3 p-3 mx-auto\&quot;&gt;
+                                        &lt;div class=\&quot;card-block\&quot;&gt;
+                                            &lt;div class=\&quot;row m-b-20\&quot;&gt;
+                                                &lt;div class=\&quot;col-md-12\&quot;&gt;
+                                                    &lt;h3 class=\&quot;h3 text-gray-800 mb-4 text-center\&quot;&gt;{$nome_pagina}&lt;/h3&gt;
+                                                &lt;/div&gt;
+                                            &lt;/div&gt;&quot;;
+</pre></div>
+</div>
+<p>Praticamente todos os pontos analisados na <code class="docutils literal notranslate"><span class="pre">views/candidaturas.php</span></code> se aplicam as outras views da
+aplicação. <strong>Não há testes automatizados para as views da aplicação</strong>.</p>
+</div>
+<div class="section" id="controllers-candidaturas-php">
+<h2>controllers/Candidaturas.php<a class="headerlink" href="#controllers-candidaturas-php" title="Permalink to this headline">¶</a></h2>
+<p>O arquivo <code class="docutils literal notranslate"><span class="pre">controllers/Candidaturas.php</span></code> possui  4215 linhas de código fonte. Realizando uma contagem básica
+do número de estruturas condicionais (if, else) no arquivo, temos 563 if e 257 else. Como esta
+controller possui muitos métodos, iremos analisar apenas um deles, apontando possíveis problema no
+estilo e no design do código. Vamos começar analisando o que é uma controller dentro do padrão
+MVC. O padrão MVC trabalha com separação de responsabilidades. A camada de visualização desenha a
+tela e apresenta as regras de negócio estabelecidas e verificadas na camada modelo. A camada de
+modelo é quem armazena as regras de negócio da aplicação, como por exemplo, a nota que deve ser dada
+para uma resposta do candidato. A camada de controle é responsável por processar as requisições HTTP,
+controlar os objetos que vem da camada de modelo e por inicializar a camada de apresentação.
+Avaliando a implementação do método <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code>, na controller de candidaturas, é possível
+notar que existe um problema de responsabilidade. A controller é responsável por mais do que ela
+deveria, o que fere o princípio de responsabilidades do MVC.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    else if($questao -&gt; in_tipo == &#39;3&#39; || $questao -&gt; in_tipo == &#39;4&#39;){
+            
+            $total+=@intval($respostas[$questao -&gt; pr_questao] -&gt; tx_resposta) * intval($questao -&gt; in_peso);
+            $total_max += intval($questao -&gt; in_peso);
+
+    }
+    else if($questao -&gt; in_tipo == &#39;5&#39;){
+            //$nota = 0;
+            //0=&gt;Nenhum,33%=&gt;básico,66%=&gt;intermediário,100%=&gt;avançado
+            $nota = round((@intval($respostas[$questao -&gt; pr_questao] -&gt; tx_resposta)/3)*intval($questao-&gt;in_peso));
+            /*if(@intval($respostas[$questao -&gt; pr_questao] -&gt; tx_resposta)&gt;=1 &amp;&amp; ($questao -&gt; vc_respostaAceita == &#39;&#39; || mb_convert_case($questao -&gt; vc_respostaAceita, MB_CASE_LOWER, &quot;UTF-8&quot;) == &#39;básico&#39;)){
+                    $nota += intval($questao-&gt;in_peso);
+            }
+            else if(@intval($respostas[$questao -&gt; pr_questao] -&gt; tx_resposta)&gt;=2 &amp;&amp; mb_convert_case($questao -&gt; vc_respostaAceita, MB_CASE_LOWER, &quot;UTF-8&quot;) == &#39;intermediário&#39;){
+                    $nota += intval($questao-&gt;in_peso);
+            }
+            else if(@intval($respostas[$questao -&gt; pr_questao] -&gt; tx_resposta)&gt;=3 &amp;&amp; mb_convert_case($row -&gt; vc_respostaAceita, MB_CASE_LOWER, &quot;UTF-8&quot;) == &#39;avançado&#39;){
+                    $nota += intval($questao-&gt;in_peso);
+            }
+            $total_max += intval($questao-&gt;in_peso);*/
+            $total+=$nota;
+            $total_max += intval($questao-&gt;in_peso);
+    }
+    else if($questao -&gt; in_tipo == &#39;6&#39;){
+            
+            $total+=@intval($respostas[$questao -&gt; pr_questao] -&gt; tx_resposta);
+            $total_max += intval($questao -&gt; in_peso);
+    }
+</pre></div>
+</div>
+<p>Neste trecho de código, notamos que é a controller <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code> quem sabe como calcular a nota
+dependendo do tipo de questão. Esse tipo de calculo tem que estar implementado na modelo do
+Candidato e testada de forma unitaria. O papel da controller é  receber o input do usuário,
+instanciar a modelo que possui as regras de negócio, e <strong>controlar</strong> o processamento da requisição.
+Esse trecho é um exemplo entre vários, que ferem o princípio de responsabilidade de uma controller
+no padrão MVC.</p>
+<p>Um outro problema presente nas controllers é a duplicação de código. No método <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code> a
+mesma linha de código que recupera as questões do banco, é chamada diversas vezes. Isso se dá pelo
+alto número de caminhos condicionais que dificultam simplificar a implementação, facilitando a
+leitura e manutenção do código. <strong>Não há testes automatizados para as controllers da aplicação</strong>.</p>
+<p>Praticamente todos os pontos analisados na <code class="docutils literal notranslate"><span class="pre">controllers/Candidaturas.php</span></code> se aplicam  as outras
+controllers da aplicação.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="analise_phpinsight.html" class="btn btn-neutral float-left" title="Analise da qualidade com a ferramenta PHP Insight" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Carlos de Araújo Silva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

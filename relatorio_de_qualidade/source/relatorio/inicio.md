@@ -25,3 +25,4 @@ As seguintes ferramentas serão utilizadas para analisar o código da plataforma
 | PHP-CS-Fixer | Ferramenta que formata o código seguindo diversas convensões para PHP      | *Estilo de código*        | [https://github.com/FriendsOfPHP/PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer)|
 | PhpLoc | Ferramenta para medir o tamanho e analisar a estrutura de projetos php      | Metricas de tamanho        | [https://github.com/sebastianbergmann/phploc](https://github.com/sebastianbergmann/phploc)|
 | PHP Insight | Ferramenta para coletar metricas de qualidade como complexidade ciclomatica e arquitetura      | Metricas de qualidade        | [https://github.com/nunomaduro/phpinsights](https://github.com/nunomaduro/phpinsights)|
+| Churn PHP | Ferramenta focada em coletar metricas de complexidade ciclomatica      | Metricas de qualidade        | [https://github.com/nunomaduro/phpinsights](https://github.com/bmitch/churn-php)|

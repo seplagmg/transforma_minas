@@ -13,7 +13,9 @@ A ferramenta coleta diversas medidas do código, mas iremos focar nossa análise
 of Code**(LOC), **Comment Lines of Code**(CLOC), **Non-comment Lines of Code** (NCLOC), **Logical
 Lines of Code** (LLOC). Além dessas também avaliaremos as métricas relacionadas às classes e
 funções da plataforma. O relatório completo gerado pela ferramenta, pode ser encontrado em
-`relatorio_de_qualidade/phploc-report.txt`
+`relatorio_de_qualidade/phploc-report.txt`. Uma referência para o entendimento dessas métricas 
+pode ser encontrada 
+no link [http://www.projectcodemeter.com/cost_estimation/help/GL_sloc.htm](http://www.projectcodemeter.com/cost_estimation/help/GL_sloc.htm).
 
 De acordo com a ferramenta, as seguintes métricas foram coletadas:
 
@@ -49,7 +51,8 @@ Cyclomatic Complexity
 
 ```
 
-A plataforma possui no total 111255 linhas de código, sendo que destas **22%** é codigo comentado.
+A plataforma possui no total 111255 (cento e onze mil duzentas e cinquenta e cinco) linhas de código, 
+sendo que destas, **22%** é codigo comentado.
 Estes comentários não são documentação para facilitar o entendimento de certas estruturas, é código
 comentado que não foi removido pelos desenvolvedores. A motivação para isso é incerta, mas esse tipo
 de prática impacta diretamente na leitura do código e na possibilidade de realizar alterações sem
@@ -58,7 +61,9 @@ quebrar a aplicação.
 Ainda olhando outras métricas como NLOC e LLOC temos um cenário curioso. A ferramenta identificou
 que **77%** do código é composto por linhas não comentadas, mas apenas **26%** são linhas logicas
 (código PHP). Iremos refinar nossa analise para os principais módulos da aplicação, excluindo
-os diretórios application/config, application/libraries, application/third_party/, dentro de `application`. Esses diretórios ou pertencem ao CodeIgniter, ou são bibliotecas utilizadas pela aplicação. Olharemos essas diretórios com mais calma em outro momento.
+os diretórios `application/config`, `application/libraries` e `application/third_party/`. 
+Esses diretórios ou pertencem ao CodeIgniter ou são bibliotecas utilizadas pela aplicação. 
+Olharemos essas diretórios com mais calma em outro momento.
 
     php tools/phploc.phar application/ --exclude application/config --exclude application/libraries/ --exclude application/third_party/
 
@@ -96,7 +101,12 @@ Cyclomatic Complexity
 
 ```
 
-Excluindo os diretórios citados anteriormente, notamos uma redução drastica no tamanho da aplicação. De 111255 para 40166 linhas, uma redução de mais de 50%. Isso pode indicar que boa parte do código do transforma são bibliotecas, modulos e scripts de terceiros, que **podem ou não estar sendo usados**. Isso é um problema grave, já que mais que metade do código é dependência externa. O número de código comentado também segue bem alto, o que implica que a maior parte dos comentários estão no código escrito para o sistema e não código de terceiros.
+Excluindo os diretórios citados anteriormente, notamos uma redução drástica no tamanho da aplicação. 
+De 111255 (cento e onze mil duzentas e cinquenta e cinco) para 40166 (quarenta mil cento e sessenta e seis) linhas, uma redução de mais de 50%. O Code Igniter 3 (inteiro) possui 68577 (sessenta e oito mil quinhentos setenta e sete) linhas. 
+
+Isso pode indicar que boa parte do código do transforma são bibliotecas, modulos e scripts de terceiros, que **podem ou não estar sendo usados**. Isso é um problema grave, já que mais da metade do código é dependência externa. O número de código comentado também segue bem alto, o que implica que a maior parte dos comentários estão no código da plataforma e não no código de terceiros. Em termos de espaço em disco, o diretório `application` possui **33MB**, sendo que a pasta `application/libraries` possui **30MB**.
+Isso indica que das 111255 (cento e onze mil duzentas e cinquenta e cinco) linhas de código do transforma, apenas a pasta `application/libraries` possui 61101 (sessenta e um mil cento e um) linhas.
+Será necessária uma analise profunda desta pasta para avaliarmos se todo esse código é realmente utilizado.
 
 Ainda falando da porcentagem de código comentado, podemos exemplificar essa pratica olhando a
 controller `application/controllers/Candidatos.php`, na função `index`. Da linha 37 até 69 temos
@@ -104,8 +114,4 @@ código comentado. Da linha 91 até 180 temos código comentado. Da linha 202 at
 comentado. Ou seja, um método de 329 linhas possui 223 linhas comentadas.  
 
 Avaliando as métricas das classes, temos classes com 1284 linhas e métodos com 384 linhas.
-Independente do que eles fazem, são implementações muito longas para a natureza da aplicação, que atrapalham escrita de testes, evolução e manutenção. Iremos comparar as métricas de complexidade da ferramenta PhpLoc com a PHP Insight, já que esta é uma métrica que depende de como as ferramentas fazem o processsamento do código.
-
-TODO: Rodar phploc no código do codeigniter, para verificarmos se as 70 mil linhas de código
-restantes são do framework, ou de bibliotecas que o projeto utiliza.
-
+Independente do que elas fazem, essas classes e métodos possuem implementações muito longas para a natureza da aplicação, o que impossibilita a escrita de testes, evolução e manutenção. Iremos comparar as métricas de complexidade da ferramenta PhpLoc com a PHP Insight, já que esta é uma métrica que depende de como as ferramentas fazem o processsamento do código.

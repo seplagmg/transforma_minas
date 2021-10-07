@@ -78,16 +78,16 @@
 Minas. Entendemos que existem centenas de fatores envolvidos no processo de desenvolvimento de
 sofware que impactam na sua qualidade, principalmente quando falamos de software governamental,
 mas como um dos objetivos do projeto no médio prazo é
-construir uma comunidade de software livre, composta por pessoas da área técnica e da área da gestão
+construir uma comunidade de software livre composta por pessoas da área técnica e da área da gestão
 pública, precisamos entender que o status atual do código ainda não permite essa construção.</p>
 <p>O projeto não possui testes automatizados de nenhum nível, a complexidade ciclomática das controllers,
 views e models é alto, o estilo de código adotado está fora das convenções utilizadas pela
 comunidade PHP e muitas decisões de implementação ferem conceitos e princípios do Code Igniter. O
-uso de ferramentas consolidadas na comunidade PHP para coletarmos métricas que nos mostrassem tais problemas,
-possibilita que outros desenvolvedores repliquem nossas nossas analises (utilizando a mesma versão
+uso de ferramentas consolidadas na comunidade PHP para a coleta de métricas
+possibilita que outros desenvolvedores repliquem nossas analises (utilizando a mesma versão
 do código) e tirem suas próprias conclusões.</p>
 <p>A partir dos resultados coletados, propomos um possível roadmap de melhorias de produto. Este
-roadmap não irá atuar em problemas de UX/UI, já que esta não foi o foco da nossa análise.
+roadmap não irá atuar em problemas de UX/UI, já que esse não foi o foco da nossa análise.
 Reescrever a aplicação inteira também não é estratégico, já que ela possui muitos usuários e foi
 desenvolvida com recurso público.
 Este roadmap irá ser guiado por métricas de qualidade, testes automatizados e
@@ -108,9 +108,9 @@ projeto;</p></li>
 <a class="reference external" href="https://www.cypress.io/">Cypress</a>. Na versão atual do código, é praticamente impossível fazer
 testes a nível de controller, então iniciaremos este processo com testes “caixa-preta”, em que
 testamos os fluxos do usuário ao longo da aplicação. A ideia é construir uma suite de testes
-quebre cubram a maior parte das telas e fluxos. Junto aos testes também iremos montar um ambiente
+que cubra a maior parte das telas e fluxos. Junto aos testes também iremos montar um ambiente
 para integração contínua, em que a cada novo commit executaremos a suite de testes construida pelo
-time.</p>
+time. Também iremos corrigir o estilo do código utilizando a ferramenta <a class="reference external" href="https://github.com/FriendsOfPHP/PHP-CS-Fixer">PHP-CS-Fixer</a>.</p>
 <ul class="simple">
 <li><p><strong>estimativa de prazo da fase 1</strong>: dois meses;</p></li>
 <li><p><strong>time alocado</strong>: dois desenvolvedores jr e um gestor de projeto;</p></li>
@@ -122,8 +122,8 @@ time.</p>
 começar a limpar os códigos comentados, reeimplementar as views usando melhores práticas de frontend
 e passando para as controllers regras de negócio e validações que estão sendo implementadas nas
 views. Todo esse processo poderá ser feito de forma controlada, já que teremos os testes de
-aceitação verificando se o que está sendo entregue não irá quebrar a interface para o usuário.
-Nessa fase, incluiremos no pipeline de integração contínua a coleta das métricas utilizando a
+aceitação verificando se o que está sendo entregue não irá quebrar a interface do usuário.
+Nessa fase, incluiremos no pipeline de integração contínua a coleta das métricas utilizando
 as mesmas ferramentas do relatório. Isso irá demonstrar se o nosso trabalho está melhorando a
 qualidade do código ou não.</p>
 <ul class="simple">
@@ -133,15 +133,15 @@ qualidade do código ou não.</p>
 </div>
 <div class="section" id="fase-3">
 <h2>Fase 3<a class="headerlink" href="#fase-3" title="Permalink to this headline">¶</a></h2>
-<p>A terceira fase irá focar na escrita de testes para as controllers e models, além da correção de
-bugs encontrados nas fase 1 e fase 2. Além disso, nessa
+<p>A terceira fase irá focar na escrita de testes unitarios e funcionais para controllers e models,
+além da correção de bugs encontrados nas fase 1 e 2. Além disso, nessa
 fase também iremos disponibilizar o pipeline de deploy contínuo em um ambiente beta.</p>
 <ul class="simple">
 <li><p><strong>estimativa de prazo da fase 3</strong>: um mês;</p></li>
 <li><p><strong>time alocado</strong>: dois desenvolvedores jr e um gestor de projeto;</p></li>
 </ul>
-<p>No total, o projeto de melhoria e refatoração da plataforma irá durar 6 meses no total. Se bem
-sucedido, entregaremos uma nova versão da plataforma com testes, código simples de manter e evoluir
+<p>O projeto de melhoria e refatoração da plataforma irá durar 6 meses no total. Se bem
+sucedido, entregaremos uma nova versão da plataforma com testes, design de código melhorado
 e um guia de desenvolvimento para novos colaboradores.</p>
 </div>
 </div>

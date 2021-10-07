@@ -48,6 +48,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="analise_phpchurn.html">Analise da qualidade com a ferramenta Churn PHP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap de melhorias</a></li>
 </ul>
 
         </div>
@@ -77,9 +78,9 @@
   <div class="tex2jax_ignore mathjax_ignore section" id="analise-da-qualidade-com-a-ferramenta-php-insight">
 <h1>Analise da qualidade com a ferramenta PHP Insight<a class="headerlink" href="#analise-da-qualidade-com-a-ferramenta-php-insight" title="Permalink to this headline">¶</a></h1>
 <p>Utilizaremos a ferramenta PHP Insight para coletar métricas e medidas relacionadas á qualidade do
-código da plataforma. Iremos analisar a métrica de complexidade ciclomatica, mal cheiro de código,
-arquitetura e estilo de programação em PHP. Iremos focar em arquivos que pertencem ao
-domínio da aplicação e excluiremos diretórios que pertençam ao Codeigniter ou a bibliotecas de
+código da plataforma. Iremos analisar a métrica de complexidade ciclomática, mal cheiro de código,
+arquitetura e estilo de programação em PHP. Iremos focar em arquivos que da aplicação e
+excluiremos diretórios que específicos do Codeigniter ou a bibliotecas de
 terceiros.</p>
 <p>Iremos avaliar as métricas dos principais diretórios: <code class="docutils literal notranslate"><span class="pre">application/controllers</span></code>, <code class="docutils literal notranslate"><span class="pre">application/models/</span></code>,
 <code class="docutils literal notranslate"><span class="pre">application/helpers/</span></code> e <code class="docutils literal notranslate"><span class="pre">application/views/</span></code>. São eles que de fato implementam o domínio da aplicação.
@@ -112,7 +113,7 @@ da ferramenta diz o seguinte:</p>
 diretamente na manutenibilidade e estabilidade do código. No caso da métrica de complexidade, a
 ferramenta irá identificar complexidade alta sempre que uma classe tiver entre seus métodos,
 mais que <strong>5</strong> estruturas de controle (if/else, for, foreach, switch entre outras). A partir da
-avaliação de todas as classes, a média final é estabelecida. A classe <code class="docutils literal notranslate"><span class="pre">Questoes_model.php</span></code>, por
+avaliação de todas as classes a média final é estabelecida. A classe <code class="docutils literal notranslate"><span class="pre">Questoes_model.php</span></code>, por
 exemplo, possui 48 estruturas de controle.</p>
 <p>A arquitetura média está em 64 pontos. Aqui são analisados praticas como: tamanho das classes, número de
 métodos por classe, gestão de dependencias, tamanho das funções entre outros. Também bem abaixo de
@@ -160,9 +161,9 @@ da aplicação.</p>
 </div>
 <p>e obtivemos o seguinte resultado:</p>
 <p><img alt="relatorio" src="../_images/phpinsight-views.png" /></p>
-<p>A ferramenta PHP Insight calcula a complexidade ciclomatica <a class="reference external" href="https://phpinsights.com/insights/complexity.html">apenas</a> para classes.
-A implementação da camada de visualização(view) do transforma não utiliza classes, o que pode levar ao falso
-positivo que esses arquivos possuem baixa complexidade ciclomatica. Avaliaremos com mais
+<p>A ferramenta PHP Insight calcula a complexidade ciclomática <a class="reference external" href="https://phpinsights.com/insights/complexity.html">apenas</a> para classes.
+A implementação da camada de visualização(view) da aplicação não utiliza classes, o que pode levar ao falso
+positivo que esses arquivos possuem baixa complexidade ciclomática. Avaliaremos com mais
 profundidade a camada de visualização com as métricas coletadas com a ferramenta <a class="reference external" href="https://github.com/bmitch/churn-php">churn-php</a>.
 Ignorando a métrica de complexidade, o estilo do código nas views segue ruim, e irá precisar de
 melhorias e refatorações.</p>

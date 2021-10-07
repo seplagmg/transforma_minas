@@ -1,9 +1,9 @@
 # Analise da qualidade com a ferramenta PHP Insight
 
 Utilizaremos a ferramenta PHP Insight para coletar métricas e medidas relacionadas á qualidade do
-código da plataforma. Iremos analisar a métrica de complexidade ciclomatica, mal cheiro de código, 
-arquitetura e estilo de programação em PHP. Iremos focar em arquivos que pertencem ao
-domínio da aplicação e excluiremos diretórios que pertençam ao Codeigniter ou a bibliotecas de
+código da plataforma. Iremos analisar a métrica de complexidade ciclomática, mal cheiro de código, 
+arquitetura e estilo de programação em PHP. Iremos focar em arquivos que da aplicação e 
+excluiremos diretórios que específicos do Codeigniter ou a bibliotecas de
 terceiros.
 
 Iremos avaliar as métricas dos principais diretórios: `application/controllers`, `application/models/`,
@@ -43,7 +43,7 @@ Ou seja, existem classes no código do transforma com complexidade altissima, o 
 diretamente na manutenibilidade e estabilidade do código. No caso da métrica de complexidade, a
 ferramenta irá identificar complexidade alta sempre que uma classe tiver entre seus métodos,
 mais que **5** estruturas de controle (if/else, for, foreach, switch entre outras). A partir da
-avaliação de todas as classes, a média final é estabelecida. A classe `Questoes_model.php`, por
+avaliação de todas as classes a média final é estabelecida. A classe `Questoes_model.php`, por
 exemplo, possui 48 estruturas de controle.
 
 A arquitetura média está em 64 pontos. Aqui são analisados praticas como: tamanho das classes, número de
@@ -102,9 +102,9 @@ e obtivemos o seguinte resultado:
 
 ![relatorio](../_static/images/phpinsight-views.png)
 
-A ferramenta PHP Insight calcula a complexidade ciclomatica [apenas](https://phpinsights.com/insights/complexity.html) para classes. 
-A implementação da camada de visualização(view) do transforma não utiliza classes, o que pode levar ao falso
-positivo que esses arquivos possuem baixa complexidade ciclomatica. Avaliaremos com mais
+A ferramenta PHP Insight calcula a complexidade ciclomática [apenas](https://phpinsights.com/insights/complexity.html) para classes. 
+A implementação da camada de visualização(view) da aplicação não utiliza classes, o que pode levar ao falso
+positivo que esses arquivos possuem baixa complexidade ciclomática. Avaliaremos com mais
 profundidade a camada de visualização com as métricas coletadas com a ferramenta [churn-php](https://github.com/bmitch/churn-php).
 Ignorando a métrica de complexidade, o estilo do código nas views segue ruim, e irá precisar de
 melhorias e refatorações.

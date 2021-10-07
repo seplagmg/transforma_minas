@@ -15,6 +15,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Roadmap de melhorias" href="roadmap.html" />
     <link rel="prev" title="Analise da qualidade com a ferramenta PHP Insight" href="analise_phpinsight.html" /> 
 </head>
 
@@ -44,6 +45,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#controllers-candidaturas-php">controllers/Candidaturas.php</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap de melhorias</a></li>
 </ul>
 
         </div>
@@ -73,7 +75,7 @@
   <div class="tex2jax_ignore mathjax_ignore section" id="analise-da-qualidade-com-a-ferramenta-churn-php">
 <h1>Analise da qualidade com a ferramenta Churn PHP<a class="headerlink" href="#analise-da-qualidade-com-a-ferramenta-churn-php" title="Permalink to this headline">¶</a></h1>
 <p>Utilizaremos a ferramenta <a class="reference external" href="https://github.com/bmitch/churn-php">churn-php</a> para coletar metas de
-complexidade ciclomatica. Diferente da ferramenta <a class="reference external" href="https://github.com/nunomaduro/phpinsights">PHP Insight</a>
+complexidade ciclomatica. Diferente da ferramenta <a class="reference external" href="https://github.com/nunomaduro/phpinsights">PHP Insight</a>,
 que coleta métricas gerais, a churn-php indica os arquivos com maior complexidade que podem se
 beneficiar de práticas de refatoração. A ferramenta irá pontuar os arquivos de 0.1 a 1, sendo 0.1
 complexidade mínima e 1 complexidade máxima.</p>
@@ -132,7 +134,7 @@ controlar o estado da pagina. Além disso, o arquivo contem 21 linhas de código
 possível. Seguindo a própria documentação do <a class="reference external" href="https://codeigniter.com/userguide3/general/views.html">Code Igniter</a>,
 o construtor <code class="docutils literal notranslate"><span class="pre">echo</span></code> nas views deve ser utilizado apenas para apresentar variáveis que venham das controllers (carregamento dinamico),
 mas na plataforma o uso de <code class="docutils literal notranslate"><span class="pre">echo</span></code> vai para além disso, sendo utilizado para gerar  html a partir de strings.
-Isso polui demais a estrutura do código e dificulta a manutenção e evolução da página. No arquivo
+Isso polui a estrutura do código e dificulta a manutenção e evolução da página. No arquivo
 <code class="docutils literal notranslate"><span class="pre">views/candidaturas.php</span></code> o comando <code class="docutils literal notranslate"><span class="pre">echo</span></code> é utilizado 658 vezes.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo &quot;
             &lt;section class=\&quot;login-block\&quot;&gt;
@@ -221,8 +223,8 @@ Esse trecho é um exemplo entre vários, que ferem o princípio de responsabilid
 no padrão MVC.</p>
 <p>Um outro problema presente nas controllers é a duplicação de código. No método <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code> a
 mesma linha de código que recupera as questões do banco, é chamada diversas vezes. Isso se dá pelo
-alto número de caminhos condicionais que dificultam simplificar a implementação, facilitando a
-leitura e manutenção do código. <strong>Não há testes automatizados para as controllers da aplicação</strong>.</p>
+alto número de caminhos condicionais que dificultam o reuso de código.
+<strong>Não há testes automatizados para as controllers da aplicação</strong>.</p>
 <p>Praticamente todos os pontos analisados na <code class="docutils literal notranslate"><span class="pre">controllers/Candidaturas.php</span></code> se aplicam  as outras
 controllers da aplicação.</p>
 </div>
@@ -233,6 +235,7 @@ controllers da aplicação.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="analise_phpinsight.html" class="btn btn-neutral float-left" title="Analise da qualidade com a ferramenta PHP Insight" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="roadmap.html" class="btn btn-neutral float-right" title="Roadmap de melhorias" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

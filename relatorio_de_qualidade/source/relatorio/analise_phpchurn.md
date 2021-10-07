@@ -1,7 +1,7 @@
 # Analise da qualidade com a ferramenta Churn PHP
 
 Utilizaremos a ferramenta [churn-php](https://github.com/bmitch/churn-php) para coletar metas de 
-complexidade ciclomatica. Diferente da ferramenta [PHP Insight](https://github.com/nunomaduro/phpinsights)
+complexidade ciclomatica. Diferente da ferramenta [PHP Insight](https://github.com/nunomaduro/phpinsights),
 que coleta métricas gerais, a churn-php indica os arquivos com maior complexidade que podem se
 beneficiar de práticas de refatoração. A ferramenta irá pontuar os arquivos de 0.1 a 1, sendo 0.1
 complexidade mínima e 1 complexidade máxima.
@@ -69,7 +69,7 @@ Por serem arquivos que geram as paginas html, views devem ser o mais desacoplada
 possível. Seguindo a própria documentação do [Code Igniter](https://codeigniter.com/userguide3/general/views.html), 
 o construtor `echo` nas views deve ser utilizado apenas para apresentar variáveis que venham das controllers (carregamento dinamico), 
 mas na plataforma o uso de `echo` vai para além disso, sendo utilizado para gerar  html a partir de strings.
-Isso polui demais a estrutura do código e dificulta a manutenção e evolução da página. No arquivo
+Isso polui a estrutura do código e dificulta a manutenção e evolução da página. No arquivo
 `views/candidaturas.php` o comando `echo` é utilizado 658 vezes.
 
 
@@ -165,8 +165,8 @@ no padrão MVC.
 
 Um outro problema presente nas controllers é a duplicação de código. No método `calcula_nota` a
 mesma linha de código que recupera as questões do banco, é chamada diversas vezes. Isso se dá pelo
-alto número de caminhos condicionais que dificultam simplificar a implementação, facilitando a
-leitura e manutenção do código. **Não há testes automatizados para as controllers da aplicação**.
+alto número de caminhos condicionais que dificultam o reuso de código. 
+**Não há testes automatizados para as controllers da aplicação**.
 
 Praticamente todos os pontos analisados na `controllers/Candidaturas.php` se aplicam  as outras
 controllers da aplicação.

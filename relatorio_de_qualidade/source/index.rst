@@ -15,4 +15,7 @@ Relatório de qualidade de código da plataforma Transforma Minas
    relatorio/analise_phpcpd
    relatorio/analise_phpinsight
    relatorio/analise_phpchurn
+   relatorio/roadmap
+
+
 

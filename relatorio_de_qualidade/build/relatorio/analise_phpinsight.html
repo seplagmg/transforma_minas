@@ -14,7 +14,9 @@
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Analise da qualidade com a ferramenta Churn PHP" href="analise_phpchurn.html" />
+    <link rel="prev" title="Analise da código duplicado com a ferramenta phpcpd" href="analise_phpcpd.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,8 +35,19 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Conteúdos:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="inicio.html">Introdução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Analise do tamanho da plataforma com a ferramenta phploc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpcpd.html">Analise da código duplicado com a ferramenta phpcpd</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Analise da qualidade com a ferramenta PHP Insight</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#visao-geral">Visão geral</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-controllers">application/controllers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-models">application/models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-helpers">application/helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-views">application/views</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpchurn.html">Analise da qualidade com a ferramenta Churn PHP</a></li>
 </ul>
 
         </div>
@@ -64,7 +77,8 @@
   <div class="tex2jax_ignore mathjax_ignore section" id="analise-da-qualidade-com-a-ferramenta-php-insight">
 <h1>Analise da qualidade com a ferramenta PHP Insight<a class="headerlink" href="#analise-da-qualidade-com-a-ferramenta-php-insight" title="Permalink to this headline">¶</a></h1>
 <p>Utilizaremos a ferramenta PHP Insight para coletar métricas e medidas relacionadas á qualidade do
-código da plataforma. Iremos analisar a métrica de complexidade ciclomatica, mal cheiro de código, arquitetura e estilo de programação em PHP. Iremos focar em arquivos que pertencem ao
+código da plataforma. Iremos analisar a métrica de complexidade ciclomatica, mal cheiro de código,
+arquitetura e estilo de programação em PHP. Iremos focar em arquivos que pertencem ao
 domínio da aplicação e excluiremos diretórios que pertençam ao Codeigniter ou a bibliotecas de
 terceiros.</p>
 <p>Iremos avaliar as métricas dos principais diretórios: <code class="docutils literal notranslate"><span class="pre">application/controllers</span></code>, <code class="docutils literal notranslate"><span class="pre">application/models/</span></code>,
@@ -95,7 +109,11 @@ do código não poderia ser pior, segundo os dados coletados pela ferramenta. Um
 da ferramenta diz o seguinte:</p>
 <p><img alt="relatorio" src="../_images/phpinsight-complexity.png" /></p>
 <p>Ou seja, existem classes no código do transforma com complexidade altissima, o que impacta
-diretamente na manutenibilidade e estabilidade do código.</p>
+diretamente na manutenibilidade e estabilidade do código. No caso da métrica de complexidade, a
+ferramenta irá identificar complexidade alta sempre que uma classe tiver entre seus métodos,
+mais que <strong>5</strong> estruturas de controle (if/else, for, foreach, switch entre outras). A partir da
+avaliação de todas as classes, a média final é estabelecida. A classe <code class="docutils literal notranslate"><span class="pre">Questoes_model.php</span></code>, por
+exemplo, possui 48 estruturas de controle.</p>
 <p>A arquitetura média está em 64 pontos. Aqui são analisados praticas como: tamanho das classes, número de
 métodos por classe, gestão de dependencias, tamanho das funções entre outros. Também bem abaixo de
 80. O estilo médio do código está em 55.4 pontos. O código apresenta má formatação e está fora do padrão
@@ -111,8 +129,9 @@ da aplicação.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendor/bin/phpinsights analyse application/controllers/
 </pre></div>
 </div>
-<p>e obtivemos o seguinte resultado:
-<img alt="relatorio" src="../_images/phpinsight-controllers.png" /></p>
+<p>e obtivemos o seguinte resultado:</p>
+<p><img alt="relatorio" src="../_images/phpinsight-controllers.png" /></p>
+<p><img alt="relatorio" src="../_images/phpinsight-controllers-complexity.png" /></p>
 </div>
 <div class="section" id="application-models">
 <h2>application/models<a class="headerlink" href="#application-models" title="Permalink to this headline">¶</a></h2>
@@ -122,6 +141,7 @@ da aplicação.</p>
 </div>
 <p>e obtivemos o seguinte resultado:</p>
 <p><img alt="relatorio" src="../_images/phpinsight-models.png" /></p>
+<p><img alt="relatorio" src="../_images/phpinsight-models-complexity.png" /></p>
 </div>
 <div class="section" id="application-helpers">
 <h2>application/helpers<a class="headerlink" href="#application-helpers" title="Permalink to this headline">¶</a></h2>
@@ -152,7 +172,10 @@ melhorias e refatorações.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="analise_phpcpd.html" class="btn btn-neutral float-left" title="Analise da código duplicado com a ferramenta phpcpd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="analise_phpchurn.html" class="btn btn-neutral float-right" title="Analise da qualidade com a ferramenta Churn PHP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

@@ -1,7 +1,8 @@
 # Analise da qualidade com a ferramenta PHP Insight
 
 Utilizaremos a ferramenta PHP Insight para coletar métricas e medidas relacionadas á qualidade do
-código da plataforma. Iremos analisar a métrica de complexidade ciclomatica, mal cheiro de código, arquitetura e estilo de programação em PHP. Iremos focar em arquivos que pertencem ao
+código da plataforma. Iremos analisar a métrica de complexidade ciclomatica, mal cheiro de código, 
+arquitetura e estilo de programação em PHP. Iremos focar em arquivos que pertencem ao
 domínio da aplicação e excluiremos diretórios que pertençam ao Codeigniter ou a bibliotecas de
 terceiros.
 
@@ -39,7 +40,11 @@ da ferramenta diz o seguinte:
 ![relatorio](../_static/images/phpinsight-complexity.png)
 
 Ou seja, existem classes no código do transforma com complexidade altissima, o que impacta
-diretamente na manutenibilidade e estabilidade do código.
+diretamente na manutenibilidade e estabilidade do código. No caso da métrica de complexidade, a
+ferramenta irá identificar complexidade alta sempre que uma classe tiver entre seus métodos,
+mais que **5** estruturas de controle (if/else, for, foreach, switch entre outras). A partir da
+avaliação de todas as classes, a média final é estabelecida. A classe `Questoes_model.php`, por
+exemplo, possui 48 estruturas de controle.
 
 A arquitetura média está em 64 pontos. Aqui são analisados praticas como: tamanho das classes, número de
 métodos por classe, gestão de dependencias, tamanho das funções entre outros. Também bem abaixo de
@@ -58,7 +63,11 @@ Para coletar as métricas, executamos o seguinte comando:
     vendor/bin/phpinsights analyse application/controllers/
 
 e obtivemos o seguinte resultado:
+
 ![relatorio](../_static/images/phpinsight-controllers.png)
+
+![relatorio](../_static/images/phpinsight-controllers-complexity.png)
+
 
 ## application/models
 
@@ -69,6 +78,8 @@ Para coletar as métricas, executamos o seguinte comando:
 e obtivemos o seguinte resultado:
 
 ![relatorio](../_static/images/phpinsight-models.png)
+
+![relatorio](../_static/images/phpinsight-models-complexity.png)
 
 
 ## application/helpers

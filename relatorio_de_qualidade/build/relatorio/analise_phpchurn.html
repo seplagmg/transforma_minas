@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Roadmap de melhorias" href="roadmap.html" />
-    <link rel="prev" title="Analise da qualidade com a ferramenta PHP Insight" href="analise_phpinsight.html" /> 
+    <link rel="prev" title="Análise da qualidade com a ferramenta PHP Insight" href="analise_phpinsight.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,9 +37,9 @@
               <p class="caption"><span class="caption-text">Conteúdos:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="inicio.html">Introdução</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Analise do tamanho da plataforma com a ferramenta phploc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phpcpd.html">Analise da código duplicado com a ferramenta phpcpd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Analise da qualidade com a ferramenta PHP Insight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Análise do tamanho da plataforma com a ferramenta phploc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpcpd.html">Análise da código duplicado com a ferramenta phpcpd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Análise da qualidade com a ferramenta PHP Insight</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Analise da qualidade com a ferramenta Churn PHP</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#views-candidaturas-php">views/candidaturas.php</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#controllers-candidaturas-php">controllers/Candidaturas.php</a></li>
@@ -77,23 +77,23 @@
 <p>Utilizaremos a ferramenta <a class="reference external" href="https://github.com/bmitch/churn-php">churn-php</a> para coletar metas de
 complexidade ciclomatica. Diferente da ferramenta <a class="reference external" href="https://github.com/nunomaduro/phpinsights">PHP Insight</a>,
 que coleta métricas gerais, a churn-php indica os arquivos com maior complexidade que podem se
-beneficiar de práticas de refatoração. A ferramenta irá pontuar os arquivos de 0.1 a 1, sendo 0.1
+beneficiar de práticas de refatoração. A ferramenta irá pontuar os arquivos de 0,1 a 1, sendo 0,1
 complexidade mínima e 1 complexidade máxima.</p>
 <p>Com a ferramenta instalada, executamos o seguinte comando:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>vendor/bin/churn run --configuration=tools/churn.yml application/models/ application/controllers/ application/views/ application/helpers/
 </pre></div>
 </div>
-<p>Segundo dados coletados pela ferramenta, os top 15 arquivos mais complexos do transforma são
+<p>Segundo dados coletados pela ferramenta, os 15 arquivos mais complexos do transforma são
 apresentados na imagem abaixo:</p>
 <p><img alt="relatorio" src="../_images/phpchurn.png" /></p>
 <p>Iremos avaliar alguns dos arquivos apontados pela ferramenta, discutindo possíveis motivos para
 terem uma taxa alta de complexidade ciclomatica.</p>
 <div class="section" id="views-candidaturas-php">
 <h2>views/candidaturas.php<a class="headerlink" href="#views-candidaturas-php" title="Permalink to this headline">¶</a></h2>
-<p>O arquivo <code class="docutils literal notranslate"><span class="pre">views/candidaturas.php</span></code> possui 3882 linhas de código fonte. Realizando uma contagem básica
+<p>O arquivo <code class="docutils literal notranslate"><span class="pre">views/candidaturas.php</span></code> possui 3882 linhas de código-fonte. Realizando uma contagem básica
 do número de estruturas condicionais (if, else) no arquivo, temos 473 if e 58 else.  Um arquivo com
 473 caminhos possíveis tem um custo enorme de manutenção e evolução, o que indica a alta taxa
-de complexidade atribuida pela ferramenta. O Code Igniter segue o padrão MVC, e nesse padrão
+de complexidade atribuida pela ferramenta. O Code Igniter segue o padrão MVC, e nele
 a camada de visualização <strong>não pode implementar</strong> regras de negócio.
 Alguns desses 473 caminhos possíveis são verificações que deveriam estar ou nas modelos ou nas
 helpers. A seguir, um trecho de código que não deveria estar na view, e sim em uma helper para
@@ -129,12 +129,13 @@ candidaturas, por exemplo.</p>
 </div>
 <p>O fato desses caminhos e verificações estarem implementados diretamente na view, impede o reuso e a
 implementação de testes para essas regras. Muitas dessas condicionais também são utilizadas para
-controlar o estado da pagina. Além disso, o arquivo contem 21 linhas de código comentadas.</p>
+controlar o estado da página. Além disso, o arquivo possui 21 linhas de código comentadas.</p>
 <p>Por serem arquivos que geram as paginas html, views devem ser o mais desacopladas do backend
 possível. Seguindo a própria documentação do <a class="reference external" href="https://codeigniter.com/userguide3/general/views.html">Code Igniter</a>,
 o construtor <code class="docutils literal notranslate"><span class="pre">echo</span></code> nas views deve ser utilizado apenas para apresentar variáveis que venham das controllers (carregamento dinamico),
-mas na plataforma o uso de <code class="docutils literal notranslate"><span class="pre">echo</span></code> vai para além disso, sendo utilizado para gerar  html a partir de strings.
-Isso polui a estrutura do código e dificulta a manutenção e evolução da página. No arquivo
+mas na plataforma o comando <code class="docutils literal notranslate"><span class="pre">echo</span></code> é utilizado para gerar toda a estrutura do html.
+Isso polui o código, dificulta a manutenção e encarece a adição de novas funcionalidades e
+comportamentos visuais. No arquivo
 <code class="docutils literal notranslate"><span class="pre">views/candidaturas.php</span></code> o comando <code class="docutils literal notranslate"><span class="pre">echo</span></code> é utilizado 658 vezes.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo &quot;
             &lt;section class=\&quot;login-block\&quot;&gt;
@@ -173,15 +174,15 @@ aplicação. <strong>Não há testes automatizados para as views da aplicação<
 </div>
 <div class="section" id="controllers-candidaturas-php">
 <h2>controllers/Candidaturas.php<a class="headerlink" href="#controllers-candidaturas-php" title="Permalink to this headline">¶</a></h2>
-<p>O arquivo <code class="docutils literal notranslate"><span class="pre">controllers/Candidaturas.php</span></code> possui  4215 linhas de código fonte. Realizando uma contagem básica
-do número de estruturas condicionais (if, else) no arquivo, temos 563 if e 257 else. Como esta
-controller possui muitos métodos, iremos analisar apenas um deles, apontando possíveis problema no
-estilo e no design do código. Vamos começar analisando o que é uma controller dentro do padrão
+<p>O arquivo <code class="docutils literal notranslate"><span class="pre">controllers/Candidaturas.php</span></code> possui  4215 linhas de código-fonte. Realizando uma contagem básica
+do número de estruturas condicionais (if, else) no arquivo, temos 563 if e 257 else. Como essa
+controller possui muitos métodos iremos analisar apenas um deles, apontando possíveis problemas no
+estilo e no design do código. Vamos começar analisando o que é uma controller no padrão
 MVC. O padrão MVC trabalha com separação de responsabilidades. A camada de visualização desenha a
-tela e apresenta as regras de negócio estabelecidas e verificadas na camada modelo. A camada de
-modelo é quem armazena as regras de negócio da aplicação, como por exemplo, a nota que deve ser dada
+tela e apresenta as regras de negócio estabelecidas e verificadas na camada modelo. A camada
+modelo é quem armazena as regras de negócio da aplicação como, por exemplo, a nota que deve ser dada
 para uma resposta do candidato. A camada de controle é responsável por processar as requisições HTTP,
-controlar os objetos que vem da camada de modelo e por inicializar a camada de apresentação.
+controlar os objetos que vem da camada modelo e por inicializar a camada de apresentação.
 Avaliando a implementação do método <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code>, na controller de candidaturas, é possível
 notar que existe um problema de responsabilidade. A controller é responsável por mais do que ela
 deveria, o que fere o princípio de responsabilidades do MVC.</p>
@@ -215,14 +216,14 @@ deveria, o que fere o princípio de responsabilidades do MVC.</p>
     }
 </pre></div>
 </div>
-<p>Neste trecho de código, notamos que é a controller <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code> quem sabe como calcular a nota
-dependendo do tipo de questão. Esse tipo de calculo tem que estar implementado na modelo do
+<p>Neste trecho de código, notamos que é a controller <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code> a responsável por calcular a nota
+dependendo da questão. Esse cálculo tem que estar implementado na modelo do
 Candidato e testada de forma unitaria. O papel da controller é  receber o input do usuário,
 instanciar a modelo que possui as regras de negócio, e <strong>controlar</strong> o processamento da requisição.
 Esse trecho é um exemplo entre vários, que ferem o princípio de responsabilidade de uma controller
 no padrão MVC.</p>
-<p>Um outro problema presente nas controllers é a duplicação de código. No método <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code> a
-mesma linha de código que recupera as questões do banco, é chamada diversas vezes. Isso se dá pelo
+<p>Outro problema presente nas controllers é a duplicação de código. No método <code class="docutils literal notranslate"><span class="pre">calcula_nota</span></code>, a
+mesma linha de código que recupera as questões do banco é chamada diversas vezes. Isso se dá pelo
 alto número de caminhos condicionais que dificultam o reuso de código.
 <strong>Não há testes automatizados para as controllers da aplicação</strong>.</p>
 <p>Praticamente todos os pontos analisados na <code class="docutils literal notranslate"><span class="pre">controllers/Candidaturas.php</span></code> se aplicam  as outras
@@ -234,7 +235,7 @@ controllers da aplicação.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="analise_phpinsight.html" class="btn btn-neutral float-left" title="Analise da qualidade com a ferramenta PHP Insight" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="analise_phpinsight.html" class="btn btn-neutral float-left" title="Análise da qualidade com a ferramenta PHP Insight" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="roadmap.html" class="btn btn-neutral float-right" title="Roadmap de melhorias" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

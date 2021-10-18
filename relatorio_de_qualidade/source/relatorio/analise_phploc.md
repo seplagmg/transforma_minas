@@ -1,11 +1,11 @@
-# Analise do tamanho da plataforma com a ferramenta phploc
+# Análise do tamanho da plataforma com a ferramenta phploc
 
 Vamos iniciar nossa análise pela ferrramenta **PhpLoc**. Segundo estudos na área de metricas de
 qualidade, medir o tamanho das classes e módulos segue sendo umas das melhores métricas de
-qualidade e por isso iremos começar com esta medição.
+qualidade, então iremos começar com esta medição.
 
-Considerando que a ferramenta foi instalada dentro de uma pasta `tools`, 
-podemos realizar a analise do código:
+Considerando que a ferramenta foi instalada no diretório `tools`, 
+podemos realizar a análise do código:
 
 		php tools/phploc.phar application/
 
@@ -17,7 +17,7 @@ funções da plataforma. O relatório completo gerado pela ferramenta, pode ser 
 pode ser encontrada 
 no link [http://www.projectcodemeter.com/cost_estimation/help/GL_sloc.htm](http://www.projectcodemeter.com/cost_estimation/help/GL_sloc.htm).
 
-De acordo com a ferramenta, as seguintes métricas foram coletadas:
+As seguintes métricas foram coletadas:
 
 
 ```
@@ -51,19 +51,19 @@ Cyclomatic Complexity
 
 ```
 
-A plataforma possui no total 111255 (cento e onze mil duzentas e cinquenta e cinco) linhas de código, 
+A plataforma possui no total 111 255 (cento e onze mil duzentas e cinquenta e cinco) linhas de código, 
 sendo que destas, **22%** é codigo comentado.
 Estes comentários não são documentação para facilitar o entendimento de certas estruturas, é código
-comentado que não foi removido pelos desenvolvedores. A motivação para isso é incerta, mas esse tipo
-de prática impacta diretamente na leitura do código e na possibilidade de realizar alterações sem
+comentado que não foi removido pelos desenvolvedores. A motivação para isso é incerta, mas essa prática 
+impacta diretamente na leitura do código e na possibilidade de realizar alterações sem
 quebrar a aplicação.
 
 Ainda olhando outras métricas como NLOC e LLOC temos um cenário curioso. A ferramenta identificou
 que **77%** do código é composto por linhas não comentadas, mas apenas **26%** são linhas logicas
-(código PHP). Iremos refinar nossa analise para os principais módulos da aplicação, excluindo
+(código PHP). Iremos restringir nossa análise para os principais módulos da aplicação, excluindo
 os diretórios `application/config`, `application/libraries` e `application/third_party/`. 
-Esses diretórios ou pertencem ao CodeIgniter ou são bibliotecas utilizadas pela aplicação. 
-Olharemos essas diretórios com mais calma em outro momento.
+Esses diretórios ou pertencem ao CodeIgniter, ou são bibliotecas utilizadas pela aplicação. 
+Avaliaremos esses diretórios com mais calma em outro momento.
 
     php tools/phploc.phar application/ --exclude application/config --exclude application/libraries/ --exclude application/third_party/
 
@@ -102,16 +102,17 @@ Cyclomatic Complexity
 ```
 
 Excluindo os diretórios citados anteriormente, notamos uma redução drástica no tamanho da aplicação. 
-De 111255 (cento e onze mil duzentas e cinquenta e cinco) para 40166 (quarenta mil cento e sessenta e seis) linhas, uma redução de mais de 50%. O Code Igniter 3 (inteiro) possui 68577 (sessenta e oito mil quinhentos setenta e sete) linhas. 
+De 111 255 (cento e onze mil duzentas e cinquenta e cinco) para 40 166 (quarenta mil cento e sessenta e seis) linhas, uma redução superior a 50%. O Code Igniter 3 (inteiro) possui 68 577 (sessenta e oito mil quinhentos setenta e sete) linhas. 
 
-Isso pode indicar que boa parte do código do transforma são bibliotecas, modulos e scripts de terceiros, que **podem ou não estar sendo usados**. Isso é um problema grave, já que mais da metade do código é dependência externa. O número de código comentado também segue bem alto, o que implica que a maior parte dos comentários estão no código da plataforma e não no código de terceiros. Em termos de espaço em disco, o diretório `application` possui **33MB**, sendo que a pasta `application/libraries` possui **30MB**.
-Isso indica que das 111255 (cento e onze mil duzentas e cinquenta e cinco) linhas de código do transforma, apenas a pasta `application/libraries` possui 61101 (sessenta e um mil cento e um) linhas.
-Será necessária uma analise profunda desta pasta para avaliarmos se todo esse código é realmente utilizado.
+Isso pode indicar que boa parte do código do transforma são bibliotecas, modulos e scripts de terceiros, que **podem ou não estar sendo usados**. Isso é um problema grave, já que mais da metade do código é dependência externa. O número de código comentado também segue elevado, o que implica que a maior parte dos comentários estão no código da plataforma e não nas dependências externas. Analisando o espaço em disco, o diretório `application` possui **33 MB**, sendo que a pasta `application/libraries` possui **30 MB**.
+Isso indica que das 111 255 (cento e onze mil duzentas e cinquenta e cinco) linhas de código do transforma, apenas a pasta `application/libraries` possui 61 101 (sessenta e um mil cento e um) linhas. Na proposta de [roadmap](./roadmap), uma das tarefas do time será verificar quais bibliotecas são mantidas na pasta `application/libraries` e se elas são realmente uteis para a plataforma.
 
-Ainda falando da porcentagem de código comentado, podemos exemplificar essa pratica olhando a
+Ainda falando da porcentagem de código comentado, podemos exemplificar essa prática olhando a
 controller `application/controllers/Candidatos.php`, na função `index`. Da linha 37 até 69 temos
-código comentado. Da linha 91 até 180 temos código comentado. Da linha 202 até 304 temos código
+código comentado. Da linha 91 até 180 temos código comentado. Entre as linhas 202 até 304 temos código
 comentado. Ou seja, um método de 329 linhas possui 223 linhas comentadas.  
 
 Avaliando as métricas das classes, temos classes com 1284 linhas e métodos com 384 linhas.
-Independente do que elas fazem, essas classes e métodos possuem implementações muito longas para a natureza da aplicação, o que impossibilita a escrita de testes, evolução e manutenção. Iremos comparar as métricas de complexidade da ferramenta PhpLoc com a PHP Insight, já que esta é uma métrica que depende de como as ferramentas fazem o processsamento do código.
+Classes e métodos muito longos dificultam a escrita de testes, evolução e manutenção do código. 
+Iremos comparar as métricas de complexidade da ferramenta PhpLoc com a PHP Insight, 
+já que esta é uma métrica que depende de como as ferramentas fazem o processsamento do código.

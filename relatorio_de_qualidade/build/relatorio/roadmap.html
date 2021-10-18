@@ -36,14 +36,15 @@
               <p class="caption"><span class="caption-text">Conteúdos:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="inicio.html">Introdução</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Analise do tamanho da plataforma com a ferramenta phploc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phpcpd.html">Analise da código duplicado com a ferramenta phpcpd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Analise da qualidade com a ferramenta PHP Insight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Análise do tamanho da plataforma com a ferramenta phploc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpcpd.html">Análise da código duplicado com a ferramenta phpcpd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Análise da qualidade com a ferramenta PHP Insight</a></li>
 <li class="toctree-l1"><a class="reference internal" href="analise_phpchurn.html">Analise da qualidade com a ferramenta Churn PHP</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Roadmap de melhorias</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#fase-1">Fase 1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fase-2">Fase 2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fase-3">Fase 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fase-4-futuro">Fase 4 (Futuro)</a></li>
 </ul>
 </li>
 </ul>
@@ -79,21 +80,21 @@ Minas. Entendemos que existem centenas de fatores envolvidos no processo de dese
 sofware que impactam na sua qualidade, principalmente quando falamos de software governamental,
 mas como um dos objetivos do projeto no médio prazo é
 construir uma comunidade de software livre composta por pessoas da área técnica e da área da gestão
-pública, precisamos entender que o status atual do código ainda não permite essa construção.</p>
+pública, precisamos entender que a versão atual do código ainda não permite tal construção.</p>
 <p>O projeto não possui testes automatizados de nenhum nível, a complexidade ciclomática das controllers,
 views e models é alto, o estilo de código adotado está fora das convenções utilizadas pela
 comunidade PHP e muitas decisões de implementação ferem conceitos e princípios do Code Igniter. O
 uso de ferramentas consolidadas na comunidade PHP para a coleta de métricas
-possibilita que outros desenvolvedores repliquem nossas analises (utilizando a mesma versão
+possibilita que outros desenvolvedores repliquem nossas análises (utilizando a mesma versão
 do código) e tirem suas próprias conclusões.</p>
 <p>A partir dos resultados coletados, propomos um possível roadmap de melhorias de produto. Este
 roadmap não irá atuar em problemas de UX/UI, já que esse não foi o foco da nossa análise.
-Reescrever a aplicação inteira também não é estratégico, já que ela possui muitos usuários e foi
-desenvolvida com recurso público.
-Este roadmap irá ser guiado por métricas de qualidade, testes automatizados e
-melhorias na arquitetura da aplicação. Nosso principais objetivos serão:</p>
+Reescrever a aplicação inteira também não é estratégico, já que ela possui muitos usuários e vem
+sendo desenvolvida com recurso público.</p>
+<p>Este roadmap irá ser guiado por métricas de qualidade, testes automatizados e
+melhorias na arquitetura da aplicação. Nossos principais objetivos serão:</p>
 <ol class="simple">
-<li><p>desenvolver uma suite de testes de aceitação, que permitam que o time refatore partes da
+<li><p>desenvolver uma <em>suite</em> de testes de aceitação, que permitam que o time refatore partes da
 aplicação sem que a interface quebre para o usuário final;</p></li>
 <li><p>aplicar uma série de conceitos como <em>single responsability</em>, <em>open closed</em>, reuso de código e
 outras técnicas de refatoração nos arquivos mais problemáticos apontados pelas ferramentas de
@@ -106,9 +107,9 @@ projeto;</p></li>
 <h2>Fase 1<a class="headerlink" href="#fase-1" title="Permalink to this headline">¶</a></h2>
 <p>A primeira fase do roadmap será focada na construção de testes de aceitação utilizando a ferramenta
 <a class="reference external" href="https://www.cypress.io/">Cypress</a>. Na versão atual do código, é praticamente impossível fazer
-testes a nível de controller, então iniciaremos este processo com testes “caixa-preta”, em que
+testes da camada de controle, então iniciaremos este processo com testes “caixa-preta”, em que
 testamos os fluxos do usuário ao longo da aplicação. A ideia é construir uma suite de testes
-que cubra a maior parte das telas e fluxos. Junto aos testes também iremos montar um ambiente
+que cubra a maior parte das telas e jornada do usuário. Junto aos testes também iremos montar um ambiente
 para integração contínua, em que a cada novo commit executaremos a suite de testes construida pelo
 time. Também iremos corrigir o estilo do código utilizando a ferramenta <a class="reference external" href="https://github.com/FriendsOfPHP/PHP-CS-Fixer">PHP-CS-Fixer</a>.</p>
 <ul class="simple">
@@ -133,16 +134,26 @@ qualidade do código ou não.</p>
 </div>
 <div class="section" id="fase-3">
 <h2>Fase 3<a class="headerlink" href="#fase-3" title="Permalink to this headline">¶</a></h2>
-<p>A terceira fase irá focar na escrita de testes unitarios e funcionais para controllers e models,
-além da correção de bugs encontrados nas fase 1 e 2. Além disso, nessa
+<p>A terceira fase irá focar na escrita de testes unitarios e funcionais para camada de controle e
+modelo, além da correção de bugs encontrados nas fases 1 e 2. Além disso, nessa
 fase também iremos disponibilizar o pipeline de deploy contínuo em um ambiente beta.</p>
 <ul class="simple">
 <li><p><strong>estimativa de prazo da fase 3</strong>: um mês;</p></li>
 <li><p><strong>time alocado</strong>: dois desenvolvedores jr e um gestor de projeto;</p></li>
 </ul>
-<p>O projeto de melhoria e refatoração da plataforma irá durar 6 meses no total. Se bem
-sucedido, entregaremos uma nova versão da plataforma com testes, design de código melhorado
+<p>O projeto de melhoria e refatoração da plataforma irá durar 6 meses no total. Se bem-sucedido,
+entregaremos uma nova versão da plataforma com testes, design de código melhorado
 e um guia de desenvolvimento para novos colaboradores.</p>
+</div>
+<div class="section" id="fase-4-futuro">
+<h2>Fase 4 (Futuro)<a class="headerlink" href="#fase-4-futuro" title="Permalink to this headline">¶</a></h2>
+<p>A fase quatro é uma sugestão que não necessariamente precisa entrar nessa primeira rodada (fase 1,
+2 e 3) de melhorias. O Transforma Minas é basedo no CodeIgniter 3, que já está em <em>end of
+life</em>. Os desenvolvedores do framework já está trabalhando na versão 4, e esse relatório recomenda
+a migração da plataforma para a nova versão do CodeIgniter. Nessa nova versão uma das grandes
+mudanças é a gestão de dependencias feita via <a class="reference external" href="https://getcomposer.org/">Composer</a>. Essa mudança
+irá permitir remover uma série de bibliotecas externas que são versionadas junto do código da plataforma,
+o que é uma má prática de gestão de dependencias.</p>
 </div>
 </div>
 

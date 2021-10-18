@@ -1,8 +1,8 @@
-# Analise da código duplicado com a ferramenta phpcpd
+# Análise da código duplicado com a ferramenta phpcpd
 
 Utilizaremos a ferramenta [phpcpd](https://github.com/sebastianbergmann/phpcpd) para coletar duplicações no código da plataforma.
 
-Os seguintes comandos foram executados
+Os seguintes comandos foram executados:
 
      php phpcpd.phar --fuzzy application/views/ > relatorio_de_qualidade/phpcpd-report-views.txt
      php phpcpd.phar --fuzzy application/models/ > relatorio_de_qualidade/phpcpd-report-models.txt
@@ -317,4 +317,4 @@ Time: 00:00.011, Memory: 6.00 MB
 
 O código apresenta muitas duplicações (ctrl-c, ctrl-v), principalmente nas views e controllers. Toda
 aplicação vai apresentar algum nível de duplicação, mas o volume de ocorrencias apresentadas pela
-ferramenta indica uma provável falha de design e mal cheiro de código.
+ferramenta indica uma provável falha de design e mau cheiro de código.

@@ -1,7 +1,7 @@
-# Analise da qualidade com a ferramenta PHP Insight
+# Análise da qualidade com a ferramenta PHP Insight
 
 Utilizaremos a ferramenta PHP Insight para coletar métricas e medidas relacionadas á qualidade do
-código da plataforma. Iremos analisar a métrica de complexidade ciclomática, mal cheiro de código, 
+código da plataforma. Iremos analisar a métrica de complexidade ciclomática, mau cheiro de código, 
 arquitetura e estilo de programação em PHP. Iremos focar em arquivos que da aplicação e 
 excluiremos diretórios que específicos do Codeigniter ou a bibliotecas de
 terceiros.
@@ -26,7 +26,7 @@ e obtivemos o seguinte resultado:
 
 ![relatorio](../_static/images/phpinsight.png)
 
-Todos as métricas coletadas nessa etapa ficaram a baixo de 80, que é o valor considerado como bom
+Todas as métricas coletadas nessa etapa ficaram a baixo de 80, valor considerado como bom
 pela ferramenta.
 Para a métrica de código foi atribuido **61** pontos (de 0 a 100). Nessa métrica, são
 identificadas más práticas de programação em php como: 
@@ -34,7 +34,7 @@ variáveis sem uso, métodos sem retorno, estruturas de controle (if/else) mal u
 escopo de funções (public/private) incorretas entre outros.
 
 A Complexidade média do transforma está em **0**, ou seja, o uso de estruturas condicionais ao longo
-do código não poderia ser pior, segundo os dados coletados pela ferramenta. Um dos resultados
+do código é alto, segundo os dados coletados pela ferramenta. Um dos resultados
 da ferramenta diz o seguinte:
 
 ![relatorio](../_static/images/phpinsight-complexity.png)
@@ -48,7 +48,7 @@ exemplo, possui 48 estruturas de controle.
 
 A arquitetura média está em 64 pontos. Aqui são analisados praticas como: tamanho das classes, número de
 métodos por classe, gestão de dependencias, tamanho das funções entre outros. Também bem abaixo de
-80. O estilo médio do código está em 55.4 pontos. O código apresenta má formatação e está fora do padrão
+80. O estilo médio do código está em 55,4 pontos. O código apresenta má formatação e está fora do padrão
 utilizado pela comunidade PHP.
 
 Na visão geral do código, utilizando como insumo os resultados obtidos com a ferramenta, o

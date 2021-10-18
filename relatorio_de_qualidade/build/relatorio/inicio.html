@@ -15,7 +15,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Analise do tamanho da plataforma com a ferramenta phploc" href="analise_phploc.html" />
+    <link rel="next" title="Análise do tamanho da plataforma com a ferramenta phploc" href="analise_phploc.html" />
     <link rel="prev" title="Relatório de qualidade de código da plataforma Transforma Minas" href="../index.html" /> 
 </head>
 
@@ -40,9 +40,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#ferramentas-utilizadas-nas-analises">Ferramentas utilizadas nas análises</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Analise do tamanho da plataforma com a ferramenta phploc</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phpcpd.html">Analise da código duplicado com a ferramenta phpcpd</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Analise da qualidade com a ferramenta PHP Insight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Análise do tamanho da plataforma com a ferramenta phploc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpcpd.html">Análise da código duplicado com a ferramenta phpcpd</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Análise da qualidade com a ferramenta PHP Insight</a></li>
 <li class="toctree-l1"><a class="reference internal" href="analise_phpchurn.html">Analise da qualidade com a ferramenta Churn PHP</a></li>
 <li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap de melhorias</a></li>
 </ul>
@@ -75,12 +75,12 @@
 <h1>Introdução<a class="headerlink" href="#introducao" title="Permalink to this headline">¶</a></h1>
 <p>Este relatório tem por objetivo analisar, a partir da execução de uma série de ferramentas de análise
 estática, a qualidade de código da plataforma <a class="reference external" href="https://github.com/seplagmg/transforma_minas">Transforma Minas</a>.
-A Pencillabs, em parceria com a fundação Lemman e o time da SEPLAG, realizou uma séria de
-consultorias para disponibilizar o código da plataforma como software livre. Com o código disponível
+A Pencillabs, em parceria com a <a class="reference external" href="https://fundacaolemann.org.br/">Fundação Lemann</a> e a <a class="reference external" href="http://planejamento.mg.gov.br/">SEPLAG</a>,
+realizou uma séria de consultorias para disponibilizar o código da plataforma como software livre. Com o código disponível
 para o público, o próximo passo é construir uma comunidade em torno do projeto, de modo que
 desenvolvedores e gestores públicos possam contribuir e se beneficiar dos recursos oferecidos pela
 plataforma.</p>
-<p>Para que seja possível construir tal comunidade e receber contribuições de outras pessoas
+<p>Para construir tal comunidade e receber contribuições de outras pessoas
 desenvolvedoras, o código da plataforma precisa ter alguns requisitos não funcionais:</p>
 <ol class="simple">
 <li><p>Ser simples de ler;</p></li>
@@ -88,11 +88,11 @@ desenvolvedoras, o código da plataforma precisa ter alguns requisitos não func
 <li><p>Ser simples de evoluir;</p></li>
 </ol>
 <p>Essas três características são essenciais para qualquer projeto software livre. Sem elas, é
-praticamente impossível construir uma política de contribuição por meio de <em>merge requests</em>. Surge
+praticamente impossível construir uma política de contribuição através de <em>merge requests</em>. Surge
 então a necessidade de avaliar se o código da plataforma atende esses requisitos, e é por isso que
 este relatório foi produzido. Para reduzir o viés interpretativo, uma série
 de ferramentas de análise estática foram escolhidas para extrair, de forma automatizada,
-métricas e medidas do código fonte.</p>
+métricas e medidas do código-fonte.</p>
 <p>Com essas métricas em mãos, iremos verificar no código se há
 respaldo para o que foi encontrado pelas ferramentas. Ao final da nossa análise, iremos sugerir um
 possível roadmap que resolva parte ou todos os problemas levantados pelas ferramentas.
@@ -100,7 +100,7 @@ Para a coleta de métricas de qualidade utilizaremos um conjunto de ferramentas
 disponíveis no universo PHP. Para uma visão da arquitetura de software e boas práticas de
 programação, utilizaremos como base o que a literura de engenharia de software e ciência da computação
 aborda sobre estes assuntos.</p>
-<p>Todas as analises foram feitas a partir do commit <a class="reference external" href="https://github.com/seplagmg/transforma_minas/commit/42bb6cdac1413e10e29e4fe456810d815415f50c">https://github.com/seplagmg/transforma_minas/commit/42bb6cdac1413e10e29e4fe456810d815415f50c</a>, no repositório público da plataforma.</p>
+<p>Todas as análises foram feitas a partir do commit <a class="reference external" href="https://github.com/seplagmg/transforma_minas/commit/42bb6cdac1413e10e29e4fe456810d815415f50c">https://github.com/seplagmg/transforma_minas/commit/42bb6cdac1413e10e29e4fe456810d815415f50c</a>, no repositório público da plataforma.</p>
 <div class="section" id="ferramentas-utilizadas-nas-analises">
 <h2>Ferramentas utilizadas nas análises<a class="headerlink" href="#ferramentas-utilizadas-nas-analises" title="Permalink to this headline">¶</a></h2>
 <p>As seguintes ferramentas serão utilizadas para analisar o código da plataforma:</p>
@@ -148,7 +148,7 @@ aborda sobre estes assuntos.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../index.html" class="btn btn-neutral float-left" title="Relatório de qualidade de código da plataforma Transforma Minas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="analise_phploc.html" class="btn btn-neutral float-right" title="Analise do tamanho da plataforma com a ferramenta phploc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="analise_phploc.html" class="btn btn-neutral float-right" title="Análise do tamanho da plataforma com a ferramenta phploc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

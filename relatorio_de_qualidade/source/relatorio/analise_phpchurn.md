@@ -3,7 +3,7 @@
 Utilizaremos a ferramenta [churn-php](https://github.com/bmitch/churn-php) para coletar metas de 
 complexidade ciclomatica. Diferente da ferramenta [PHP Insight](https://github.com/nunomaduro/phpinsights),
 que coleta métricas gerais, a churn-php indica os arquivos com maior complexidade que podem se
-beneficiar de práticas de refatoração. A ferramenta irá pontuar os arquivos de 0.1 a 1, sendo 0.1
+beneficiar de práticas de refatoração. A ferramenta irá pontuar os arquivos de 0,1 a 1, sendo 0,1
 complexidade mínima e 1 complexidade máxima.
 
 Com a ferramenta instalada, executamos o seguinte comando:
@@ -11,7 +11,7 @@ Com a ferramenta instalada, executamos o seguinte comando:
     vendor/bin/churn run --configuration=tools/churn.yml application/models/ application/controllers/ application/views/ application/helpers/
 
 
-Segundo dados coletados pela ferramenta, os top 15 arquivos mais complexos do transforma são
+Segundo dados coletados pela ferramenta, os 15 arquivos mais complexos do transforma são
 apresentados na imagem abaixo:
 
 ![relatorio](../_static/images/phpchurn.png)
@@ -21,10 +21,10 @@ terem uma taxa alta de complexidade ciclomatica.
 
 ## views/candidaturas.php
 
-O arquivo `views/candidaturas.php` possui 3882 linhas de código fonte. Realizando uma contagem básica
+O arquivo `views/candidaturas.php` possui 3882 linhas de código-fonte. Realizando uma contagem básica
 do número de estruturas condicionais (if, else) no arquivo, temos 473 if e 58 else.  Um arquivo com
 473 caminhos possíveis tem um custo enorme de manutenção e evolução, o que indica a alta taxa
-de complexidade atribuida pela ferramenta. O Code Igniter segue o padrão MVC, e nesse padrão 
+de complexidade atribuida pela ferramenta. O Code Igniter segue o padrão MVC, e nele 
 a camada de visualização **não pode implementar** regras de negócio. 
 Alguns desses 473 caminhos possíveis são verificações que deveriam estar ou nas modelos ou nas
 helpers. A seguir, um trecho de código que não deveria estar na view, e sim em uma helper para
@@ -63,13 +63,14 @@ candidaturas, por exemplo.
 
 O fato desses caminhos e verificações estarem implementados diretamente na view, impede o reuso e a
 implementação de testes para essas regras. Muitas dessas condicionais também são utilizadas para
-controlar o estado da pagina. Além disso, o arquivo contem 21 linhas de código comentadas.
+controlar o estado da página. Além disso, o arquivo possui 21 linhas de código comentadas.
 
 Por serem arquivos que geram as paginas html, views devem ser o mais desacopladas do backend
 possível. Seguindo a própria documentação do [Code Igniter](https://codeigniter.com/userguide3/general/views.html), 
 o construtor `echo` nas views deve ser utilizado apenas para apresentar variáveis que venham das controllers (carregamento dinamico), 
-mas na plataforma o uso de `echo` vai para além disso, sendo utilizado para gerar  html a partir de strings.
-Isso polui a estrutura do código e dificulta a manutenção e evolução da página. No arquivo
+mas na plataforma o comando `echo` é utilizado para gerar toda a estrutura do html.
+Isso polui o código, dificulta a manutenção e encarece a adição de novas funcionalidades e
+comportamentos visuais. No arquivo
 `views/candidaturas.php` o comando `echo` é utilizado 658 vezes.
 
 
@@ -112,15 +113,15 @@ aplicação. **Não há testes automatizados para as views da aplicação**.
 
 ## controllers/Candidaturas.php
 
-O arquivo `controllers/Candidaturas.php` possui  4215 linhas de código fonte. Realizando uma contagem básica
-do número de estruturas condicionais (if, else) no arquivo, temos 563 if e 257 else. Como esta
-controller possui muitos métodos, iremos analisar apenas um deles, apontando possíveis problema no
-estilo e no design do código. Vamos começar analisando o que é uma controller dentro do padrão
+O arquivo `controllers/Candidaturas.php` possui  4215 linhas de código-fonte. Realizando uma contagem básica
+do número de estruturas condicionais (if, else) no arquivo, temos 563 if e 257 else. Como essa
+controller possui muitos métodos iremos analisar apenas um deles, apontando possíveis problemas no
+estilo e no design do código. Vamos começar analisando o que é uma controller no padrão
 MVC. O padrão MVC trabalha com separação de responsabilidades. A camada de visualização desenha a
-tela e apresenta as regras de negócio estabelecidas e verificadas na camada modelo. A camada de
-modelo é quem armazena as regras de negócio da aplicação, como por exemplo, a nota que deve ser dada 
+tela e apresenta as regras de negócio estabelecidas e verificadas na camada modelo. A camada
+modelo é quem armazena as regras de negócio da aplicação como, por exemplo, a nota que deve ser dada 
 para uma resposta do candidato. A camada de controle é responsável por processar as requisições HTTP, 
-controlar os objetos que vem da camada de modelo e por inicializar a camada de apresentação.
+controlar os objetos que vem da camada modelo e por inicializar a camada de apresentação.
 Avaliando a implementação do método `calcula_nota`, na controller de candidaturas, é possível
 notar que existe um problema de responsabilidade. A controller é responsável por mais do que ela
 deveria, o que fere o princípio de responsabilidades do MVC.
@@ -156,15 +157,15 @@ deveria, o que fere o princípio de responsabilidades do MVC.
     }
 ```
 
-Neste trecho de código, notamos que é a controller `calcula_nota` quem sabe como calcular a nota
-dependendo do tipo de questão. Esse tipo de calculo tem que estar implementado na modelo do
+Neste trecho de código, notamos que é a controller `calcula_nota` a responsável por calcular a nota
+dependendo da questão. Esse cálculo tem que estar implementado na modelo do
 Candidato e testada de forma unitaria. O papel da controller é  receber o input do usuário,
 instanciar a modelo que possui as regras de negócio, e **controlar** o processamento da requisição.
 Esse trecho é um exemplo entre vários, que ferem o princípio de responsabilidade de uma controller
 no padrão MVC.
 
-Um outro problema presente nas controllers é a duplicação de código. No método `calcula_nota` a
-mesma linha de código que recupera as questões do banco, é chamada diversas vezes. Isso se dá pelo
+Outro problema presente nas controllers é a duplicação de código. No método `calcula_nota`, a
+mesma linha de código que recupera as questões do banco é chamada diversas vezes. Isso se dá pelo
 alto número de caminhos condicionais que dificultam o reuso de código. 
 **Não há testes automatizados para as controllers da aplicação**.
 

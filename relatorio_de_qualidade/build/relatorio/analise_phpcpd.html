@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Analise da código duplicado com a ferramenta phpcpd &mdash; Transforma Minas 1.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>Análise da código duplicado com a ferramenta phpcpd &mdash; Transforma Minas 1.0.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
@@ -15,8 +15,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Analise da qualidade com a ferramenta PHP Insight" href="analise_phpinsight.html" />
-    <link rel="prev" title="Analise do tamanho da plataforma com a ferramenta phploc" href="analise_phploc.html" /> 
+    <link rel="next" title="Análise da qualidade com a ferramenta PHP Insight" href="analise_phpinsight.html" />
+    <link rel="prev" title="Análise do tamanho da plataforma com a ferramenta phploc" href="analise_phploc.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,16 +37,17 @@
               <p class="caption"><span class="caption-text">Conteúdos:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="inicio.html">Introdução</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Analise do tamanho da plataforma com a ferramenta phploc</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Analise da código duplicado com a ferramenta phpcpd</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="analise_phploc.html">Análise do tamanho da plataforma com a ferramenta phploc</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Análise da código duplicado com a ferramenta phpcpd</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#duplicacoes-nas-views">Duplicações nas views</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#duplicacoes-nas-models">Duplicações nas models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#duplicacoes-nas-controllers">Duplicações nas controllers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#duplicacoes-nas-helpers">Duplicações nas helpers</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Analise da qualidade com a ferramenta PHP Insight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analise_phpinsight.html">Análise da qualidade com a ferramenta PHP Insight</a></li>
 <li class="toctree-l1"><a class="reference internal" href="analise_phpchurn.html">Analise da qualidade com a ferramenta Churn PHP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roadmap.html">Roadmap de melhorias</a></li>
 </ul>
 
         </div>
@@ -63,7 +64,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Analise da código duplicado com a ferramenta phpcpd</li>
+      <li>Análise da código duplicado com a ferramenta phpcpd</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/relatorio/analise_phpcpd.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -74,9 +75,9 @@
            <div itemprop="articleBody">
              
   <div class="tex2jax_ignore mathjax_ignore section" id="analise-da-codigo-duplicado-com-a-ferramenta-phpcpd">
-<h1>Analise da código duplicado com a ferramenta phpcpd<a class="headerlink" href="#analise-da-codigo-duplicado-com-a-ferramenta-phpcpd" title="Permalink to this headline">¶</a></h1>
+<h1>Análise da código duplicado com a ferramenta phpcpd<a class="headerlink" href="#analise-da-codigo-duplicado-com-a-ferramenta-phpcpd" title="Permalink to this headline">¶</a></h1>
 <p>Utilizaremos a ferramenta <a class="reference external" href="https://github.com/sebastianbergmann/phpcpd">phpcpd</a> para coletar duplicações no código da plataforma.</p>
-<p>Os seguintes comandos foram executados</p>
+<p>Os seguintes comandos foram executados:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span> php phpcpd.phar --fuzzy application/views/ &gt; relatorio_de_qualidade/phpcpd-report-views.txt
  php phpcpd.phar --fuzzy application/models/ &gt; relatorio_de_qualidade/phpcpd-report-models.txt
  php phpcpd.phar --fuzzy application/controllers/ &gt; relatorio_de_qualidade/phpcpd-report-controllers.txt
@@ -384,7 +385,7 @@
 </div>
 <p>O código apresenta muitas duplicações (ctrl-c, ctrl-v), principalmente nas views e controllers. Toda
 aplicação vai apresentar algum nível de duplicação, mas o volume de ocorrencias apresentadas pela
-ferramenta indica uma provável falha de design e mal cheiro de código.</p>
+ferramenta indica uma provável falha de design e mau cheiro de código.</p>
 </div>
 </div>
 
@@ -392,8 +393,8 @@ ferramenta indica uma provável falha de design e mal cheiro de código.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="analise_phploc.html" class="btn btn-neutral float-left" title="Analise do tamanho da plataforma com a ferramenta phploc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="analise_phpinsight.html" class="btn btn-neutral float-right" title="Analise da qualidade com a ferramenta PHP Insight" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="analise_phploc.html" class="btn btn-neutral float-left" title="Análise do tamanho da plataforma com a ferramenta phploc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="analise_phpinsight.html" class="btn btn-neutral float-right" title="Análise da qualidade com a ferramenta PHP Insight" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

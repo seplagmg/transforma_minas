@@ -2,13 +2,13 @@
 
 Este relatório tem por objetivo analisar, a partir da execução de uma série de ferramentas de análise
 estática, a qualidade de código da plataforma [Transforma Minas](https://github.com/seplagmg/transforma_minas). 
-A Pencillabs, em parceria com a fundação Lemman e o time da SEPLAG, realizou uma séria de 
-consultorias para disponibilizar o código da plataforma como software livre. Com o código disponível
+A Pencillabs, em parceria com a [Fundação Lemann](https://fundacaolemann.org.br/) e a [SEPLAG](http://planejamento.mg.gov.br/), 
+realizou uma séria de consultorias para disponibilizar o código da plataforma como software livre. Com o código disponível
 para o público, o próximo passo é construir uma comunidade em torno do projeto, de modo que
 desenvolvedores e gestores públicos possam contribuir e se beneficiar dos recursos oferecidos pela
 plataforma.
 
-Para que seja possível construir tal comunidade e receber contribuições de outras pessoas
+Para construir tal comunidade e receber contribuições de outras pessoas
 desenvolvedoras, o código da plataforma precisa ter alguns requisitos não funcionais:
 
 1. Ser simples de ler;
@@ -16,11 +16,11 @@ desenvolvedoras, o código da plataforma precisa ter alguns requisitos não func
 3. Ser simples de evoluir;
 
 Essas três características são essenciais para qualquer projeto software livre. Sem elas, é
-praticamente impossível construir uma política de contribuição por meio de _merge requests_. Surge
+praticamente impossível construir uma política de contribuição através de _merge requests_. Surge
 então a necessidade de avaliar se o código da plataforma atende esses requisitos, e é por isso que
 este relatório foi produzido. Para reduzir o viés interpretativo, uma série
 de ferramentas de análise estática foram escolhidas para extrair, de forma automatizada, 
-métricas e medidas do código fonte. 
+métricas e medidas do código-fonte. 
 
 Com essas métricas em mãos, iremos verificar no código se há
 respaldo para o que foi encontrado pelas ferramentas. Ao final da nossa análise, iremos sugerir um
@@ -30,7 +30,7 @@ disponíveis no universo PHP. Para uma visão da arquitetura de software e boas 
 programação, utilizaremos como base o que a literura de engenharia de software e ciência da computação 
 aborda sobre estes assuntos.
 
-Todas as analises foram feitas a partir do commit [https://github.com/seplagmg/transforma_minas/commit/42bb6cdac1413e10e29e4fe456810d815415f50c](https://github.com/seplagmg/transforma_minas/commit/42bb6cdac1413e10e29e4fe456810d815415f50c), no repositório público da plataforma.
+Todas as análises foram feitas a partir do commit [https://github.com/seplagmg/transforma_minas/commit/42bb6cdac1413e10e29e4fe456810d815415f50c](https://github.com/seplagmg/transforma_minas/commit/42bb6cdac1413e10e29e4fe456810d815415f50c), no repositório público da plataforma.
 
 ## Ferramentas utilizadas nas análises
 

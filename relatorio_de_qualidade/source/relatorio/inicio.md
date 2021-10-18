@@ -3,13 +3,13 @@
 Este relatório tem por objetivo analisar, a partir da execução de uma série de ferramentas de análise
 estática, a qualidade de código da plataforma [Transforma Minas](https://github.com/seplagmg/transforma_minas). 
 A Pencillabs, em parceria com a [Fundação Lemann](https://fundacaolemann.org.br/) e a [SEPLAG](http://planejamento.mg.gov.br/), 
-realizou uma séria de consultorias para disponibilizar o código da plataforma como software livre. Com o código disponível
-para o público, o próximo passo é construir uma comunidade em torno do projeto, de modo que
+implementou melhorias e correções para disponibilizar o código como software livre. Com o sistema disponível
+para o público, o próximo passo é construir uma comunidade em torno do projeto de modo que
 desenvolvedores e gestores públicos possam contribuir e se beneficiar dos recursos oferecidos pela
 plataforma.
 
 Para construir tal comunidade e receber contribuições de outras pessoas
-desenvolvedoras, o código da plataforma precisa ter alguns requisitos não funcionais:
+desenvolvedoras, o código precisa ter alguns requisitos não funcionais:
 
 1. Ser simples de ler;
 2. Ser simples de manter; 
@@ -17,13 +17,12 @@ desenvolvedoras, o código da plataforma precisa ter alguns requisitos não func
 
 Essas três características são essenciais para qualquer projeto software livre. Sem elas, é
 praticamente impossível construir uma política de contribuição através de _merge requests_. Surge
-então a necessidade de avaliar se o código da plataforma atende esses requisitos, e é por isso que
-este relatório foi produzido. Para reduzir o viés interpretativo, uma série
-de ferramentas de análise estática foram escolhidas para extrair, de forma automatizada, 
-métricas e medidas do código-fonte. 
+então a necessidade de construir um relatório de qualidade que avalie se o código da plataforma atende aos requisitos não funcionais.
+Para reduzir o viés interpretativo, uma série de ferramentas de análise estática foram escolhidas para extrair, de forma automatizada, 
+métricas e medidas do código-fonte.
 
-Com essas métricas em mãos, iremos verificar no código se há
-respaldo para o que foi encontrado pelas ferramentas. Ao final da nossa análise, iremos sugerir um
+Com essas métricas em mãos iremos verificar no código se há
+respaldo para o que foi encontrado pelas ferramentas. Ao final da nossa análise iremos sugerir um
 possível roadmap que resolva parte ou todos os problemas levantados pelas ferramentas.
 Para a coleta de métricas de qualidade utilizaremos um conjunto de ferramentas 
 disponíveis no universo PHP. Para uma visão da arquitetura de software e boas práticas de

@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 //$config['base_url'] = 'https://www.selecaotransformaminas.mg.gov.br//';
-$config['base_url'] = 'http://testetransformaminas.mg.gov.br';
+$config['base_url'] = 'http://localhost:8080/';
 /*
 |--------------------------------------------------------------------------
 | Index File

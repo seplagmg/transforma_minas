@@ -18,12 +18,9 @@ responsável por servir os scripts PHP.
 - Subir um container chamado `transforma-minas_db_1`, utilizando a imagem mariadb:latest.  
 Esse container será o banco de dados da aplicação.
 
-3. Restaure o banco utilizando o comando `make restore`;
-
-4. Para visualizar a plataforma, acesse `http://localhost:8080`;
-
-5. A partir daqui você pode criar um usuário clicando em `Cadastre-se`. Uma senha temporária será enviada para o email informado no cadastro.
-
+3. Restaure schema do banco utilizando o comando `make load-schema`;
+4. Crie os usuários  `make create-users`;
+4. Acesse a plataforma em `http://localhost:8080` utilizando um dos usuários listados na sessão [Usuários](##usuários);
 
 ## SMTP
 

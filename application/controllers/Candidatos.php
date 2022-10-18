@@ -384,7 +384,7 @@ class Candidatos extends CI_Controller {
                                                                                 
                                         $dados['tx_atividades'][$i]=$experiencia->tx_atividades;
                                         $dados['pr_experienca'][$i]=$experiencia->pr_experienca;
-                                        //$dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
+                                        $dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
                                 }
                         }
                         $dados['num_experiencia']=$i;
@@ -489,7 +489,7 @@ class Candidatos extends CI_Controller {
                                         }
                                 }
                                                                 
-                                /*for($i = 1; $i <= $this -> input -> post('num_experiencia'); $i++){
+                                for($i = 1; $i <= $this -> input -> post('num_experiencia'); $i++){
                                         if(isset($_FILES["comprovante{$i}"]['name']) && strlen($_FILES["comprovante{$i}"]['name']) > 0){
                                                 if(strlen($this -> input -> post("empresa{$i}")) > 0 || strlen($this -> input -> post("inicio{$i}")) > 0 || strlen($this -> input -> post("atividades{$i}")) > 0){
                                                         //$this -> upload -> do_upload("comprovante{$i}")
@@ -507,7 +507,7 @@ class Candidatos extends CI_Controller {
                                                 }
                                                 
                                         }
-                                }*/
+                                }
                                 
                         }
                         
@@ -600,7 +600,7 @@ class Candidatos extends CI_Controller {
                                                                         
                                                                         $this -> Candidaturas_model -> update_experiencia("tx_atividades", $this -> input -> post("atividades{$i}"),$this -> input -> post("codigo_experiencia{$i}"));
                                                                                                                                         
-                                                                        /*if(isset($_FILES["comprovante{$i}"]['name']) && strlen($_FILES["comprovante{$i}"]['name']) > 0){
+                                                                                                                                        if(isset($_FILES["comprovante{$i}"]['name']) && strlen($_FILES["comprovante{$i}"]['name']) > 0){
                                                                                 $dados_upload["envio_experiencia{$i}"]['experiencia'] = $this -> input -> post("codigo_experiencia{$i}");
                                                                                 if(isset($_FILES["comprovante{$i}"]['name']) && strlen($_FILES["comprovante{$i}"]['name']) > 0){
                                                                                         $id = $this -> Anexos_model -> salvar_anexo($dados_upload["envio_experiencia{$i}"], '1');
@@ -614,12 +614,12 @@ class Candidatos extends CI_Controller {
                                                                                                 }
                                                                                         }
                                                                                 }
-                                                                        }*/
+                                                                        }
                                                                 }
                                                                 else{
                                                                         $experiencia = $this -> Candidaturas_model -> create_experiencia($dados_form, $i);
                                                                                                                                         
-                                                                        /*$dados_upload["envio_experiencia{$i}"]['experiencia'] = $experiencia;
+                                                                        $dados_upload["envio_experiencia{$i}"]['experiencia'] = $experiencia;
                                                                         if(isset($_FILES["comprovante{$i}"]['name']) && strlen($_FILES["comprovante{$i}"]['name']) > 0){
                                                                                 $id = $this -> Anexos_model -> salvar_anexo($dados_upload["envio_experiencia{$i}"], '1');
                                                                                 if($id > 0){
@@ -631,7 +631,7 @@ class Candidatos extends CI_Controller {
                                                                                         }
                                                                                         //rename($config['upload_path'].$dados_upload["envio_experiencia{$i}"]['file_name'], $config['upload_path'].$id);
                                                                                 }
-                                                                        }*/
+                                                                        }
                                                                 }
                                                         }
                                                 }
@@ -665,7 +665,7 @@ class Candidatos extends CI_Controller {
                                                                                                         
                                                         $dados['tx_atividades'][$i]=$experiencia->tx_atividades;
                                                         $dados['pr_experienca'][$i]=$experiencia->pr_experienca;
-                                                        //$dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
+                                                        $dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
                                                 }
                                                 $dados['num_experiencia']=$i;
                                                 
@@ -712,7 +712,7 @@ class Candidatos extends CI_Controller {
                 $this -> load -> helper('string');
 
                 $this -> form_validation -> set_rules('NomeCompleto', "'Nome completo'", 'required|min_length[8]');
-                $this -> form_validation -> set_rules('CPF', "'CPF'", 'required|verificaCPF|callback_validaUnicoCPF', array('required' => 'O campo \'CPF\' é obrigatório.', 'verificaCPF' => 'O CPF inserido é inválido.'));
+                $this -> form_validation -> set_rules('CPF', "'CPF'", 'required|verificaCPF|is_unique[tb_usuarios.vc_login]', array('required' => 'O campo \'CPF\' é obrigatório.', 'verificaCPF' => 'O CPF inserido é inválido.', 'is_unique' => 'O CPF inserido já está cadastrado. Recupere sua senha na página inicial.'));
                 $this -> form_validation -> set_rules('RG', "'RG'", 'required|is_unique[tb_candidatos.vc_rg]', array('required' => 'O campo \'RG\' é obrigatório.', 'is_unique' => 'O RG inserido já está cadastrado. Recupere sua senha na página inicial.'));
                 $this -> form_validation -> set_rules('OrgaoEmissor', "'Órgao Emissor'", 'required');
                 $this -> form_validation -> set_rules('IdentidadeGenero', "'Gênero'", 'required|maior_que_zero', array('maior_que_zero' => 'O campo \'Gênero\' é obrigatório.'));
@@ -1020,261 +1020,6 @@ class Candidatos extends CI_Controller {
 
                 $this -> load -> view('candidatos', $dados);
         }
-
-        public function changeName(){
-                if(!$this -> session -> logado){
-                        redirect('Publico');
-                }
-				else if($this -> session -> perfil != 'sugesp' && $this -> session -> perfil != 'orgaos' && $this -> session -> perfil != 'administrador'){
-                        redirect('Interna/index');
-                }
-                $this -> load -> model('Usuarios_model');
-                $this -> load -> library('email');
-
-                $pagina['menu1']='Candidatos';
-                $pagina['menu2']='changeName';
-                $pagina['url']='Candidatos/changeName';
-                $pagina['nome_pagina']='Alterar o nome do candidato';
-                $pagina['icone']='fa fa-user';
-
-                $candidato = $this -> uri -> segment(3);
-                $dados_form = $this -> input -> post(null,true);
-                if(isset($dados_form['codigo']) && $dados_form['codigo'] > 0){
-                        $candidato = $dados_form['codigo'];
-                }
-                $dados_candidato = $this -> Candidatos_model -> get_candidatos($candidato);
-                $usuario = $dados_candidato -> pr_usuario;
-                
-                $dados = (array) $dados_candidato;
-
-                $dados['codigo'] = $candidato;
-                
-                $dados += $pagina;
-
-                $this -> form_validation -> set_rules('NomeNovo', "'Nome completo novo'", 'required|min_length[8]');
-                $dados['sucesso'] = '';
-                $dados['erro'] = '';
-                if ($this -> form_validation -> run() == FALSE){
-                        $dados['sucesso'] = '';
-                        $dados['erro'] =  validation_errors();
-                }
-                else{
-                        $dados_candidato2['codigo'] = $dados_candidato -> pr_candidato;
-                        $dados_candidato2['NomeCompleto'] = $dados_form['NomeNovo'];
-
-                        $this -> Candidatos_model -> update_candidato($dados_candidato2);
-                        $this -> Usuarios_model -> update_usuario('vc_nome', $dados_form['NomeNovo'], $usuario);
-                        $dados['sucesso'] = "Nome alterado com sucesso. <br /><a href=\"".base_url('Candidatos/ListaCandidatos')."\" class=\"btn btn-light\">Voltar</a>";
-                        $dados['erro'] = '';
-                        $this -> Usuarios_model -> log('sucesso', 'Candidatos/changeName', 'Alteração feita com sucesso do nome do candidato para '.$dados_form['NomeNovo'].', de código '.$usuario.', feita pelo usuário '.$this -> session -> uid, 'tb_usuarios', $usuario);
-                        //inserir senha
-                        $this->load->helper('emails');
-                                                $config = getEmailEnvConfigs();
-
-						$this->email->initialize($config);
-						
-                        $this -> email -> from($this -> config -> item('email'), $this -> config -> item('nome'));
-                        $this -> email -> to($dados_candidato -> vc_email);
-                        $this -> email -> subject('['.$this -> config -> item('nome').'] Alteração de nome');
-                        //$msg='Olá '.$dados['usuario'] -> vc_nome.',<br/><br/>Foi solicitada uma nova senha do sistema do programa '.$this -> config -> item('nome').'. Seus dados para acesso são:<br/><br/>Usuário: '.$dados['usuario'] -> vc_login."<br/>Senha inicial: $senha<br/><br/>Se não foi você que solicitou essa recuperação de senha, não se preocupe pois sua senha antiga ainda funciona.<br/><br/>Acesse o sistema por meio do link: ".base_url();
-                        $msg=loadChangeName(
-                                $dados_form['NomeNovo']
-                        );
-			$this -> email -> message($msg);
-                        if(!$this -> email -> send()){
-                               
-                                $this -> Usuarios_model -> log('erro', 'Publico/changeName', 'Erro no envio de e-mail de alteração de nome para '.$dados_candidato -> vc_email);
-                        }
-                        else{
-                                
-                                $this -> Usuarios_model -> log('sucesso', 'Publico/changeName', 'Sucesso no envio de e-mail de alteração de nome para '.$dados_candidato -> vc_email);
-                        }
-                }
-
-                
-
-                $this -> load -> view('candidatos', $dados);
-        }
-
-        public function changeEmail(){
-                if(!$this -> session -> logado){
-                        redirect('Publico');
-                }
-				else if($this -> session -> perfil != 'sugesp' && $this -> session -> perfil != 'orgaos' && $this -> session -> perfil != 'administrador'){
-                        redirect('Interna/index');
-                }
-                $this -> load -> model('Usuarios_model');
-
-                $pagina['menu1']='Candidatos';
-                $pagina['menu2']='changeEmail';
-                $pagina['url']='Candidatos/changeEmail';
-                $pagina['nome_pagina']='Alterar o e-mail do candidato';
-                $pagina['icone']='fa fa-user';
-
-                $candidato = $this -> uri -> segment(3);
-                $dados_form = $this -> input -> post(null,true);
-                if(isset($dados_form['codigo']) && $dados_form['codigo'] > 0){
-                        $candidato = $dados_form['codigo'];
-                }
-                $dados_candidato = $this -> Candidatos_model -> get_candidatos($candidato);
-                $usuario = $dados_candidato -> pr_usuario;
-                
-                $dados = (array) $dados_candidato;
-
-                $dados['codigo'] = $candidato;
-                
-                $dados += $pagina;
-
-                $this -> form_validation -> set_rules('EmailNovo', "'E-mail novo'", 'required|min_length[8]');
-                $dados['sucesso'] = '';
-                $dados['erro'] = '';
-                if ($this -> form_validation -> run() == FALSE){
-                        $dados['sucesso'] = '';
-                        $dados['erro'] =  validation_errors();
-                }
-                else{
-                        $dados_candidato2['codigo'] = $dados_candidato -> pr_candidato;
-                        $dados_candidato2['Email'] = $dados_form['EmailNovo'];
-
-                        $this -> Candidatos_model -> update_candidato($dados_candidato2);
-                        $this -> Usuarios_model -> update_usuario('vc_email', $dados_form['EmailNovo'], $usuario);
-                        $dados['sucesso'] = "E-mail alterado com sucesso. <br /><a href=\"".base_url('Candidatos/ListaCandidatos')."\" class=\"btn btn-light\">Voltar</a>";
-                        $dados['erro'] = '';
-                        $this -> Usuarios_model -> log('erro', 'Candidatos/changeName', 'Alteração feita com sucesso do e-mail do candidato para '.$dados_form['EmailNovo'].', de código '.$usuario.', feita pelo usuário '.$this -> session -> uid, 'tb_usuarios', $usuario);
-                }
-
-                
-
-                $this -> load -> view('candidatos', $dados);
-        }
-
-        /*public function transform(){
-                if(!$this -> session -> logado){
-                        redirect('Publico');
-                }
-		else if($this -> session -> perfil != 'sugesp' && $this -> session -> perfil != 'orgaos' && $this -> session -> perfil != 'administrador'){
-                        redirect('Interna/index');
-                }
-                $this -> load -> model('Usuarios_model');
-
-                $pagina['menu1']='Candidatos';
-                $pagina['menu2']='transform';
-                $pagina['url']='Candidatos/transform';
-                $pagina['nome_pagina']='Alterar o perfil de usuário';
-                $pagina['icone']='fa fa-user';
-
-                $candidato = $this -> uri -> segment(3);
-                $dados_form = $this -> input -> post(null,true);
-                if(isset($dados_form['codigo']) && $dados_form['codigo'] > 0){
-                        $candidato = $dados_form['codigo'];
-                }
-                $dados_candidato = $this -> Candidatos_model -> get_candidatos($candidato);
-                $usuario = $dados_candidato -> pr_usuario;
-                
-                $dados = (array) $dados_candidato;
-
-                $dados['codigo'] = $candidato;
-                
-                $dados += $pagina;
-
-                $this -> form_validation -> set_rules('perfil', "'Perfil'", 'required');
-                $dados['sucesso'] = '';
-                $dados['erro'] = '';
-                if ($this -> form_validation -> run() == FALSE){
-                        $dados['sucesso'] = '';
-                        $dados['erro'] =  validation_errors();
-                }
-                else{
-                        $dados_candidato2['codigo'] = $dados_candidato -> pr_candidato;
-                        $dados_candidato2['bl_removido'] = '1';
-
-                        $this -> Candidatos_model -> update_candidato($dados_candidato2);
-                        $this -> Usuarios_model -> update_usuario('bl_removido', '1', $usuario);
-                        $this -> Usuarios_model -> update_usuario('vc_senha', null, $usuario);
-                        $this -> Usuarios_model -> update_usuario('vc_senha_temporaria', null, $usuario);
-                        $this -> Usuarios_model -> update_usuario('vc_email', $dados_form['EmailNovo'], $usuario);
-
-                        $dados_usuarios = $this -> Usuarios_model -> get_usuarios('',$dados_candidato -> vc_cpf);
-                        foreach($dados_usuarios as $usuario){
-                                if(!strlen($usuario -> es_candidato) > 0){
-                                        $dados_usuario_antigo = $usuario;
-                                }
-                        }
-                        if(isset($dados_usuario_antigo)){
-                                $senha = random_string ('alnum', 8);
-                                $password = $this -> encryption -> encrypt($senha);
-                                $this -> Usuarios_model -> update_usuario('bl_removido', '0', $dados_usuario_antigo->pr_usuario);
-                                $this -> Usuarios_model -> update_usuario('vc_senha_temporaria', $password, $dados_usuario_antigo->pr_usuario);
-                                $this -> Usuarios_model -> update_usuario('en_perfil', $dados_form['perfil'], $dados_usuario_antigo->pr_usuario);
-                                $this -> Usuarios_model -> update_usuario('dt_alteracao', date('Y-m-d H:i:s'), $dados_usuario_antigo->pr_usuario);
-
-                                $this -> load -> library('email');
-                                $this -> load -> helper('string');
-                                $this -> load -> library('encryption');
-                                $this->load->helper('emails');
-                                $config = getEmailEnvConfigs();
-
-                                $this->email->initialize($config);
-                                
-                                $this -> email -> from($this -> config -> item('email'), $this -> config -> item('nome'));
-                                $this -> email -> to($dados_usuario_antigo -> vc_email);
-                                $this -> email -> subject('['.$this -> config -> item('nome').'] Nova senha');
-                                $msg='Olá '.$dados_usuario_antigo -> vc_nome.',<br><br>Foi solicitada uma nova senha do sistema do programa '.$this -> config -> item('nome').'. Seus dados para acesso são:<br><br>Usuário: '.$dados_usuario_antigo -> vc_login."<br>Senha inicial: $senha<br><br>Se não foi você que solicitou essa recuperação de senha, não se preocupe pois sua senha antiga ainda funciona.<br><br>Acesse o sistema por meio do link: ".base_url();
-                                $this -> email -> message($msg);
-                                if(!$this -> email -> send()){
-                                        $this -> Usuarios_model -> log('erro', 'Usuarios/transform', 'Erro de envio de e-mail com senha de cadastro para o e-mail '.$dados_usuario_antigo -> vc_email.' do usuário '.$dados_usuario_antigo -> pr_usuario, 'tb_usuarios', $dados_usuario_antigo->pr_usuario);
-                                }
-                                else{
-                                        $this -> Usuarios_model -> log('sucesso', 'Usuarios/transform', "Nova senha para Usuário ".$dados_usuario_antigo->pr_usuario." enviada com sucesso.", 'tb_usuarios', $dados_usuario_antigo->pr_usuario);
-                                }
-                        }
-                        else{
-                                $this -> load -> library('email');
-                                $this -> load -> helper('string');
-                                
-                                $this->load->helper('emails');
-                                $config = getEmailEnvConfigs();
-                                $senha = random_string ('alnum', 8);
-                                $dados_usuario = $this -> Usuarios_model -> get_usuarios($usuario);
-                                $dados['NomeCompleto'] = $dados_usuario -> vc_nome;
-                                $dados['CPF'] = $dados_usuario -> vc_login;
-                                $dados['Email'] = $dados_usuario -> vc_email;
-                                $dados['senha'] = $senha;
-                                $dados['perfil'] = $dados_form['perfil'];
-                                $dados['candidato'] = null;
-                                $dados['Telefone'] = $dados_usuario -> vc_telefone;
-                                $novo_usuario = $this -> Usuarios_model -> create_usuario($dados);
-                                if($novo_usuario > 0){
-                                        $this -> email -> from($this -> config -> item('email'), $this -> config -> item('nome'));
-                                        $this -> email -> to($dados_usuario -> vc_email);
-                                        $this -> email -> subject('['.$this -> config -> item('nome').'] Alteração de perfil');
-                                        
-                                        $msg = loadCadastroHtml($this -> config -> item('nome'), $this -> config -> item('subTituloPlataforma'),  $dados_usuario -> vc_nome, $senha, $dados_usuario -> vc_login);
-
-                                        $this -> email -> message($msg);
-                                        if(!$this -> email -> send()){
-                                                $this -> Usuarios_model -> log('erro', 'Usuarios/create', "Erro de envio de e-mail com senha de cadastro para o e-mail {$dados_form['Email']} do usuário {$usuario}.", 'tb_usuarios', $usuario);
-                                        }
-
-                                        $dados['sucesso'] = 'Cadastro realizado com sucesso. Você vai receber sua senha inicial de acesso por e-mail. Caso não receba, tente recuperar sua senha pela página inicial ou entre em contato pelo fale conosco.<br/><br/><a href="'.base_url('Usuarios/index').'" class="btn btn-light">Voltar</a>';
-                                        $dados['erro'] =  NULL;
-                                        $this -> Usuarios_model -> log('sucesso', 'Usuarios/create', "Usuário {$usuario} criado com sucesso.", 'tb_usuarios', $usuario);
-                                }
-                                else{
-
-                                }
-
-                        } 
-                        $dados['sucesso'] = "Perfil alterado com sucesso. <br /><a href=\"".base_url('Candidatos/ListaCandidatos')."\" class=\"btn btn-light\">Voltar</a>";
-                        $dados['erro'] = '';
-                        $this -> Usuarios_model -> log('erro', 'Candidatos/transform', 'Alteração feita com sucesso do perfil do candidato para '.$dados_form['perfil'].', de código '.$usuario.', feita pelo usuário '.$this -> session -> uid, 'tb_usuarios', $usuario);
-                }
-
-                
-
-                $this -> load -> view('candidatos', $dados);
-        }*/
-        
 	public function novaSenha(){
                 if(!$this -> session -> logado){
                         redirect('Publico');
@@ -1464,11 +1209,8 @@ class Candidatos extends CI_Controller {
                         echo "<script type=\"text/javascript\">alert('Erro na recuperação dos dados do usuário. Os responsáveis já foram avisados.');window.location='".base_url('Candidatos/ListaCandidatos')."';</script>";
                 }
 
-                
+                //$this -> load -> view('candidatos', $dados);
         }
-
-        
-
         public function fetch_Municipios(){ //função de preenchimento da combo da view de cadastro
                 $this -> load -> model('Candidatos_model');
                 if($this -> input -> post ('estado')){
@@ -1505,20 +1247,6 @@ class Candidatos extends CI_Controller {
                         return TRUE;
                 }
         }
-
-        public function validaUnicoCPF($valor){
-                $this -> load -> model('Usuarios_model');
-                $dados_usuario = $this -> Usuarios_model -> get_usuarios('',$valor, '', '', true);
-                if(isset($dados_usuario)){
-                        $this -> form_validation -> set_message('validaUnicoCPF', 'Já existe um usuário com esse \'CPF\'.');
-                        return false;
-                }
-                else{
-                        
-                        return true;
-                } 
-                
-        }
         
         public function delete_formacao($id){
             $this -> load -> model('Anexos_model');
@@ -1546,6 +1274,4 @@ class Candidatos extends CI_Controller {
                 }
                 //redirect('Candidatos/cadastro/');
         }
-
-        
 }

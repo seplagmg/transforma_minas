@@ -111,10 +111,6 @@ class Candidatos_model extends CI_Model {
                 $this -> db -> where('pr_candidato', $dados['codigo']);
                 $query = $this -> db -> get();
                 if (strlen($dados['codigo']) > 0 && $query -> num_rows() > 0) { //atualizar
-                        
-                        if(isset($dados['NomeCompleto'])){
-                                $this -> db -> set ('vc_nome', $dados['NomeCompleto']);
-                        }
                         if(isset($dados['IdentidadeGenero'])){
                                 $this -> db -> set ('in_genero', $dados['IdentidadeGenero']);
                         }

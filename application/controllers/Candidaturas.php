@@ -29,8 +29,7 @@ class Candidaturas extends CI_Controller {
                                             'datatables' => true);
                 if($this -> session -> candidato > 0){
                         $dados['candidaturas'] = $this -> Candidaturas_model -> get_candidaturas ('', $this -> session -> candidato);
-                        //echo $this -> db -> last_query();
-			$vagas = $this -> Vagas_model -> get_vagas('', true, 'array', $this -> session -> candidato,'1');
+						$vagas = $this -> Vagas_model -> get_vagas('', true, 'array', $this -> session -> candidato,'1');
                         $dados['num_vagas'] = isset($vagas)?count($vagas):0;
 
                         $this -> load -> view('candidaturas', $dados);
@@ -47,49 +46,33 @@ class Candidaturas extends CI_Controller {
                 $pagina['icone']='fa fa-edit';
 
                 $dados=$pagina;
-                $dados['vaga'] = $this -> uri -> segment(3);
-                $dados_form = $this -> input -> post(null,true);
-                $vaga = '';
-                if(isset($dados_form['vaga'])){
-                        $vaga = $dados_form['vaga'];
-                }
-                else if(strlen($this -> uri -> segment(3)) > 0){
-                        $vaga = $this -> uri -> segment(3);
-                }
-                if(strlen($vaga) > 0){
-                        $dados['vaga_detalhe'] = $this -> Vagas_model -> get_vagas($vaga);
-                        if(mysql_to_unix($dados['vaga_detalhe'][0] -> dt_fim) < time()){
-                                redirect("Candidaturas/index");
-                        }
-                }
-                $dados['adicionais'] = array('wizard' => true, 'datatables' => true);
+                $dados['adicionais'] = array('wizard' => true);
 
-                $this -> form_validation -> set_rules('vaga', "'vaga'", 'callback_valida_create', array('valida_create' => 'O campo \'Vaga\' é obrigatório.'));
+                $this -> form_validation -> set_rules('Vaga', "'Vaga'", 'callback_valida_create', array('valida_create' => 'O campo \'Vaga\' é obrigatório.'));
 
                 if ($this -> form_validation -> run() == FALSE){
                         $dados['sucesso'] = '';
                         $dados['erro'] = validation_errors();
                 }
                 else{
-
-                        $dados_form['candidato'] = $this -> session -> candidato;
+                        //var_dump($this -> input -> post(null,true));
+                        $dados_form = $this -> input -> post(null,true);
+                        $dados_form['candidato'] = null;
                         $dados_form['Telefone'] = '';
-                        $dados_form['Vaga'] = $vaga;
                         $pr_candidatura = $this -> Candidaturas_model -> create_candidatura($dados_form);
                         if($pr_candidatura > 0){
                                 $this -> Usuarios_model -> log('sucesso', 'Candidaturas/create', "Candidatura {$pr_candidatura} criado com sucesso.", 'tb_candidaturas', $pr_candidatura);
-                                redirect('Candidaturas/Prova/'.$vaga);
+                                redirect('Candidaturas/Prova/'.$this -> input -> post('Vaga'));
                         }
                         else{
                                 $erro = $this -> db -> error();
-                                
                                 $this -> Usuarios_model -> log('erro', 'Candidaturas/create', 'Candidato '.$this -> session -> candidato.' não conseguiu cadastrar candidatura para a vaga '.$this -> input -> post('Vaga').': '.$erro['message'], 'tb_candidatos', $pr_candidatura);
                                 $dados['sucesso'] = '';
                                 $dados['erro'] = 'Ocorreu um erro no cadastro da sua candidatura. Os responsáveis já foram avisados.';
                         }
                 }
 
-                $dados['vagas'] = $this -> Vagas_model -> get_vagas('', true, '', $this -> session -> candidato,'1');
+                $dados['vagas'] = $this -> Vagas_model -> get_vagas('', true, 'array', $this -> session -> candidato,'1');
 
                 if(count($dados['vagas'])==0){
                         $dados['erro'] = 'Não existem vagas disponíveis para inscrição no momento.';
@@ -384,7 +367,7 @@ class Candidaturas extends CI_Controller {
                                                         /*if($falha){
                                                                 $this -> Candidaturas_model -> update_candidatura('es_status', 5,  $candidatura[0] -> pr_candidatura);
                                                                 $this -> Candidaturas_model -> update_candidatura('dt_candidatura', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
-                                                                $dados['sucesso'] = 'Seu preenchimento foi registrado mas infelizmente você não cumpre com os requisitos mínimos da vaga. Em caso de dúvidas, favor entrar em contato com o fale conosco.<br/><br/><a class=\"btn btn-light\" href="'.base_url('Candidaturas/index').'">Voltar</a>';
+                                                                $dados['sucesso'] = 'Seu preenchimento foi registrado mas infelizmente você não cumpre com os requisitos mínimos da vaga. Em caso de dúvidas, favor entrar em contato com o fale conosco.<br/><br/><a href="'.base_url('Candidaturas/index').'">Voltar</a>';
                                                                 $dados['erro'] = '';
                                                                 $this -> Usuarios_model -> log('sucesso', 'Candidaturas/Prova', "Prova da candidatura {$dados_form['candidatura']} respondida com sucesso.", 'tb_candidaturas', $dados_form['candidatura']);
                                                         }
@@ -393,7 +376,7 @@ class Candidaturas extends CI_Controller {
                                                         $this -> Candidaturas_model -> update_candidatura('es_status', 5,  $candidatura[0] -> pr_candidatura);
                                                         $this -> Candidaturas_model -> update_candidatura('dt_candidatura', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
                                                         $this -> Candidaturas_model -> update_candidatura('dt_realizada', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
-                                                        $dados['sucesso'] = 'Seu preenchimento foi registrado mas infelizmente você não cumpre com os requisitos mínimos da vaga. Em caso de dúvidas, favor entrar em contato com o fale conosco.<br/><br/><a class=\"btn btn-light\" href="'.base_url('Candidaturas/index').'">Voltar</a>';
+                                                        $dados['sucesso'] = 'Seu preenchimento foi registrado mas infelizmente você não cumpre com os requisitos mínimos da vaga. Em caso de dúvidas, favor entrar em contato com o fale conosco.<br/><br/><a href="'.base_url('Candidaturas/index').'">Voltar</a>';
                                                         $dados['erro'] = '';
 
                                                         $candidato = $this -> Candidatos_model -> get_candidatos ($candidatura[0] -> es_candidato);
@@ -590,12 +573,12 @@ class Candidaturas extends CI_Controller {
                                         $dados['pr_experienca'][$i]=$experiencia->pr_experienca;
                                         $dados['es_experiencia_pai'][$i]=$experiencia->es_experiencia_pai;
 
-                                        /*$dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
-                                        $dados["anexos_experiencia2"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->es_experiencia_pai);*/
+                                        $dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
+                                        $dados["anexos_experiencia2"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->es_experiencia_pai);
                                 }
                                 else{
                                         $dados['es_experiencia_pai'][$i]=$experiencia->pr_experienca;
-					//$dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
+										$dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
                                 }
                         }
                 }
@@ -643,7 +626,22 @@ class Candidaturas extends CI_Controller {
                                                                         $erro .= "Você deve escolher a data da conclusão da 'Formação acadêmica {$i}'.<br/>";
                                                                 }
 																
-                                                               
+                                                                /*if(strlen($this -> input -> post("semestre_conclusao{$i}")) == 0){
+                                                                        $erro .= "Você deve escolher o semestre da conclusão da 'Formação acadêmica {$i}'.<br/>";
+                                                                }
+																if(strlen($this -> input -> post("mes_conclusao{$i}")) == 0){
+																		$erro .= "Você deve escolher o mês da conclusão da 'Formação acadêmica {$i}'.<br/>";
+																}
+																else{
+																		if(strlen($this -> input -> post("semestre_conclusao{$i}")) > 0){
+																				if($this -> input -> post("semestre_conclusao{$i}") == 1 && $this -> input -> post("mes_conclusao{$i}") > 6){
+																						$erro .= "Você deve escolher o mês da conclusão da 'Formação acadêmica {$i}' não pode ser maior que Junho quando o semestre for igual a 1.<br/>";
+																				}
+																				if($this -> input -> post("semestre_conclusao{$i}") == 2 && $this -> input -> post("mes_conclusao{$i}") < 7){
+																						$erro .= "Você deve escolher o mês da conclusão da 'Formação acadêmica {$i}' não pode ser menor que Julho quando o semestre for igual a 2.<br/>";
+																				}
+																		}
+																}*/
 
 
                                                         }
@@ -741,8 +739,27 @@ class Candidaturas extends CI_Controller {
                                                         }
                                                 }
 
-												/*for($i = 1; $i <= $this -> input -> post('num_experiencia'); $i++){
-														
+												for($i = 1; $i <= $this -> input -> post('num_experiencia'); $i++){
+														/*if((!isset($_FILES["comprovante{$i}"]['name']) || strlen($_FILES["comprovante{$i}"]['name']) == 0) && $this -> input -> post('cadastrar') == 'Avançar'){
+																//$erro .= "Você deve anexar o comprovante da 'Experiência profissional {$i}'.<br/>";
+																if(strlen($this -> input -> post("codigo_experiencia{$i}"))>0){
+																		$anexos = $this -> Anexos_model -> get_anexo('','','','',$this -> input -> post("codigo_experiencia{$i}"));
+																		$anexos2 = $this -> Anexos_model -> get_anexo('','','','',$this -> input -> post("codigo_experiencia_pai{$i}"));
+																		if(!isset($anexos) && !isset($anexos2)){
+																				$erro .= "Você deve anexar o comprovante da 'Experiência profissional {$i}'.<br/>";
+																		}
+																}
+																else if(strlen($this -> input -> post("codigo_experiencia_pai{$i}"))>0){
+																		$anexos = $this -> Anexos_model -> get_anexo('','','','',$this -> input -> post("codigo_experiencia_pai{$i}"));
+																		if(!isset($anexos)){
+																				$erro .= "Você deve anexar o comprovante da 'Experiência profissional {$i}'.<br/>";
+																		}
+																}
+																else{
+																		$erro .= "Você deve anexar o comprovante da 'Experiência profissional {$i}'.<br/>";
+																}
+														}
+														else*/ 
                                                         if(isset($_FILES["comprovante{$i}"]['name']) && strlen($_FILES["comprovante{$i}"]['name']) > 0){
 																if(strlen($this -> input -> post("empresa{$i}")) > 0 || strlen($this -> input -> post("inicio{$i}")) > 0 || strlen($this -> input -> post("atividades{$i}")) > 0){
 																		@unlink($config['upload_path'].$_FILES["comprovante{$i}"]['name']);
@@ -775,7 +792,7 @@ class Candidaturas extends CI_Controller {
 																}
 
 														}
-												}*/
+												}
 
                                         //}
                                         if (strlen($erro)>0){
@@ -885,20 +902,21 @@ class Candidaturas extends CI_Controller {
                                                                         }*/
                                                                         $dados_form["candidatura".$i]=$candidatura[0]->pr_candidatura;
                                                                         $experiencia = $this -> Candidaturas_model -> create_experiencia($dados_form, $i);
-                                                                        /*if(isset($_FILES["comprovante{$i}"]['name']) && strlen($_FILES["comprovante{$i}"]['name']) > 0){
-                                                                                        $dados_upload["envio_experiencia{$i}"]['experiencia'] = $experiencia;
+																		if(isset($_FILES["comprovante{$i}"]['name']) && strlen($_FILES["comprovante{$i}"]['name']) > 0){
+																				$dados_upload["envio_experiencia{$i}"]['experiencia'] = $experiencia;
 
-                                                                                        $id = $this -> Anexos_model -> salvar_anexo($dados_upload["envio_experiencia{$i}"], '1');
-                                                                                        if($id > 0){
+																				$id = $this -> Anexos_model -> salvar_anexo($dados_upload["envio_experiencia{$i}"], '1');
+																				if($id > 0){
                                                                                         if(copy($_FILES["comprovante{$i}"]['tmp_name'],$config['upload_path'].$id)){
                                                                                                 //$dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia);
                                                                                         }
                                                                                         else{
                                                                                                 $this -> Anexos_model -> delete_anexo($id);
                                                                                         }
-																						
-                                                                                        }
-                                                                        }*/
+																						//rename($config['upload_path'].$dados_upload["envio_experiencia{$i}"]['file_name'], $config['upload_path'].$id);
+																						//echo $config['upload_path'].$dados_upload["envio_experiencia{$i}"]['file_name'];
+																				}
+																		}
                                                                         //$this -> Candidaturas_model -> create_experiencia_candidatura($experiencia,$candidatura[0] -> pr_candidatura);
                                                                 }
                                                         }
@@ -963,12 +981,12 @@ class Candidaturas extends CI_Controller {
                                                                                 $dados['pr_experienca'][$i]=$experiencia->pr_experienca;
                                                                                 $dados['es_experiencia_pai'][$i]=$experiencia->es_experiencia_pai;
 
-                                                                                /*$dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
-                                                                                $dados["anexos_experiencia2"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->es_experiencia_pai);*/
+                                                                                $dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
+                                                                                $dados["anexos_experiencia2"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->es_experiencia_pai);
                                                                         }
                                                                         else{
                                                                                 $dados['es_experiencia_pai'][$i]=$experiencia->pr_experienca;
-                                                                                //$dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
+                                                                                $dados["anexos_experiencia"][$i] = $this -> Anexos_model -> get_anexo('','','','',$experiencia->pr_experienca);
                                                                         }
                                                                 }
                                                         }
@@ -1026,7 +1044,7 @@ class Candidaturas extends CI_Controller {
                 }
                 
                 $dados['adicionais'] = array(
-                                            'wizard' => true,'dCountsjs' => true);
+                                            'wizard' => true);
                 $candidatura = $this -> Candidaturas_model -> get_candidaturas('', $this -> session -> candidato, $dados['vaga']);
                 if($candidatura[0] -> es_status == '5' || $candidatura[0] -> es_status == '7'){
                         redirect('Candidaturas/index');
@@ -1485,7 +1503,7 @@ class Candidaturas extends CI_Controller {
                                                                 $this -> Candidaturas_model -> update_candidatura('es_status', 5,  $candidatura[0] -> pr_candidatura);
                                                                 $this -> Candidaturas_model -> update_candidatura('dt_candidatura', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
                                                                 $this -> Candidaturas_model -> update_candidatura('dt_realizada', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
-                                                                $dados['sucesso'] = 'Seu preenchimento foi registrado mas infelizmente você não cumpre com os requisitos mínimos da vaga. Em caso de dúvidas, favor entrar em contato com o fale conosco.<br/><br/><a class=\"btn btn-light\" href="'.base_url('Candidaturas/index').'">Voltar</a>';
+                                                                $dados['sucesso'] = 'Seu preenchimento foi registrado mas infelizmente você não cumpre com os requisitos mínimos da vaga. Em caso de dúvidas, favor entrar em contato com o fale conosco.<br/><br/><a href="'.base_url('Candidaturas/index').'">Voltar</a>';
                                                                 $dados['erro'] = '';
 
                                                                 $candidato = $this -> Candidatos_model -> get_candidatos ($candidatura[0] -> es_candidato);
@@ -1520,7 +1538,7 @@ class Candidaturas extends CI_Controller {
 
                                                                 $this -> Candidaturas_model -> update_candidatura('dt_candidatura', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
                                                                 $this -> Candidaturas_model -> update_candidatura('dt_realizada', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
-                                                                $dados['sucesso'] = 'Obrigado pela participação. Seu cadastro foi concluído e agora faz parte do banco de dados do Processo Seletivo.<br/><br/>Em caso de dúvidas, favor entrar em contato com o fale conosco.<br/><br/><a class=\"btn btn-secondary\" href="'.base_url('Candidaturas/index').'">Voltar</a>';
+                                                                $dados['sucesso'] = 'Obrigado pela participação. Seu cadastro foi concluído e agora faz parte do banco de dados do Processo Seletivo.<br/><br/>Em caso de dúvidas, favor entrar em contato com o fale conosco.<br/><br/><a href="'.base_url('Candidaturas/index').'">Voltar</a>';
                                                                 $dados['erro'] = '';
 
 								$candidato = $this -> Candidatos_model -> get_candidatos ($candidatura[0] -> es_candidato);
@@ -2054,14 +2072,13 @@ class Candidaturas extends CI_Controller {
                 $dados['hbdi'] = $this -> Candidaturas_model -> get_hbdi($dados['candidatura']);
 
                 if($this -> session -> candidato != $candidatura[0] -> es_candidato){
-                        $this -> Usuarios_model -> log('seguranca', 'Candidaturas/HBDI', "HBDI da candidatura ".$candidatura[0] -> pr_candidatura." pelo candidato ".$this -> session -> candidato." não liberado ou concluído.", 'tb_candidaturas', $candidatura[0] -> pr_candidatura);
+                        $this -> Usuarios_model -> log('seguranca', 'Candidaturas/HBDI', "Tentativa de visualização de teste HBDI concluído ou não solicitado da candidatura ".$candidatura[0] -> pr_candidatura." pelo candidato ".$this -> session -> candidato, 'tb_candidaturas', $candidatura[0] -> pr_candidatura);
                         echo "<script type=\"text/javascript\">alert('Acesso indevido ao HBDI de uma candidatura armazenada para fins de auditoria');window.location='".base_url()."';</script>";
 
                         exit();
                 }
                 else if($candidatura[0] -> en_hbdi != '1'){
-                        $this -> Usuarios_model -> log('seguranca', 'Candidaturas/HBDI', "Tentativa de visualização de teste HBDI concluído ou não solicitado da candidatura ".$candidatura[0] -> pr_candidatura." pelo candidato ".$this -> session -> candidato, 'tb_candidaturas', $candidatura[0] -> pr_candidatura);
-                        
+                        $this -> Usuarios_model -> log('seguranca', 'Candidaturas/HBDI', "HBDI da candidatura ".$candidatura[0] -> pr_candidatura." pelo candidato ".$this -> session -> candidato." não liberado ou concluído.", 'tb_candidaturas', $candidatura[0] -> pr_candidatura);
                         echo "<script type=\"text/javascript\">alert('Acesso indevido ao HBDI de uma candidatura armazenada para fins de auditoria');window.location='".base_url()."';</script>";
 
                         exit();
@@ -2193,204 +2210,6 @@ class Candidaturas extends CI_Controller {
                         return false;
                 }
                 return true;
-        }
-
-        public function download(){
-                
-
-                $candidatura = $this -> uri -> segment(3);
-				
-				
-                $dados['candidatura'] = $this -> Candidaturas_model -> get_teste_situacao_funcional ($candidatura);
-                if(isset($dados['candidatura'])){
-                        $arq='./anexos_sit_funcional/'.$dados['candidatura'] -> es_candidatura;
-			echo $arq;	
-				
-                        $fp = fopen($arq, 'rb');
-                        $tamanho=filesize($arq);
-
-                        $content = fread($fp, $tamanho);
-
-                        fclose($fp);
-
-                        if(strlen($content)>0){
-                                //header("Content-length: {$tamanho}");
-                                header('Content-type: '.$dados['candidatura'] -> vc_mime);
-                                header('Content-Disposition: attachment; filename='.str_replace(",","",$dados['candidatura'] -> vc_comprovanteVinc));
-
-                                //$content = addslashes($content);
-                                echo $content;
-                        }
-                        else{
-                                //log_site(1, 'Download', 'Erro no download do arquivo '.$candidatura[0] -> pr_candidatura, '', '');
-                                $this -> Usuarios_model -> log('erro', 'Interna/download', 'Erro no download do arquivo '.$candidatura[0] -> pr_candidatura, 'tb_formulario_situacao_funcional', $candidatura[0] -> pr_candidatura);
-                                echo "<script type=\"text/javascript\">alert('Erro no download do arquivo. O arquivo está corrompido.');</script>";
-                                //echo "<script type=\"text/javascript\">window.location=\"/home_js\";</script>";
-                                echo "<noscript>Erro no download do arquivo. O arquivo está corrompido.<br /><a href=\"/home\">Voltar</a></noscript>";
-                        }
-                }
-                else{
-                        log_site(1, 'Download', 'Erro no download do arquivo '.$candidatura, '', '');
-                        $this -> Usuarios_model -> log('erro', 'Interna/download', 'Erro no download do arquivo '.$candidatura.' por inexistência dessa candidatura na base de dados', 'tb_formulario_situacao_funcional', $candidatura);
-                        echo "<script type=\"text/javascript\">alert('Erro no download do arquivo. O arquivo está corrompido.');</script>";
-                        //echo "<script type=\"text/javascript\">window.location=\"/home_js\";</script>";
-                        echo "<noscript>Erro no download do arquivo. O arquivo está corrompido.<br /><a href=\"/home\">Voltar</a></noscript>";
-                }
-                
-        }
-
-        public function FormSituaFunc(){
-                if($this -> session -> perfil != 'candidato'){
-                        redirect('Interna/index');
-                }
-                $this -> load -> model('Questoes_model');
-                $this -> load -> model('Instituicoes_model');
-                $this -> load -> library('email');
-
-                $pagina['menu1']='Candidaturas';
-                $pagina['menu2']='FormSituaFunc';
-                $pagina['url']='Candidaturas/FormSituaFunc';
-                $pagina['nome_pagina']='Formulário de Situação Funcional';
-                $pagina['icone']='fa fa-edit';
-
-                $dados=$pagina;
-
-                if($this -> input -> post('candidatura') > 0){
-                        $dados['candidatura'] = $this -> input -> post('candidatura');
-                }
-                else{
-                        $dados['candidatura'] = $this -> uri -> segment(3);
-                }
-
-                $dados_candidatura = $this -> Candidaturas_model -> get_candidaturas($dados['candidatura']);
-
-                //$dados += (array) $dados_candidatura[0];
-
-                $dados['candidaturas'] = $dados_candidatura;
-
-                if($this -> session -> candidato != $dados_candidatura[0] -> es_candidato){
-                        $this -> Usuarios_model -> log('seguranca', 'Candidaturas/FormSituaFunc', "Formulário de Situação Funcional da candidatura ".$dados_candidatura[0] -> pr_candidatura." pelo candidato ".$this -> session -> candidato." não liberado ou concluído.", 'tb_candidaturas', $dados_candidatura[0] -> pr_candidatura);
-                        echo "<script type=\"text/javascript\">alert('Acesso indevido ao Formulário de Situação Funcional de uma candidatura armazenada para fins de auditoria');window.location='".base_url()."';</script>";
-
-                        exit();
-                }
-                else if($dados_candidatura[0] -> en_situacao_funcional != '1'){
-                        $this -> Usuarios_model -> log('seguranca', 'Candidaturas/FormSituaFunc', "Tentativa de visualização do formulário de Situação Funcional concluído ou não solicitado da candidatura ".$dados_candidatura[0] -> pr_candidatura." pelo candidato ".$this -> session -> candidato, 'tb_candidaturas', $dados_candidatura[0] -> pr_candidatura);
-                        
-                        echo "<script type=\"text/javascript\">alert('Acesso indevido ao formulário de Situação Funcional de uma candidatura armazenada para fins de auditoria');window.location='".base_url()."';</script>";
-
-                        exit();
-                }
-
-                $dados_formulario = $this -> Candidaturas_model -> get_teste_situacao_funcional($dados['candidatura']);
-
-                $dados += (array) $dados_formulario;
-
-                $dados_candidato = $this -> Candidatos_model -> get_candidatos($dados_candidatura[0] -> es_candidato);
-
-                
-
-                $dados['candidato'] = $dados_candidato;
-                $dados['instituicoes'] = $this -> Instituicoes_model -> get_instituicoes();
-
-                $dados['sucesso'] = '';
-                $dados['erro'] = '';
-
-                $dados_form = $this -> input -> post(null,true);        
-                //comprovante
-                $comprovanteVinc = '';
-                $mime = '';
-                if(isset($dados_formulario) && strlen($dados_formulario->vc_comprovanteVinc) > 0){
-                        $comprovanteVinc = $dados_formulario->vc_comprovanteVinc;
-                        $mime = $dados->formulario -> vc_mime;
-                }
-
-                if($dados_form['salvar'] == 'Salvar'){
-                        $this -> form_validation -> set_rules('vinculo', "'Vínculo'", 'trim');
-                        $this -> form_validation -> set_rules('tipovinculo', "'Você é'", 'trim');
-                        $this -> form_validation -> set_rules('poder', "'Poder'", 'trim');
-                        $this -> form_validation -> set_rules('esfera', "'Esfera'", 'trim');
-                        $this -> form_validation -> set_rules('instituicao', "'Sigla do Órgão ou Entidade'", 'trim');
-                        $this -> form_validation -> set_rules('codCargo', "'Cargo/Função'", 'trim');
-                        $this -> form_validation -> set_rules('masp', "'MASP'", 'trim');
-                        //$this -> form_validation -> set_rules('comprovanteVinc', "'Comprovante de Vínculo'", 'trim');
-                }
-                else{
-                        $this -> form_validation -> set_rules('vinculo', "'Vínculo'", 'required');
-                        if(isset($dados_form['vinculo']) && $dados_form['vinculo'] == '1'){
-                                $this -> form_validation -> set_rules('tipovinculo', "'Você é'", 'required');
-                                $this -> form_validation -> set_rules('poder', "'Poder'", 'required');
-                                $this -> form_validation -> set_rules('esfera', "'Esfera'", 'required');
-                                if(isset($dados_form['esfera']) && $dados_form['esfera'] == '2'){
-                                        $this -> form_validation -> set_rules('instituicao', "'Sigla do Órgão ou Entidade'", 'required|maior_que_zero',array('maior_que_zero'=>"O campo 'Órgão/Entidade' é obrigatório"));
-                                        $this -> form_validation -> set_rules('instituicao2', "'Sigla do Órgão ou Entidade'", 'trim');
-                                }
-                                else{
-                                        $this -> form_validation -> set_rules('instituicao', "'Sigla do Órgão ou Entidade'", 'trim');
-                                        $this -> form_validation -> set_rules('instituicao2', "'Sigla do Órgão ou Entidade'", 'required');
-                                }
-                                $this -> form_validation -> set_rules('codCargo', "'Cargo/Função'", 'required');
-                                if(isset($dados_form['esfera']) && $dados_form['esfera'] == '2'){
-                                        $this -> form_validation -> set_rules('masp', "'MASP'", 'required');
-                                }
-                                else{
-                                        $this -> form_validation -> set_rules('masp', "'MASP'", 'trim');
-                                }
-                                if (empty($_FILES['comprovanteVinc']['name']) && strlen($comprovanteVinc) == 0){
-                                        $this -> form_validation -> set_rules('comprovanteVinc', "'Comprovante de Vínculo'", 'required');
-                                }
-                        }
-                        else{
-                                $this -> form_validation -> set_rules('tipovinculo', "'Você é'", 'trim');
-                                $this -> form_validation -> set_rules('poder', "'Poder'", 'trim');
-                                $this -> form_validation -> set_rules('esfera', "'Esfera'", 'trim');
-                                $this -> form_validation -> set_rules('instituicao', "'Sigla do Órgão ou Entidade'", 'trim');
-                                $this -> form_validation -> set_rules('codCargo', "'Cargo/Função'", 'trim');
-                                $this -> form_validation -> set_rules('masp', "'MASP'", 'trim');
-                        }
-                        
-                        
-
-                       
-                        
-                }
-                if ($this -> form_validation -> run() == FALSE){
-                        $dados['sucesso'] = '';
-                        $dados['erro'] = validation_errors();
-                }
-                else{
-                        $dados_form['candidatura'] = $dados['candidatura'];
-                        $dados_form['comprovanteVinc'] = $comprovanteVinc;
-                        $dados_form['mime'] = $mime;
-                        
-                        if(!empty($_FILES['comprovanteVinc']['name'])){
-                                @unlink('./anexos_sit_funcional'.$dados['candidatura']);
-                                if(copy($_FILES['comprovanteVinc']['tmp_name'],'./anexos_sit_funcional/'.$dados['candidatura'])){
-                                        $dados_form['comprovanteVinc'] = $_FILES['comprovanteVinc']['name'];
-                                        $dados_form['mime'] = $_FILES['comprovanteVinc']["type"];
-                                }
-                                
-                        }
-                        
-                        if($dados_form['salvar'] == 'Salvar'){
-                                $dados_form['status'] = 'salvo';
-                                $dados['sucesso'] = "Formulário de Situação Funcional salvo com sucesso.<a href=\"".site_url("Candidaturas/index")."\">Voltar</a>";
-                        }
-                        else{
-                                $dados_form['status'] = 'entregue';
-                                $this -> Candidaturas_model -> update_candidatura('en_situacao_funcional', '2',  $dados['candidatura']);
-                                //echo $this->db->last_query();
-                                $dados['sucesso'] = "<i class=\"fas fa-check-circle\"></i><p>Formulário de Situação Funcional concluído com sucesso.</p><a class=\"btn btn-light\" href=\"".site_url("Candidaturas/index")."\">Voltar</a>";
-                        }
-                        $this -> Candidaturas_model -> atualiza_teste_situacao_funcional($dados_form);
-                        
-
-
-                }
-                
-
-                $this -> load -> view('candidaturas', $dados);
-
         }
 
         /**
@@ -2525,7 +2344,7 @@ class Candidaturas extends CI_Controller {
                 /*if(!isset($dados_form['filtro_instituicao'])){
                         $dados_form['filtro_instituicao']='';
                 }*/
-                if($this -> session -> perfil == 'avaliador' && !isset($dados_form['filtro_status'])){ //avaliador
+                if($this -> session -> perfil == 'avaliador'){ //avaliador
                         $dados_form['filtro_status']='<>5';
                 }
                 if(!isset($dados_form['filtro_status'])){
@@ -2562,7 +2381,7 @@ class Candidaturas extends CI_Controller {
                         
                 }
 
-                //echo $this -> db -> last_query();
+                
                 if(isset($candidaturas)){
                         $dados['total'] = count($candidaturas);
                 }
@@ -2637,15 +2456,14 @@ class Candidaturas extends CI_Controller {
                 $anexos = $this -> Anexos_model -> get_anexo('','',$candidatura[0] -> pr_candidatura, '');
                 $dados['anexos_questao'] = array();
                 if(isset($anexos)){
-                        foreach($anexos as $anexo){
+                                foreach($anexos as $anexo){
 
-                                $dados['anexos_questao'][$anexo -> es_questao] = $anexo;
+                                                $dados['anexos_questao'][$anexo -> es_questao] = $anexo;
 
-                        }
+                                }
                 }
 
                 $dados['hbdi'] = $this -> Candidaturas_model -> get_hbdi($candidatura[0] -> pr_candidatura);
-                $dados['formulario'] = $this -> Candidaturas_model -> get_teste_situacao_funcional($candidatura[0] -> pr_candidatura);
 
                 $dados['questoes1'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 1);
                 $dados['questoes2'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 2);
@@ -2674,20 +2492,20 @@ class Candidaturas extends CI_Controller {
                 }
 
                 $dados['experiencias'] = $this -> Candidaturas_model -> get_experiencia(null,$candidatura[0] -> es_candidato,$candidatura[0]->pr_candidatura);
-                /*if(isset($dados['experiencias'])){
-                                foreach($dados['experiencias'] as $experiencia){
-                                                $dados['anexos_experiencia'][$experiencia->pr_experienca] = $this -> Anexos_model -> get_anexo('', '','', '', $experiencia->pr_experienca);
-                                                if(!isset($dados['anexos_experiencia'][$experiencia->pr_experienca][0])){
-                                                                $dados['anexos_experiencia'][$experiencia->pr_experienca] =  $this -> Anexos_model -> get_anexo('', '','', '', $experiencia->es_experiencia_pai);
-                                                }
-                                }
-                }*/
-                $notas = $this -> Candidaturas_model -> get_nota('',$candidatura[0]->pr_candidatura);
-                if(isset($notas)){
-                        foreach($notas as $nota){
-                                $dados["notas"][$nota -> es_etapa] = $nota -> in_nota;
-                        }
-                }
+				if(isset($dados['experiencias'])){
+						foreach($dados['experiencias'] as $experiencia){
+								$dados['anexos_experiencia'][$experiencia->pr_experienca] = $this -> Anexos_model -> get_anexo('', '','', '', $experiencia->pr_experienca);
+								if(!isset($dados['anexos_experiencia'][$experiencia->pr_experienca][0])){
+										$dados['anexos_experiencia'][$experiencia->pr_experienca] =  $this -> Anexos_model -> get_anexo('', '','', '', $experiencia->es_experiencia_pai);
+								}
+						}
+				}
+				$notas = $this -> Candidaturas_model -> get_nota('',$candidatura[0]->pr_candidatura);
+				if(isset($notas)){
+						foreach($notas as $nota){
+								$dados["notas"][$nota -> es_etapa] = $nota -> in_nota;
+						}
+				}
 				/*$notas = $this -> Candidaturas_model -> get_nota('',$candidatura[0]->pr_candidatura,4,'','1');
 				if(isset($notas)){
 						foreach($notas as $nota){
@@ -3569,12 +3387,12 @@ class Candidaturas extends CI_Controller {
 
                 $pagina['menu1']='Candidaturas';
                 $pagina['menu2']='AvaliacaoCurriculo';
-                if($id_vaga>0){
-                        $pagina['url']='Candidaturas/AvaliacaoCurriculo/'.$id.'/'.$id_vaga;
-                }
-                else{
-                        $pagina['url']='Candidaturas/AvaliacaoCurriculo/'.$id;
-                }
+				if($id_vaga>0){
+					$pagina['url']='Candidaturas/AvaliacaoCurriculo/'.$id.'/'.$id_vaga;
+				}
+				else{
+					$pagina['url']='Candidaturas/AvaliacaoCurriculo/'.$id;
+				}
                 
                 $pagina['nome_pagina']='Análise Curricular';
                 $pagina['icone']='fa fa-edit';
@@ -3593,15 +3411,15 @@ class Candidaturas extends CI_Controller {
                 $dados['candidato'] = $this -> Candidatos_model -> get_candidatos ($candidatura[0] -> es_candidato);
                 $dados['questoes1'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 1);
 
-                $anexos = $this -> Anexos_model -> get_anexo('','',$candidatura[0] -> pr_candidatura, '');
-                $dados['anexos_questao'] = array();
-                if(isset($anexos)){
-                                foreach($anexos as $anexo){
+				$anexos = $this -> Anexos_model -> get_anexo('','',$candidatura[0] -> pr_candidatura, '');
+				$dados['anexos_questao'] = array();
+				if(isset($anexos)){
+						foreach($anexos as $anexo){
 
-                                                $dados['anexos_questao'][$anexo -> es_questao] = $anexo;
+								$dados['anexos_questao'][$anexo -> es_questao] = $anexo;
 
-                                }
-                }
+						}
+				}
 
                 $dados['questoes2'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 2);
                 $dados['questoes3'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 3);
@@ -3822,12 +3640,12 @@ class Candidaturas extends CI_Controller {
 
                 $dados['experiencias'] = $this -> Candidaturas_model -> get_experiencia(null,$candidatura[0] -> es_candidato,$candidatura[0]->pr_candidatura);
 
-		/*foreach($dados['experiencias'] as $experiencia){
-                        $dados['anexos_experiencia'][$experiencia->pr_experienca] = $this -> Anexos_model -> get_anexo('', '','', '', $experiencia->pr_experienca);
-                        if(!isset($dados['anexos_experiencia'][$experiencia->pr_experienca][0])){
+				foreach($dados['experiencias'] as $experiencia){
+						$dados['anexos_experiencia'][$experiencia->pr_experienca] = $this -> Anexos_model -> get_anexo('', '','', '', $experiencia->pr_experienca);
+						if(!isset($dados['anexos_experiencia'][$experiencia->pr_experienca][0])){
                                 $dados['anexos_experiencia'][$experiencia->pr_experienca] =  $this -> Anexos_model -> get_anexo('', '','', '', $experiencia->es_experiencia_pai);
                         }
-		}*/
+				}
 
                 $dados['status'] = $this -> Candidaturas_model -> get_status ();
                 $dados['opcoes'] = $this -> Questoes_model -> get_opcoes('', '', $candidatura[0] -> es_vaga);
@@ -3837,187 +3655,7 @@ class Candidaturas extends CI_Controller {
                 $this -> load -> view('avaliacoes', $dados);
         }
 
-		
-		
-        /*public function RevisaoRequisitos($id){
-                if($this -> session -> perfil != 'avaliador' && $this -> session -> perfil != 'sugesp' && $this -> session -> perfil != 'orgaos' && $this -> session -> perfil != 'administrador'){
-                        redirect('Interna/index');
-                }
 
-                $this -> load -> model('Instituicoes_model');
-                $this -> load -> model('Candidatos_model');
-                $this -> load -> model('Questoes_model');
-                $this -> load -> model('Anexos_model');
-
-                $pagina['menu1']='Candidaturas';
-                $pagina['menu2']='RevisaoRequisitos';
-                $pagina['url']='Candidaturas/RevisaoRequisitos/'.$id;
-                $pagina['nome_pagina']='Revisão de Requisitos';
-                $pagina['icone']='fa fa-edit';
-
-                $dados=$pagina;
-
-                $candidatura = $this -> Candidaturas_model -> get_candidaturas($id);
-                //var_dump($dados_form);
-                $vaga = $this -> Vagas_model -> get_vagas($candidatura[0] -> es_vaga, false);
-
-                if(strlen($this->input->post('codigo_candidatura'))>0){
-                        $id = $this->input->post('codigo_candidatura');
-                }
-
-                $dados['codigo_candidatura'] = $id;
-                $dados['candidato'] = $this -> Candidatos_model -> get_candidatos ($candidatura[0] -> es_candidato);
-                $dados['questoes1'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 1);
-                $dados['questoes2'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 2);
-                $dados['questoes3'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 3);
-                $dados['questoes4'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 4);
-                $dados['questoes5'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 5);
-                $dados['questoes6'] = $this -> Questoes_model -> get_questoes('', $vaga[0] -> es_grupoVaga, 6);
-                $dados['opcoes'] = $this -> Questoes_model -> get_opcoes('', '', $candidatura[0] -> es_vaga);
-
-                $x=1;
-                if($this -> input -> post('salvar') == 'Salvar'){
-                        foreach ($dados['questoes6'] as $row){
-                                if($row -> bl_obrigatorio){
-                                        $this -> form_validation -> set_rules('Questao'.$row -> pr_questao, "'Questão $x'", 'required', array('required' => "A questão {$x} é obrigatória."));
-                                }
-                                $x++;
-                        }
-
-                        if ($this -> form_validation -> run() == FALSE){
-                                $dados['sucesso'] = '';
-                                $dados['erro'] = validation_errors();
-
-                        }
-                        else{
-                                $dados_form = $this -> input -> post(null,true);
-                                $dados_form['candidatura'] = $candidatura[0] -> pr_candidatura;
-
-                                $falha = false;
-                                foreach ($dados['questoes3'] as $row){
-                                        //$num = count($this -> Questoes_model -> get_respostas ('', $candidatura[0] -> pr_candidatura, $row -> pr_questao));
-                                        //if($num == 0){
-                                        //echo $row -> pr_questao;
-
-                                        if(($row -> in_tipo == '3' || $row -> in_tipo == '4') && (mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'sim' || mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'não' || strstr($row -> vc_respostaAceita, 'Sim,'))){
-                                                if($this -> input -> post("Questao".$row -> pr_questao)=='1' && mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'sim'){
-                                                        $nota += intval($row->in_peso);
-                                                }
-                                                else if($this -> input -> post("Questao".$row -> pr_questao)=='0' && mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'não'){
-                                                        $nota += intval($row->in_peso);
-                                                }
-                                                $total += intval($row->in_peso);
-                                        }
-                                        else if($row -> in_tipo == '5' && (mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'básico' || mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'intermediário' || mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'avançado')){
-                                                if(intval($this -> input -> post("Questao".$row -> pr_questao))>=1 && mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'básico'){
-                                                        $nota += intval($row->in_peso);
-                                                }
-                                                else if(intval($this -> input -> post("Questao".$row -> pr_questao))>=2 && mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'intermediário'){
-                                                        $nota += intval($row->in_peso);
-                                                }
-                                                else if(intval($this -> input -> post("Questao".$row -> pr_questao))>=3 && mb_convert_case($row -> vc_respostaAceita, MB_CASE_LOWER, "UTF-8") == 'avançado'){
-                                                        $nota += intval($row->in_peso);
-                                                }
-                                                $total += intval($row->in_peso);
-                                        }
-                                        else if($row -> in_tipo == '1'){
-                                                $opcoes = $this -> Questoes_model -> get_opcoes('',$row -> pr_questao);
-                                                $total_parcial=0;
-                                                foreach($opcoes as $opcao){
-
-                                                        if($this -> input -> post("Questao".$row -> pr_questao)==$opcao->pr_opcao){
-                                                                echo $opcao->in_valor;
-                                                                $nota += intval($opcao->in_valor);
-                                                        }
-                                                        if($total_parcial<intval($opcao->in_valor)){
-                                                                $total_parcial=intval($opcao->in_valor);
-                                                        }
-                                                }
-                                                //echo $total_parcial."<br />";
-                                                $total += $total_parcial;
-
-                                        }
-                                        if(strlen($this -> input -> post("codigo_resposta".$row -> pr_questao))>0){
-                                                if(strlen($this -> input -> post("Questao".$row -> pr_questao))>0){
-                                                        $this -> Candidaturas_model -> update_resposta("tx_resposta",$this -> input -> post("Questao".$row -> pr_questao),$this -> input -> post("codigo_resposta".$row -> pr_questao));
-
-                                                        $this -> Candidaturas_model -> update_resposta("dt_alteracao",date('Y-m-d H:i:s'),$this -> input -> post("codigo_resposta".$row -> pr_questao));
-                                                }
-                                                else{
-                                                        $this -> Candidaturas_model -> delete_resposta($this -> input -> post("codigo_resposta".$row -> pr_questao));
-                                                }
-                                        }
-                                        else{
-                                                if(strlen($this -> input -> post("Questao".$row -> pr_questao))>0){
-                                                        $this -> Candidaturas_model -> salvar_resposta($dados_form, $row -> pr_questao);
-                                                }
-                                        }
-
-                                        if($this -> input -> post('Questao'.$row -> pr_questao) == '0'){
-                                                $falha = true;
-                                                break;
-                                        }
-
-                                }
-                                //echo $id;
-                                $nota_etapa3=round(($nota/$total)*100);
-                                $notas = $this -> Candidaturas_model -> get_nota ('',$id,3);
-                                //echo $total;
-                                if(isset($notas[0] -> pr_nota)){
-                                        $this -> Candidaturas_model -> update_nota('in_nota',$nota_etapa3,$notas[0] -> pr_nota);
-                                }
-                                else{
-                                        $dados_nota=array('candidatura'=>$id,'nota'=>$nota_etapa3,'etapa'=>3);
-                                        $this -> Candidaturas_model -> create_nota($dados_nota);
-                                }
-                                if($falha){
-                                        $this -> Candidaturas_model -> update_candidatura('es_status', 10,  $candidatura[0] -> pr_candidatura);
-                                        $this -> Candidaturas_model -> update_candidatura('dt_candidatura', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
-                                        $dados['sucesso'] = 'Vaga reprovada com sucesso na revisão de requisitos.<br/><br/><a class=\"btn btn-light\" href="'.base_url('Candidaturas/index').'">Voltar</a>';
-                                        $dados['erro'] = '';
-                                        $this -> Usuarios_model -> log('sucesso', 'Candidaturas/Prova', "Prova da candidatura {$dados_form['candidatura']} respondida com sucesso.", 'tb_candidaturas', $dados_form['candidatura']);
-                                }
-                                else{
-                                        $this -> Candidaturas_model -> update_candidatura('es_status', 11,  $candidatura[0] -> pr_candidatura);
-                                        $this -> Candidaturas_model -> update_candidatura('dt_candidatura', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
-                                        $this -> Usuarios_model -> log('sucesso', 'Candidaturas/Prova', "Prova da candidatura {$dados_form['candidatura']} respondida com sucesso.", 'tb_candidaturas', $dados_form['candidatura']);
-                                        redirect('Vagas/resultado/'.$candidatura[0] -> es_vaga);
-                                }
-                                $this -> Candidaturas_model -> update_candidatura('dt_candidatura', date('Y-m-d H:i:s'),  $candidatura[0] -> pr_candidatura);
-                                $this -> Usuarios_model -> log('sucesso', 'Avaliacao/Curriculo', "Análise de currículo da candidatura {$dados_form['candidatura']} salva com sucesso.", 'tb_candidaturas', $dados_form['candidatura']);
-                                redirect('Candidaturas/ListaAvaliacao');
-                                //exit();
-
-                        }
-                }
-                else{
-                        $dados['sucesso'] = '';
-                        $dados['erro'] = '';
-                }
-
-
-                $dados['respostas'] = $this -> Questoes_model -> get_respostas('', $candidatura[0] -> pr_candidatura);
-                //$dados['vaga'] = $this -> Vagas_model -> get_vagas ($candidatura[0] -> es_vaga, false);
-                $dados['candidatura'] = $this -> Candidaturas_model -> get_candidaturas ($candidatura[0] -> pr_candidatura);
-                //$dados['anexo1'] = $this -> Anexos_model -> get_anexo ('', $candidatura[0] -> pr_candidatura, 1);
-                $dados['anexo2'] = $this -> Anexos_model -> get_anexo ('', $candidatura[0] -> pr_candidatura, 2);
-                $dados['anexo3'] = $this -> Anexos_model -> get_anexo ('', $candidatura[0] -> pr_candidatura, 3);
-                $dados['formacoes'] = $this -> Candidaturas_model -> get_formacao(null,$candidatura[0] -> es_candidato,$candidatura[0]->pr_candidatura);
-
-                foreach($dados['formacoes'] as $formacao){
-                        $dados['anexos'][$formacao->pr_formacao] =  $this -> Anexos_model -> get_anexo('', $formacao->pr_formacao,'', '');
-                        if(!isset($dados['anexos'][$formacao->pr_formacao][0])){
-                                $dados['anexos'][$formacao->pr_formacao] =  $this -> Anexos_model -> get_anexo('', $formacao->es_formacao_pai,'', '');
-                        }
-                }
-
-                $dados['experiencias'] = $this -> Candidaturas_model -> get_experiencia(null,$candidatura[0] -> es_candidato,$candidatura[0]->pr_candidatura);
-                $dados['status'] = $this -> Candidaturas_model -> get_status ();
-                $dados['opcoes'] = $this -> Questoes_model -> get_opcoes('', '', $candidatura[0] -> es_vaga);
-
-
-                $this -> load -> view('avaliacoes', $dados);
-        }*/
 
         public function mostra_questoes($questoes, $respostas, $opcoes, $erro, $edit=true, $avaliador='', $anexos_questao=array()){
                 if(isset($questoes)){
@@ -4030,19 +3668,11 @@ class Candidaturas extends CI_Controller {
                                                                                                                                     <div class=\"form-group row\">
                                                                                                                                             <div class=\"col-md-12\">";
                                 $attributes = array('class' => 'esquerdo control-label');
-
-                                $pos = strrpos($row -> tx_questao, "<p>");
-                                if ($pos === false) { 
-                                        $label=$x.') '.$row -> tx_questao;
-                                } else {
-                                        $label = substr_replace($row -> tx_questao,$x.') ',3,0);
-                                        if($row -> bl_obrigatorio && $edit == true){
-
-                                                $label = substr_replace($label,'<abbr title="Obrigatório" class="text-danger">*</abbr>',(strlen($label)-4),0);
-                                        }    
-                                }
                                 //$label=$x.') '.strip_tags($row -> tx_questao);
-                                // $label=$x.') '.$row -> tx_questao;
+                                $label=$x.') '.$row -> tx_questao;
+                                if($row -> bl_obrigatorio && $edit == true){
+                                        $label.=' <abbr title="Obrigatório" class="text-danger">*</abbr>';
+                                }
 								if($row -> in_tipo == 7 && $edit == true){
 										$label.=' (inserir arquivo pdf com tamanho máximo de 2MB)';
 								}
@@ -4120,11 +3750,9 @@ class Candidaturas extends CI_Controller {
                                         if($edit){
 
                                                 $attributes = array('name' => 'Questao'.$row -> pr_questao,
-                                                                    'rows'=>'5','id' => 'Questao'.$row -> pr_questao);
+                                                                    'rows'=>'5');
                                                 if($row -> bl_obrigatorio){
                                                         $attributes['required'] = 'required';
-                                                        $attributes['maxlength'] = '2000';
-                                                        
                                                         $attributes['oninvalid'] = "this.scrollIntoView({block:'center'});";
                                                 }
                                                 echo form_textarea($attributes, $res, 'class="form-control"');
@@ -4349,7 +3977,7 @@ class Candidaturas extends CI_Controller {
 				
         }
 
-	public function delete(){
+		public function delete(){
                 $this -> load -> model('Usuarios_model');
 
                 $pagina['menu1']='Candidaturas';
@@ -4361,22 +3989,11 @@ class Candidaturas extends CI_Controller {
                 $dados=$pagina;
                 $candidatura = $this -> uri -> segment(3);
 
-                $candidaturas = $this -> Candidaturas_model -> get_candidaturas($candidatura);
-                $dt_fim = strtotime($candidaturas[0] -> dt_fim);
-                //echo $this -> db -> last_query();
-                if($dt_fim > time()){
-                        $this -> Candidaturas_model -> update_candidatura('bl_removido', '1', $candidatura);
-                        $dados['sucesso'] = "A candidatura foi desativada com sucesso.<br/><br/><a href=\"".base_url('Candidaturas/index/').'" class="btn btn-light">Voltar</a>';
-                        $dados['erro'] = '';
-                        
-                        $this -> Usuarios_model -> log('sucesso', 'Candidaturas/delete', "Candidatura {$candidatura} desativada pelo usuário ".$this -> session -> uid, 'tb_candidaturas', $candidatura);
-                }
-                else{
-                        
-                        $dados['sucesso'] = "A candidatura não pode ser desabilitada pelo fim do prazo de inscrições.<br/><br/><a href=\"".base_url('Candidaturas/index/').'" class="btn btn-light">Voltar</a>';
-                        $dados['erro'] = '';
-                }
-                //redirect('Candidaturas/index');
+
+                $this -> Candidaturas_model -> update_candidatura('bl_removido', '1', $candidatura);
+                $dados['sucesso'] = "A candidatura foi desativada com sucesso.<br/><br/><a href=\"".base_url('Candidaturas/index/').'" class="btn btn-light">Voltar</a>';
+                $dados['erro'] = '';
+                $this -> Usuarios_model -> log('sucesso', 'Candidaturas/delete', "Candidatura {$candidatura} desativada pelo usuário ".$this -> session -> uid, 'tb_candidaturas', $candidatura);
 
                 $this -> load -> view('candidaturas', $dados);
         }
@@ -4595,14 +4212,4 @@ class Candidaturas extends CI_Controller {
 
         }
 
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
 }

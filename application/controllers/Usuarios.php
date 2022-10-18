@@ -35,7 +35,6 @@ class Usuarios extends CI_Controller {
                 else{
                 		$dados['usuarios'] = $this -> Usuarios_model -> get_usuarios();
                 }
-                
                 $dados['inativo'] = $inativo;
                 $this -> load -> view('usuarios', $dados);
         }
@@ -65,7 +64,7 @@ class Usuarios extends CI_Controller {
                 }
                 else{
                         $this -> form_validation -> set_rules('NomeCompleto', "'Nome completo'", 'required|min_length[8]|minus_maius', array('minus_maius' => 'Não utilize somente maiúsculas ou minúsculas no campo \'Nome completo\'.'));
-                        $this -> form_validation -> set_rules('CPF', "'CPF'", 'required|verificaCPF|callback_validaUnicoCPF', array('required' => 'O campo \'CPF\' é obrigatório.', 'verificaCPF' => 'O CPF inserido é inválido.'));
+                        $this -> form_validation -> set_rules('CPF', "'CPF'", 'required|verificaCPF|is_unique[tb_usuarios.vc_login]', array('required' => 'O campo \'CPF\' é obrigatório.', 'verificaCPF' => 'O CPF inserido é inválido.', 'is_unique' => 'O CPF inserido já está cadastrado.'));
                         $this -> form_validation -> set_rules('Email', "'E-mail'", 'required|valid_email');
                         $this -> form_validation -> set_rules('perfil', "'Perfil'", 'required');
 
@@ -332,46 +331,32 @@ class Usuarios extends CI_Controller {
                 else{
                         $usuario = $this -> uri -> segment(3);
                         $dados['usuario'] = $this -> Usuarios_model -> get_usuarios($usuario);
-
-                        
-                        
                         if($dados['usuario'] -> pr_usuario > 0){
-                                $dados_ativo = $this -> Usuarios_model -> get_usuarios('',$dados['usuario'] -> vc_login, '', '', true);
-                                if(isset($dados_ativo)){
-                                        $erro = $this -> db -> error();
-                                        $dados['sucesso'] = '';
-                                        $dados['erro'] =  'Já existe um usuário ativo com esse CPF. Portanto esse usuário não pode ser reativado.';
-                                        $this -> Usuarios_model -> log('erro', 'Usuarios/reactivate', "O {$usuario} não pode ser reativado, pois já existe um outro usuário ativo com o mesmo CPF. Erro: ".$erro['message']);
-                                        echo "<script type=\"text/javascript\">alert('Já existe um usuário ativo com esse CPF. Portanto esse usuário não pode ser reativado.');window.location='".base_url('Usuarios/index')."';</script>";
+                                $senha = random_string ('alnum', 8);
+                                $password = $this -> encryption -> encrypt($senha);
+                                $this -> Usuarios_model -> update_usuario('bl_removido', '0', $usuario);
+                                $this -> Usuarios_model -> update_usuario('vc_senha_temporaria', $password, $usuario);
+                                $this -> Usuarios_model -> update_usuario('dt_alteracao', date('Y-m-d H:i:s'), $usuario);
+
+                                $this->load->helper('emails');
+                                $config = getEmailEnvConfigs();
+
+                                $this->email->initialize($config);
+                                
+                                $this -> email -> from($this -> config -> item('email'), $this -> config -> item('nome'));
+                                $this -> email -> to($dados['usuario'] -> vc_email);
+                                $this -> email -> subject('['.$this -> config -> item('nome').'] Nova senha');
+                                $msg='Olá '.$dados['usuario'] -> vc_nome.',<br><br>Foi solicitada uma nova senha do sistema do programa '.$this -> config -> item('nome').'. Seus dados para acesso são:<br><br>Usuário: '.$dados['usuario'] -> vc_login."<br>Senha inicial: $senha<br><br>Se não foi você que solicitou essa recuperação de senha, não se preocupe pois sua senha antiga ainda funciona.<br><br>Acesse o sistema por meio do link: ".base_url();
+                                $this -> email -> message($msg);
+                                if(!$this -> email -> send()){
+                                        $this -> Usuarios_model -> log('erro', 'Usuarios/reactivate', 'Erro de envio de e-mail com senha de cadastro para o e-mail '.$dados['usuario'] -> vc_email.' do usuário '.$dados['usuario'] -> pr_usuario, 'tb_usuarios', $usuario);
                                 }
                                 else{
-                                        $senha = random_string ('alnum', 8);
-                                        $password = $this -> encryption -> encrypt($senha);
-                                        $this -> Usuarios_model -> update_usuario('bl_removido', '0', $usuario);
-                                        $this -> Usuarios_model -> update_usuario('vc_senha_temporaria', $password, $usuario);
-                                        $this -> Usuarios_model -> update_usuario('dt_alteracao', date('Y-m-d H:i:s'), $usuario);
-
-                                        $this->load->helper('emails');
-                                        $config = getEmailEnvConfigs();
-
-                                        $this->email->initialize($config);
-                                        
-                                        $this -> email -> from($this -> config -> item('email'), $this -> config -> item('nome'));
-                                        $this -> email -> to($dados['usuario'] -> vc_email);
-                                        $this -> email -> subject('['.$this -> config -> item('nome').'] Nova senha');
-                                        $msg='Olá '.$dados['usuario'] -> vc_nome.',<br><br>Foi solicitada uma nova senha do sistema do programa '.$this -> config -> item('nome').'. Seus dados para acesso são:<br><br>Usuário: '.$dados['usuario'] -> vc_login."<br>Senha inicial: $senha<br><br>Se não foi você que solicitou essa recuperação de senha, não se preocupe pois sua senha antiga ainda funciona.<br><br>Acesse o sistema por meio do link: ".base_url();
-                                        $this -> email -> message($msg);
-                                        if(!$this -> email -> send()){
-                                                $this -> Usuarios_model -> log('erro', 'Usuarios/reactivate', 'Erro de envio de e-mail com senha de cadastro para o e-mail '.$dados['usuario'] -> vc_email.' do usuário '.$dados['usuario'] -> pr_usuario, 'tb_usuarios', $usuario);
-                                        }
-                                        else{
-                                                $this -> Usuarios_model -> log('sucesso', 'Usuarios/reactivate', "Nova senha para Usuário {$usuario} enviada com sucesso.", 'tb_usuarios', $usuario);
-                                        }
-                                        $dados['sucesso'] = 'Usuário reativado com sucesso.<br/><br/><a href="'.base_url('Usuarios/index').'" class="btn btn-light">Voltar</a>';
-                                        $dados['erro'] =  NULL;
-                                        echo "<script type=\"text/javascript\">alert('Usuário reativado com sucesso.');window.location='".base_url('Usuarios/index')."';</script>";
+                                        $this -> Usuarios_model -> log('sucesso', 'Usuarios/reactivate', "Nova senha para Usuário {$usuario} enviada com sucesso.", 'tb_usuarios', $usuario);
                                 }
-                                
+                                $dados['sucesso'] = 'Usuário reativado com sucesso.<br/><br/><a href="'.base_url('Usuarios/index').'" class="btn btn-light">Voltar</a>';
+                                $dados['erro'] =  NULL;
+                                echo "<script type=\"text/javascript\">alert('Usuário reativado com sucesso.');window.location='".base_url('Usuarios/index')."';</script>";
                         }
                         else{
                                 $erro = $this -> db -> error();
@@ -383,18 +368,5 @@ class Usuarios extends CI_Controller {
                 }
 
                 //$this -> load -> view('usuarios', $dados);
-        }
-
-        public function validaUnicoCPF($valor){
-                $dados_usuario = $this -> Usuarios_model -> get_usuarios('',$valor, '', '', true);
-                if(isset($dados_usuario)){
-                        $this -> form_validation -> set_message('validaUnicoCPF', 'Já existe um usuário com esse \'CPF\'.');
-                        return false;
-                }
-                else{
-                        
-                        return true;
-                } 
-                
         }
 }

@@ -38,7 +38,7 @@ if ($menu2 != 'AvaliacaoCurriculo'){
                                                 <div class=\"col-sm-3 shadow-lg p-0 avaliacao-tabs\" style=\"max-width:260px; min-width:240px;\">
                                                     <div class=\"menu1\">
                                                         <button class=\"tablinks primeiro active\" onclick=\"abreConteudo(event, 'lkavaliacao')\"><span class=\"tsm-mclass\">Avaliação</span><span class=\"tsm-micon\"><i class=\"fas fa-tasks\" style=\"margin-left: 11px; font-size:1.1em;\"></i></span></button>
-                                                        <hr class=\"my-0\"> 
+                                                        <hr> 
                                                         <button class=\"tablinks\" onclick=\"abreConteudo(event, 'lkcompleta')\"><span class=\"tsm-mclass\">Candidatura completa</span><span class=\"tsm-micon\"><i class=\"fas fa-id-badge\" style=\"margin-left: 12px; font-size:1.3em\"></i></span></button>
                                                         <button class=\"tablinks\" onclick=\"abreConteudo(event, 'lkdados')\"><span class=\"tsm-mclass\">Dados da candidatura</span><span class=\"tsm-micon\"><i class=\"fas fa-address-book\" style=\"margin-left: 12px; font-size:1.1em\"></i></span></button>
                                                         <button class=\"tablinks\" onclick=\"abreConteudo(event, 'lkprereq')\"><span class=\"tsm-mclass\">Pré Requisitos da Vaga</span><span class=\"tsm-micon\"><i class=\"fas fa-address-book\" style=\"margin-left: 12px; font-size:1.1em\"></i></span></button>
@@ -701,16 +701,19 @@ echo "                                                      <h3 style=\"font-wei
                         echo form_textarea($attributes, $experiencia->tx_atividades);
                         echo "
                                                                                                 </div>
-                                                                                        </div>";
-                        /*echo "
-                                                                                        <div class=\"form-group row\">
-                                                                                                        <div class=\"col-lg-12\">
+                                                                                        </div>
+																						<div class=\"form-group row\">
+																								<div class=\"col-lg-12\">
 																																			";
 						$attributes = array('class' => 'esquerdo control-label');
 						echo form_label('Comprovante', "comprovante{$i}", $attributes);
 						echo " 
 																										<br />";
-						
+						/*$attributes = array('name' => "diploma{$i}",
+											'class' => 'form-control',
+											'disabled' => 'disabled');
+
+						echo form_upload($attributes, '', 'class="form-control"');*/
 						$vc_anexo='';
 						$pr_arquivo='';
 						if($anexos_experiencia[$experiencia->pr_experienca]){
@@ -722,10 +725,8 @@ echo "                                                      <h3 style=\"font-wei
 						}
 						
 						echo "
-                                                                                                        </div>
-                                                                                        </div>";*/
-                                                                                        
-                        echo "
+																								</div>
+																						</div>
                                                                                 </fieldset>
                                                                                         
                                                                         ";
@@ -1594,17 +1595,19 @@ echo "                                                      <h3 style=\"font-wei
                         echo form_textarea($attributes, $experiencia->tx_atividades);
                         echo "
                                                                                                 </div>
-                                                                                        </div>";
-                                                                                        
-                        /*echo "
-                                                                                        <div class=\"form-group row\">
-                                                                                                        <div class=\"col-lg-12\">
+                                                                                        </div>
+																						<div class=\"form-group row\">
+																								<div class=\"col-lg-12\">
 																																			";
 						$attributes = array('class' => 'esquerdo control-label');
 						echo form_label('Comprovante', "comprovante{$i}", $attributes);
 						echo " 
 																										<br />";
-						
+						/*$attributes = array('name' => "diploma{$i}",
+											'class' => 'form-control',
+											'disabled' => 'disabled');
+
+						echo form_upload($attributes, '', 'class="form-control"');*/
 						$vc_anexo='';
 						$pr_arquivo='';
 						if($anexos_experiencia[$experiencia->pr_experienca]){
@@ -1616,10 +1619,8 @@ echo "                                                      <h3 style=\"font-wei
 						}
 						
 						echo "
-                                                                                                        </div>
-                                                                                        </div>";*/
-                                                                                        
-                        echo "
+																								</div>
+																						</div>
                                                                                 </fieldset>
                                                                                         
                                                                         ";
@@ -1914,11 +1915,6 @@ if($menu2 == 'ListaAvaliacao'){
                                 }
                                 
                         }
-                        if($linha -> es_status == 8){
-                                if($this -> session -> perfil != 'avaliador'){
-                                        echo anchor('Vagas/AlterarStatus/'.$linha -> pr_candidatura.'/1', '<i class="fa fa-lg mr-1 fa-file-alt"></i>Alterar status', " class=\"btn btn-sm btn-square btn-secondary\" title=\"Alterar status\"");
-                                }
-                        }
                         if($linha -> es_status == 10){ //entrevista por competência
                                 if($linha -> bl_tipo_entrevista == 'competencia' && ((($this -> session -> perfil == 'sugesp' && ($this -> session -> uid == $linha -> es_avaliador1 || $this -> session -> uid == $linha -> es_avaliador2)) || $this -> session -> perfil == 'avaliador') && ( strlen($linha -> es_avaliador_competencia1) == 0 ))){ //avaliador
                                         if(strtotime($linha -> dt_entrevista) <= $atual){
@@ -1960,7 +1956,6 @@ if($menu2 == 'ListaAvaliacao'){
                                         }
                                 }
                         }
-                        
                         
                         echo "
                                                                                             </td>
@@ -2394,10 +2389,6 @@ if($menu2 == 'DetalheAvaliacao'){ //detalhamento da candidatura
 
                                                                         <li class=\"nav-item\">
                                                                                 <a class=\"nav-link\" data-toggle=\"tab\" href=\"#hbdiTab\" aria-expanded=\"true\">HBDI</a>                                                                            
-                                                                        </li>
-
-                                                                        <li class=\"nav-item\">
-                                                                                <a class=\"nav-link\" data-toggle=\"tab\" href=\"#formularioTab\" aria-expanded=\"true\">Formulário de situação funcional</a>                                                                            
                                                                         </li>
 
                                                                         <li class=\"nav-item\">
@@ -3108,8 +3099,7 @@ if($menu2 == 'DetalheAvaliacao'){ //detalhamento da candidatura
                                                                                                 echo form_textarea($attributes, $experiencia->tx_atividades);
                                                                                                 echo "
 																																											</div>
-																																									</div>";
-                                                                                                /*echo "
+																																									</div>
 																																									<div class=\"form-group row\">
                                                                                                                                                                             <div class=\"col-lg-12\">
                                                                                                                                                                                                                             ";
@@ -3117,7 +3107,11 @@ if($menu2 == 'DetalheAvaliacao'){ //detalhamento da candidatura
                                                                                                         echo form_label('Comprovante', "comprovante{$i}", $attributes);
                                                                                                         echo " 
 																																													<br />";
-                                                                                                        
+                                                                                                        /*$attributes = array('name' => "diploma{$i}",
+                                                                                                                            'class' => 'form-control',
+                                                                                                                            'disabled' => 'disabled');
+
+                                                                                                        echo form_upload($attributes, '', 'class="form-control"');*/
                                                                                                         $vc_anexo='';
                                                                                                         $pr_arquivo='';
                                                                                                         if($anexos_experiencia[$experiencia->pr_experienca]){
@@ -3130,8 +3124,7 @@ if($menu2 == 'DetalheAvaliacao'){ //detalhamento da candidatura
                                                                                                         
                                                                                                         echo "
 																																											</div>
-																																									</div>";*/
-                                                                                                        echo "
+																																									</div>
 																																							</fieldset>
 
                                                                                                                                                 ";
@@ -4857,340 +4850,8 @@ if($menu2 == 'DetalheAvaliacao'){ //detalhamento da candidatura
                                                                                 
                                                                            ";
                                                                                 
-                        echo form_fieldset_close();
-                        echo "</div> <!-- Fim HBDI Tab -->";
-                        echo "<div class=\"tab-pane\" id=\"formularioTab\" role=\"tabpanel\" aria-expanded=\"false\">";                                  
-                                                                                
-                        echo "
-                                                                                                <div class=\"kt-separator kt-separator--border-dashed kt-separator--space-lg\"></div>";
-                        echo form_fieldset('Formulário de Situação Funcional');
-                        $bl_vinculo = "";
-                        if(isset($formulario -> bl_vinculo)){
-                                $bl_vinculo = $formulario -> bl_vinculo;
-                        }                                                        
-                        echo "
-                        <div class=\"row mb-3\">
-                        <div class=\"col\">";                        
-                       
-                        ?>
-                             <label class="form-label" for="vinculo">Você possui vínculo com a Administração Pública? </label>                        
-                                     <div class="form-check">
-                                         <?php
-                                             $attributes = array(
-                                                 'name' => 'vinculo',
-                                                 'class' => 'form-check-input erro',
-                                                 'value' => '1',
-                                                 'disabled' => 'disabled'
-                                             );
-                                             echo form_radio($attributes, $bl_vinculo, ($bl_vinculo == '1' && strlen($bl_vinculo) > 0));
-                                         ?>
-                                         <label class="form-check-label" for="vinculo1">
-                                             Sim.
-                                         </label>
-                                     </div>
-                                     <div class="form-check">
-                                         <?php
-                                             $attributes = array(
-                                                 'name' => 'vinculo',
-                                                 'class' => 'form-check-input erro',
-                                                 'value' => '0',
-                                                 'disabled' => 'disabled'
-                                             );
-                                             echo form_radio($attributes, $bl_vinculo, ($bl_vinculo == '0' && strlen($bl_vinculo) > 0));
-                                         ?>
-                                         <label class="form-check-label" for="vinculo">
-                                             Não.
-                                         </label>
-                                     </div>
-       <?php                      echo"
-                     </div>
-                </div>";
-                if($bl_vinculo == '1'){
-                $en_tipovinculo = "";
-                if(isset($formulario -> en_tipovinculo)){
-                        $en_tipovinculo = $formulario -> en_tipovinculo;
-                }
-                echo "
-                <div class=\"row mb-3\">
-                        <div class=\"col\"> ";
-                        
-                        ?>
-                        
-                        <label class="form-label" for="tipovinculo">Você é: </label>                        
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '1',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '1' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="tipovinculo">
-                                             Servidor(a) Público(a) Efetivo(a).
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '2',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '2' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="tipovinculo">
-                                             Servidor(a) Público(a) em Função Comissionada.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '3',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '3' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="tipovinculo">
-                                             Empregado(a) Público(a).
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '4',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '4' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="tipovinculo">
-                                             Militar.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '5',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '5' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="tipovinculo">
-                                             Aposentado(a).
-                                    </label>
-                                </div>
-     <?php                      echo"
-                        </div>
-                </div>";
-                $en_poder = "";
-                if(isset($formulario -> en_poder)){
-                        $en_poder =  $formulario -> en_poder;
-                 }
-                echo "
-                <div class=\"row mb-3\">
-                        <div class=\"col\">";
-                        
-                        ?>
-                        <label class="form-label" for="poder">De qual poder?</label>                        
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'poder',
-                                            'class' => 'form-check-input',
-                                            'value' => '1',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_poder, ($en_poder == '1' && strlen($en_poder) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="poder">
-                                             Executivo.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'poder',
-                                            'class' => 'form-check-input',
-                                            'value' => '2',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_poder, ($en_poder == '2' && strlen($en_poder) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="poder">
-                                             Legislativo.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'poder',
-                                            'class' => 'form-check-input',
-                                            'value' => '3',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_poder, ($en_poder == '3' && strlen($en_poder) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="poder">
-                                             Judiciário.
-                                    </label>
-                                </div>
-     <?php                      echo"
-                        </div>
-                </div>";
-                $en_esfera = "";
-                if(isset($formulario -> en_esfera)){
-                        $en_esfera = $formulario -> en_esfera;
-                }
-                echo "
-                <div class=\"row mb-3\">
-                        <div class=\"col\">";
-                                
-                        ?>
-                        <label class="form-label" for="esfera">De qual esfera?</label>                        
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'esfera',
-                                            'class' => 'form-check-input',
-                                            'value' => '1',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_esfera, ($en_esfera == '1' && strlen($en_esfera) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="esfera">
-                                             Federal.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'esfera',
-                                            'class' => 'form-check-input',
-                                            'value' => '2',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_esfera, ($en_esfera == '2' && strlen($en_esfera) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="esfera">
-                                             Estadual de Minas Gerais.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'esfera',
-                                            'class' => 'form-check-input',
-                                            'value' => '3',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_esfera, ($en_esfera == '3' && strlen($en_esfera) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="esfera">
-                                             Estadual de outra Unidade Federativa.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'esfera',
-                                            'class' => 'form-check-input',
-                                            'value' => '4',
-                                            'disabled' => 'disabled'
-                                        );
-                                        echo form_radio($attributes, $en_esfera, ($en_esfera == '4' && strlen($en_esfera) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="esfera">
-                                             Municipal.
-                                    </label>
-                                </div>
-     <?php                      echo"
-                        </div>
-                </div>";
-                
-                echo "
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                                <label class=\"form-label\" for=\"instituicao\">Sigla do Órgão ou Entidade que está vinculado(a):</label>";
-                if($en_esfera == '2'){               
-                        $es_instituicao = "";
-                        if(isset($formulario -> es_instituicao)){
-                                $es_instituicao = $formulario -> es_instituicao;
-                        }                
-                        echo "
-                                <div id=\"div_instituicao1\">
-                             ";
-                
-                        echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-select form-control\" id=\"instituicao\" disabled=\"disabled\"");
-                
-                
-                                    
-                        echo "
-                                </div>";
-                } 
-                else{ 
-                        if(isset($formulario -> vc_instituicao)){
-                                $vc_instituicao = $formulario -> vc_instituicao;
-                        }              
-                        echo "
-                                <div id=\"div_instituicao2\">
-                                        <input disabled = \"disabled\" class=\"form-control\" type=\"text\" name=\"instituicao2\" value=\"".$vc_instituicao."\" title=\"Instituição\">
-                                </div>";
-                }                 
-                echo "
-                        </div>
-                </div>";
-                echo "
-                <div class=\"row mb-3\">";
-                $vc_codCargo = "";
-                if(isset($formulario -> vc_codCargo)){
-                        $vc_codCargo = $formulario -> vc_codCargo;
-                }
-                
-                echo "
-                        <div class=\"col\">
-                             <label class=\"form-label\" for=\"codCargo\">Nome/Código do Cargo ou Função Gratificada que ocupa:</label>
-                             <input disabled = \"disabled\" class=\"form-control\" type=\"text\" name=\"codCargo\" value=\"".$vc_codCargo."\"  title=\"Nome/Código do Cargo ou Função Gratificada que ocupa:\">
-                        </div>
-                </div>";
-                echo "
-                <div class=\"row mb-3\">";
-                if(isset($formulario -> in_masp)){
-                        $in_masp = $formulario -> in_masp;
-                }
-                
-                echo "
-                        <div class=\"col\">
-                             <label class=\"form-label\" for=\"masp\">MASP para o caso de ser servidor do Estado de Minas Gerais:</label>
-                             <input disabled=\"disabled\" class=\"form-control\" type=\"text\" name=\"masp\" value=\"".$in_masp."\" title=\"MASP para o caso de ser servidor do Estado de Minas Gerais:\">
-                        </div>
-                </div>";
-                echo "
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                             <label class=\"form-label\" for=\"comprovanteVinc\">Anexar comprovante de vínculo com o Estado (Contra-cheque): </label>";
-                if(isset($formulario -> vc_comprovanteVinc)){
-                        echo "
-                             <br><a href=\"".base_url("Candidaturas/download/".$formulario -> es_candidatura)."\">".$formulario -> vc_comprovanteVinc."</a>
-                        ";
-                }
-                echo "
-                             
-                        </div>
-                </div>
-                "; 
-                }                                                       
-
-                                                                                
-                                                
-                                                echo "</div> <!-- Fim Formulário de situação funcional Tab -->";
+                                                echo form_fieldset_close();
+                                                echo "</div> <!-- Fim HBDI Tab -->";
                                                 echo "<div class=\"tab-pane\" id=\"aderenciaTab\" role=\"tabpanel\" aria-expanded=\"false\">";                                  
                                                                                 
                                                                                 echo "
@@ -5956,9 +5617,8 @@ if($menu2 == 'AgendamentoEntrevista'){ //agendamento da entrevista ou calendári
                         });
                       },
                     events: [";
-                        $codigo_candidatura = "";
+                
                         foreach($candidaturas as $linha){
-                                
                                 if(strlen($linha -> dt_entrevista)>0){
                                         $partes = explode(" ",$linha -> dt_entrevista);
                                         //if($this -> session -> perfil == 'candidato'){
@@ -5995,7 +5655,7 @@ if($menu2 == 'AgendamentoEntrevista'){ //agendamento da entrevista ou calendári
                                         $partes = explode(" ",$linha -> dt_aderencia);
                                         $pagina['js'] .= " 
                                         {
-                                        title: 'HBDI'"..",
+                                        title: 'HBDI',
                                         start: '".$linha -> dt_aderencia."',
                                         description: 'HBDI<br />Vaga: ".$linha -> vc_vaga."<br />Fim do prazo de preenchimento: ".$partes[1]."',
                                         color: '".($linha->en_hbdi=='2'?"green":"red")."'   
@@ -6011,7 +5671,7 @@ if($menu2 == 'AgendamentoEntrevista'){ //agendamento da entrevista ou calendári
                                         color: '".($linha->en_motivacao=='2'?"green":"red")."'    
                                         }, ";
                                 }
-                                $codigo_candidatura = $linha -> pr_candidatura;
+                                
                                 
                         }
                                 

@@ -10,7 +10,7 @@ function getEmailEnvConfigs()
         'mailtype' => "html",
         'protocol' => "smtp",
         'smtp_auth' => true,
-        
+        'smtp_crypto' => "tls",
         'smtp_host' => $_SERVER['ENV_SMTP_HOST'],
         'smtp_port' => $_SERVER['ENV_SMTP_PORT'],
         'smtp_user' => $_SERVER['ENV_SMTP_USER'],
@@ -250,18 +250,9 @@ function loadAgendamentoDeEntrevistaHtml(
     $hora,
     $vaga,
     $link,
-    $observacoes,
-    $teste_data,
-    $teste_hora,
-    $documentacao
+    $observacoes
 ) {
-    if($tipoEntrevista == 'competencia'){
-        $template = readTemplateFile("agendamentoDeEntrevista.html");
-    }
-    else{
-        $template = readTemplateFile("agendamentoDeEntrevista2.html");
-    }
-    
+    $template = readTemplateFile("agendamentoDeEntrevista.html");
 
     $data_array = array(
         ":titulo" => $titulo,
@@ -274,10 +265,7 @@ function loadAgendamentoDeEntrevistaHtml(
         ":link" => $link,
         ":observacoes" => $observacoes,
         ":urlBase" => base_url(""),
-        ":urlContato" => base_url("Publico/contato"),
-        ":testedata" => $teste_data,
-        ":testehora" => $teste_hora,
-        ":documentacao" => $documentacao
+        ":urlContato" => base_url("Publico/contato")
     );
 
     return strtr($template, $data_array);
@@ -400,15 +388,6 @@ function loadParticipacaoEmEntrevistaCanceladaHtml(
         ":link" => $link,
         ":urlBase" => base_url(""),
         ":urlContato" => base_url("Publico/contato")
-    );
-
-    return strtr($template, $data_array);
-}
-
-function loadChangeName($nome){
-    $template = readTemplateFile("mudancaNome.html");
-    $data_array = array(
-        ":nome" => $nome
     );
 
     return strtr($template, $data_array);

@@ -87,21 +87,16 @@ class Vagas extends CI_Controller {
                 $dados['adicionais'] = array('pickers' => true);
                 //$dados += $this -> input -> post(null,true);
 
-                $this -> form_validation -> set_rules('nome', "'Título da vaga'", 'required|min_length[10]|minus_maius', array('minus_maius' => 'Não utilize somente maiúsculas ou minúsculas no campo \'Nome\'.'));
-                $this -> form_validation -> set_rules('descricao', "'Atribuições e competências da vaga'", 'required|min_length[10]');
+                $this -> form_validation -> set_rules('nome', "'Nome'", 'required|min_length[10]|minus_maius', array('minus_maius' => 'Não utilize somente maiúsculas ou minúsculas no campo \'Nome\'.'));
+                $this -> form_validation -> set_rules('descricao', "'Descrição'", 'required|min_length[10]');
                 $this -> form_validation -> set_rules('instituicao', "'Instituição'", 'required|maior_que_zero', array('maior_que_zero' => 'O campo \'Instituição\' é obrigatório.'));
                 $this -> form_validation -> set_rules('grupo', "'Grupo da vaga'", 'required|maior_que_zero', array('maior_que_zero' => 'O campo \'Grupo da vaga\' é obrigatório.'));
                 $this -> form_validation -> set_rules('inicio', "'Início das inscrições'", 'required|valida_data|callback_data_maior', array('required' => 'O campo \'Início das inscrições\' é obrigatório.', 'valida_data' => 'A data \'Início das inscrições\' inserida é inválida.'));
                 $this -> form_validation -> set_rules('fim', "'Término das inscrições'", 'required|valida_data', array('required' => 'O campo \'Término das inscrições\' é obrigatório.', 'valida_data' => 'A data \'Término das inscrições\' inserida é inválida.'));
-		$this -> form_validation -> set_rules('remuneracao', "'Remuneração'", 'required');
-                $this -> form_validation -> set_rules('descricao', "'Atribuições e competências da vaga'", 'required');
-                $this -> form_validation -> set_rules('documentacao', "'Documentação necessária'", 'required');	
-                $this -> form_validation -> set_rules('atendimento', "'Área de interesse'", 'callback_verficaopcoes');	
-                $this -> form_validation -> set_rules('grupoatividade', "'Grupo de Atividade'", 'required|maior_que_zero', array('maior_que_zero' => 'O campo \'Grupo de Atividade\' é obrigatório.'));
-                
+				//$this -> form_validation -> set_rules('brumadinho', "'Tipo de vaga'", 'required');
 				
-                /*$dados['usuarios'] = $this -> Usuarios_model -> get_usuarios ('', '', 2);
-                $usuarios = $dados['usuarios'];*/
+                $dados['usuarios'] = $this -> Usuarios_model -> get_usuarios ('', '', 2);
+                $usuarios = $dados['usuarios'];
                 
                 if ($this -> form_validation -> run() == FALSE){
                         $dados['sucesso'] = '';
@@ -111,16 +106,16 @@ class Vagas extends CI_Controller {
                         //var_dump($this -> input -> post(null,true));
                         $dados_form = $this -> input -> post(null,true);
 						
-                        //if($dados_form['brumadinho'] == '0'){
-                        $dados_form['brumadinho'] = NULL;
-                        //}
+						//if($dados_form['brumadinho'] == '0'){
+								$dados_form['brumadinho'] = NULL;
+						//}
 						
                         $vaga = $this -> Vagas_model -> create_vaga($dados_form);
                         if($vaga > 0){
                                 $dados['sucesso'] = 'Vaga cadastrada com sucesso.<br/><br/><a href="'.base_url('Vagas/index').'" class="btn btn-light">Voltar</a>';
                                 $dados['erro'] =  NULL;
                                 
-                                /*if($usuarios){
+                                if($usuarios){
                                         foreach($usuarios as $usuario){
 
                                                 if(isset($dados_form['usuario'.$usuario->pr_usuario]) && $dados_form['usuario'.$usuario->pr_usuario] = $usuario->pr_usuario){
@@ -128,7 +123,7 @@ class Vagas extends CI_Controller {
                                                         
                                                 }
                                         }
-                                }*/
+                                }
                                 
                                 $this -> Usuarios_model -> log('sucesso', 'Vagas/create', "Vaga {$vaga} criada com sucesso.", 'tb_vagas', $vaga);
                         }
@@ -138,10 +133,9 @@ class Vagas extends CI_Controller {
                                 $this -> Usuarios_model -> log('erro', 'Vagas/create', 'Erro de criação da vaga. Erro: '.$this -> db -> error('message'));
                         }
                 }
-                //$dados['usuarios'] = $this -> Usuarios_model -> get_usuarios ('', '', 2,'',true);
+                $dados['usuarios'] = $this -> Usuarios_model -> get_usuarios ('', '', 2,'',true);
                 $dados['instituicoes'] = $this -> Instituicoes_model -> get_instituicoes();
                 $dados['grupos'] = $this -> GruposVagas_model -> get_grupos();
-                $dados['gruposatividades'] = $this -> Vagas_model -> get_gruposatividades();
                 $this -> load -> view('vagas', $dados);
         }
         
@@ -190,14 +184,9 @@ class Vagas extends CI_Controller {
                 $this -> form_validation -> set_rules('inicio', "'Início das inscrições'", 'required|valida_data|callback_data_maior', array('required' => 'O campo \'Início das inscrições\' é obrigatório.', 'valida_data' => 'A data \'Início das inscrições\' inserida é inválida.'));
                 $this -> form_validation -> set_rules('fim', "'Término das inscrições'", 'required|valida_data|callback_data_fim', array('required' => 'O campo \'Término das inscrições\' é obrigatório.', 'valida_data' => 'A data \'Término das inscrições\' inserida é inválida.'));
                 //$this -> form_validation -> set_rules('brumadinho', "'Tipo de vaga'", 'required');
-		$this -> form_validation -> set_rules('remuneracao', "'Remuneração'", 'required');
-                $this -> form_validation -> set_rules('descricao', "'Descrição'", 'required');
-                $this -> form_validation -> set_rules('documentacao', "'Documentação necessária'", 'required');	
-                $this -> form_validation -> set_rules('atendimento', "'Área de interesse'", 'callback_verficaopcoes');	
-                $this -> form_validation -> set_rules('grupoatividade', "'Grupo de Atividade'", 'required|maior_que_zero', array('maior_que_zero' => 'O campo \'Grupo de Atividade\' é obrigatório.'));
-                		
-                /*$dados['usuarios'] = $this -> Usuarios_model -> get_usuarios ('', '', 2,'',true);
-                $usuarios = $dados['usuarios'];*/
+				
+                $dados['usuarios'] = $this -> Usuarios_model -> get_usuarios ('', '', 2,'',true);
+                $usuarios = $dados['usuarios'];
                 if ($this -> form_validation -> run() == FALSE){
                         $dados['sucesso'] = '';
                         $dados['erro'] = validation_errors();
@@ -209,43 +198,13 @@ class Vagas extends CI_Controller {
 						
                         $this -> Vagas_model -> update_vaga('vc_vaga', $dados_form['nome'], $vaga);
                         $this -> Vagas_model -> update_vaga('tx_descricao', $dados_form['descricao'], $vaga);
-                        $this -> Vagas_model -> update_vaga('dt_inicio', $dados_form['inicio'], $vaga);
-                        $this -> Vagas_model -> update_vaga('dt_fim', $dados_form['fim'], $vaga);
+                        $this -> Vagas_model -> update_vaga('dt_inicio', show_sql_date($dados_form['inicio'], true), $vaga);
+                        $this -> Vagas_model -> update_vaga('dt_fim', show_sql_date($dados_form['fim'], true), $vaga);
                         $this -> Vagas_model -> update_vaga('es_instituicao', $dados_form['instituicao'], $vaga);
                         $this -> Vagas_model -> update_vaga('es_grupoVaga', $dados_form['grupo'], $vaga);
                         $this -> Vagas_model -> update_vaga('bl_brumadinho', $dados_form['brumadinho'], $vaga);
-                        $this -> Vagas_model -> update_vaga('vc_remuneracao', $dados_form['remuneracao'], $vaga);
-                        $this -> Vagas_model -> update_vaga('tx_descricao', $dados_form['descricao'], $vaga);
-                        $this -> Vagas_model -> update_vaga('tx_documentacao', $dados_form['documentacao'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_atendimento', $dados_form['atendimento'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_auditoria', $dados_form['auditoria'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_compras', $dados_form['compras'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_controladoria', $dados_form['controladoria'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_desenvolvimento_eco', $dados_form['desenvolvimentoEco'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_desenv_soc', $dados_form['desenvSoc'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_dir_hum', $dados_form['dirHum'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_educacao', $dados_form['educacao'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_financeiro', $dados_form['financeiro'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_gest_contrat', $dados_form['gestContrat'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_gest_pessoa', $dados_form['gestPessoa'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_gest_process', $dados_form['gestProcess'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_gest_proj', $dados_form['gestProj'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_infraestrutura', $dados_form['infraestrutura'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_logistica', $dados_form['logistica'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_meio_amb', $dados_form['meioAmb'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_pol_pub', $dados_form['polPub'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_rec_hum', $dados_form['recHum'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_tic', $dados_form['tic'], $vaga);
-                        $this -> Vagas_model -> update_vaga('en_saude', $dados_form['saude'], $vaga);
-                        $this -> Vagas_model -> update_vaga('es_grupoatividade', $dados_form['grupoatividade'], $vaga);
-                        $this -> Vagas_model -> update_vaga('tx_orientacoes', $dados_form['orientacoes'], $vaga);
-                        /*
-                        
-                        '' => $dados[''],
-                        */
-                        
 						
-                        /*$this -> Vagas_model -> delete_vaga_avaliador($vaga);
+                        $this -> Vagas_model -> delete_vaga_avaliador($vaga);
                         if($usuarios){
                                 foreach($usuarios as $usuario){
 
@@ -253,25 +212,24 @@ class Vagas extends CI_Controller {
                                                 $this -> Vagas_model -> create_vaga_avaliador($dados_form,$vaga,$usuario->pr_usuario);
                                         }
                                 }
-                        }*/
+                        }
                         $this -> Usuarios_model -> log('sucesso', 'Vagas/edit', "Vaga {$vaga} editada com sucesso pelo usuário ".$this -> session -> uid, 'tb_vagas', $vaga);
 
                         $dados['sucesso'] = 'Vaga editada com sucesso.<br/><br/><a href="'.base_url('Vagas/index').'" class="btn btn-light">Voltar</a>';
                         $dados['erro'] = '';
                 }
                 
-                /*$vagas_avaliadores = $this -> Vagas_model -> get_vagas_avaliadores($vaga);
+                $vagas_avaliadores = $this -> Vagas_model -> get_vagas_avaliadores($vaga);
                 
                 if($vagas_avaliadores){
                         foreach($vagas_avaliadores as $vaga_avaliador){
                                $dados['avaliador'][$vaga_avaliador->es_usuario] =  $vaga_avaliador->es_usuario;
                         }
-                }*/
+                }
                 
                 
                 $dados['instituicoes'] = $this -> Instituicoes_model -> get_instituicoes();
                 $dados['grupos'] = $this -> GruposVagas_model -> get_grupos();
-                $dados['gruposatividades'] = $this -> Vagas_model -> get_gruposatividades();
                 $this -> load -> view('vagas', $dados);
         }
         
@@ -398,74 +356,6 @@ class Vagas extends CI_Controller {
 
                 $this -> load -> view('vagas', $dados);
         }
-
-        public function AlterarStatus(){
-                $this -> load -> model('Candidaturas_model');
-                $this -> load -> model('Candidatos_model');
-                $this -> load -> model('Usuarios_model');
-                if($this -> session -> perfil != 'sugesp' && $this -> session -> perfil != 'orgaos' && $this -> session -> perfil != 'administrador'){
-                        redirect('Interna/index');
-                }
-                $pagina['menu1']='Vagas';
-                $pagina['menu2']='AlterarStatus';
-                $pagina['url']='Vagas/AlterarStatus';
-                $pagina['nome_pagina']='Alterar o status para Candidatura Realizada';
-                $pagina['icone']='fa fa-thumb-tack';
-
-                $dados=$pagina;
-                $dados['adicionais'] = array('pickers' => true, 'inputmasks' => true, 'datatables' => true, 'dcountjs' => true);
-
-                $candidatura = $this -> uri -> segment(3);
-                $se_pagina_candidatura = $this -> uri -> segment(4);
-                $dados_form = $this -> input -> post(null,true);
-
-                if(isset($dados_form['codigo']) && $dados_form['codigo'] > 0){
-                        $candidatura = $dados_form['codigo'];
-                }
-                if(isset($dados_form['se_pagina_candidatura']) && $dados_form['se_pagina_candidatura'] > 0){
-                        $se_pagina_candidatura = $dados_form['se_pagina_candidatura'];
-                }
-                
-                if(strlen($se_pagina_candidatura) == 0){
-                        $se_pagina_candidatura = 0;
-                }
-
-                $dados['codigo'] = $candidatura;
-                $dados['se_pagina_candidatura'] = $se_pagina_candidatura;
-                $candidaturas = $this -> Candidaturas_model -> get_candidaturas($candidatura);
-                $dados['candidatura'] = $candidaturas[0];
-
-                $dados['candidato'] = $this -> Candidatos_model -> get_candidatos ($candidaturas[0] -> es_candidato);
-                if($candidaturas[0] -> es_status != 8){
-                        redirect('Interna/index');
-                }
-                $dados['sucesso'] = '';
-                $dados['erro'] = '';
-
-                $this -> form_validation -> set_rules('justificativa', "'Justificativa'", 'required');
-                if ($this -> form_validation -> run() == FALSE){
-                        $dados['sucesso'] = '';
-                        $dados['erro'] = validation_errors();
-                }
-                else{
-                        $this -> Candidaturas_model -> update_candidatura('es_status',7,$candidatura);
-                        $dados_form['candidatura'] = $candidatura;
-
-                        $id = $this -> Candidaturas_model -> create_alteracao_status($dados_form);
-
-                        $this -> Usuarios_model -> log('sucesso', 'Vagas/AlterarStatus', "O status da candidatura {$candidatura} foi alterada com sucesso pelo usuário ".$this -> session -> uid, 'tb_alteracao_data', $id);
-                        if($se_pagina_candidatura == 1){
-                                $dados['sucesso'] = 'Status alterado com sucesso.<br/><br/><button class="btn btn-light"><a href="'.base_url('Candidaturas/ListaAvaliacao/').'">Voltar</a></button>';
-                        }
-                        else{
-                                $dados['sucesso'] = 'Status alterado com sucesso.<br/><br/><button class="btn btn-light"><a href="'.base_url('Vagas/resultado/'.$candidaturas[0] -> es_vaga).'">Voltar</a></button>';
-                        }
-                        
-                        $dados['erro'] = '';
-                }
-
-                $this -> load -> view('vagas', $dados);
-        }
         
         public function resultado2(){
                 if($this -> session -> perfil != 'sugesp' && $this -> session -> perfil != 'orgaos' && $this -> session -> perfil != 'administrador'){
@@ -583,51 +473,7 @@ class Vagas extends CI_Controller {
                 $this -> load -> view('vagas', $dados);
         }
 		
-	public function ProrrogarAderencia(){
-                $this -> load -> model('Candidaturas_model');
-                $this -> load -> model('Candidatos_model');
-                $this -> load -> model('Usuarios_model');
-                $pagina['menu1']='Vagas';
-                $pagina['menu2']='ProrrogarAderencia';
-                $pagina['url']='Vagas/ProrrogarAderencia';
-                $pagina['nome_pagina']='Prorrogar teste de aderência';
-                $pagina['icone']='fa fa-sort-amount-down';
-
-                $dados=$pagina;
-                $dados['sucesso'] = '';
-                $dados['erro'] = '';
-                $dados['adicionais'] = array('datatables' => true);
-
-                $candidatura = $this -> uri -> segment(3);
-                $dados_form = $this -> input -> post(null,true);
-                if(isset($dados_form['codigo']) && $dados_form['codigo'] > 0){
-                        $candidatura = $dados_form['codigo'];
-                }
-                
-
-                //$dados['candidaturas'] = $this -> Candidaturas_model -> get_candidaturas('', '', $dados_vaga[0] -> pr_vaga, '');
-                $dados_candidatura = $this -> Candidaturas_model -> get_candidaturas($candidatura);
-                
-                $dados['codigo'] = $candidatura;
-                $dados += (array) $dados_candidatura[0];
-                
-                $this -> form_validation -> set_rules('data2_nova', "'Nova data do teste de aderência'", 'required|valida_data', array('required' => 'O campo \'Nova data do teste de aderência\' é obrigatório.', 'valida_data' => 'A data do campo \'Nova data do teste de aderência\' inserida é inválida.'));        
-                if ($this -> form_validation -> run() == FALSE){
-                        $dados['sucesso'] = '';
-                        $dados['erro'] = validation_errors();
-                }
-                else{
-                        
-                        $this -> Candidaturas_model -> update_candidatura('dt_aderencia',$dados_form['data2_nova'],$candidatura);
-                        $dados['sucesso'] = "<p>O prazo de preenchimento dos testes foi prorrogado com sucesso.</p><a href=\"".base_url('Vagas/resultado/'.$dados_candidatura[0] -> es_vaga).'" class="btn btn-light">Voltar</a>';
-                        echo 
-                        $dados['erro'] = '';
-                        $this -> Usuarios_model -> log('sucesso', 'Vagas/ProrrogarAderencia', "Data do teste de aderência da candidatura {$candidatura} atualizada pelo usuário ".$this -> session -> uid, 'tb_candidaturas', $candidatura);
-                }
-                $dados['candidato'] = $this -> Candidatos_model -> get_candidatos ($dados_candidatura[0] -> es_candidato);
-
-                $this -> load -> view('vagas', $dados);
-        }	
+		
 	
 	public function delete(){
                 if($this -> session -> perfil != 'sugesp' && $this -> session -> perfil != 'orgaos' && $this -> session -> perfil != 'administrador'){
@@ -651,7 +497,6 @@ class Vagas extends CI_Controller {
                 echo "<script type=\"text/javascript\">alert('A vaga foi desativada com sucesso.');window.location='".base_url('Vagas/index')."';</script>";
                 //$this -> load -> view('vagas', $dados);
         }
-
 	public function reactivate(){
                 if($this -> session -> perfil != 'sugesp' && $this -> session -> perfil != 'orgaos' && $this -> session -> perfil != 'administrador'){
                         redirect('Interna/index');
@@ -697,12 +542,6 @@ class Vagas extends CI_Controller {
                         $dados=$pagina;
                         $dados['adicionais'] = array('pickers' => true,'calendar' => true,'moment'=>true,'select2'=>true);
                         $dados_form = $this -> input -> post(null,true);
-                        $dados_link = $this -> input -> post();
-
-                        if(isset($dados_link['link'])){
-                                $dados_form['link'] = $dados_link['link'];
-                        }
-
                         //$candidatura = $this -> uri -> segment(3);
                         if(isset($dados_form['codigo']) && $dados_form['codigo'] > 0){
                                 $candidatura = $dados_form['codigo'];
@@ -720,12 +559,12 @@ class Vagas extends CI_Controller {
 
                         $dados['questoes2'] = $questoes2;
 
-                        if($tipo_entrevista=='competencia'){
-                                        $questoes = $this -> Questoes_model -> get_questoes('', $vaga[0]->es_grupoVaga, 4);
-                        }
-                        else{
-                                        $questoes = $this -> Questoes_model -> get_questoes('', $vaga[0]->es_grupoVaga, 6);
-                        }
+						if($tipo_entrevista=='competencia'){
+								$questoes = $this -> Questoes_model -> get_questoes('', $vaga[0]->es_grupoVaga, 4);
+						}
+						else{
+								$questoes = $this -> Questoes_model -> get_questoes('', $vaga[0]->es_grupoVaga, 6);
+						}
                         
 
                         if(!isset($questoes)){
@@ -754,7 +593,7 @@ class Vagas extends CI_Controller {
                         
                         if($tipo_entrevista == 'competencia'){
 								$this -> form_validation -> set_rules('avaliador1', "'Avaliador 1'", 'required|differs[avaliador3]|maior_que_zero|callback_valida_unico1', array('maior_que_zero' => 'O campo \'Avaliador 1\' é obrigatório.','differs'=>'O campo \'Avaliador 1\' deve ser diferente do \'Avaliador 3\'.'));
-                                $this -> form_validation -> set_rules('avaliador2', "'Avaliador 2'", 'required|differs[avaliadorLink para a entrevista online1]|maior_que_zero|callback_valida_unico1', array('maior_que_zero' => 'O campo \'Avaliador 2\' é obrigatório.','differs'=>'O campo \'Avaliador 2\' deve ser diferente do \'Avaliador 1\'.'));
+                                $this -> form_validation -> set_rules('avaliador2', "'Avaliador 2'", 'required|differs[avaliador1]|maior_que_zero|callback_valida_unico1', array('maior_que_zero' => 'O campo \'Avaliador 2\' é obrigatório.','differs'=>'O campo \'Avaliador 2\' deve ser diferente do \'Avaliador 1\'.'));
                                 if(isset($questoes2)){
                                     $this -> form_validation -> set_rules('data2', "'Data/Horário máximo'", 'required|valida_data', array('required' => 'O campo \'Data/Horário máximo\' é obrigatório.', 'valida_data' => 'A data do campo \'Data/Horário máximo\' inserida é inválida.'));        
                                 }
@@ -764,7 +603,7 @@ class Vagas extends CI_Controller {
 								$this -> form_validation -> set_rules('avaliador1', "'Avaliador 1'", 'required|maior_que_zero|callback_valida_unico1', array('maior_que_zero' => 'O campo \'Avaliador 1\' é obrigatório.'));
 						}
                         $this -> form_validation -> set_rules('data', "'Horário da entrevista'", 'required|valida_data|callback_valida_unico3|callback_data_atual', array('required' => 'O campo \'Horário da entrevista\' é obrigatório.', 'valida_data' => 'A data do campo \'Horário da entrevista\' inserida é inválida.'));
-                        $this -> form_validation -> set_rules('link', "'Link para a entrevista online'", 'required');
+
                         
                         
                         if ($this -> form_validation -> run() == FALSE){
@@ -772,7 +611,6 @@ class Vagas extends CI_Controller {
                                 $dados['erro'] = validation_errors();
                         }
                         else{
-                                
                                 /*if($dados_candidatura[0] -> es_status==11){
                                         $tipo_entrevista = 'especialista';
                                 }
@@ -783,47 +621,34 @@ class Vagas extends CI_Controller {
                                 //var_dump($dados_form);
                                 //var_dump($entrevista_anterior);
                                 if($entrevista_anterior != null){
-                                        $dados_form['tipo_entrevista'] = $tipo_entrevista;
-																		
-					$this -> Candidaturas_model -> atualiza_entrevista($dados_form);
-                                        $entrevista_atual = $this -> Candidaturas_model -> get_entrevistas('', $candidatura, $tipo_entrevista);
-
-
                                         $this->load->helper('emails');
                                         $config = getEmailEnvConfigs();
 
-					$this->email->initialize($config);
-                                        
+										$this->email->initialize($config);
+                                    
                                         if($entrevista_anterior[0] -> es_avaliador1 != $dados_form['avaliador1']){
-                                                $partes = explode("T",$dados_form['data']);
-                                                $data = show_date($partes[0]);
+                                                $partes = explode(" ",$dados_form['data']);
+                                                $data = $partes[0];
                                                 $hora = $partes[1];
-                                                
-                                                $this -> envio_email2($entrevista_atual[0] -> nome1,$entrevista_atual[0] -> email1,$entrevista_atual[0]->nome_candidato,$dados_candidatura,$data,$hora,$dados_form['link'],'reagendamento_cancelamento',$tipo_entrevista,$vaga);
+                                                $this -> envio_email2($entrevista_anterior[0] -> nome1,$entrevista_anterior[0] -> email1,$entrevista_anterior[0]->nome_candidato,$dados_candidatura,$data,$hora,$dados_form['link'],'reagendamento_cancelamento',$tipo_entrevista,$vaga);
                                         }
                                         if($tipo_entrevista == 'competencia'){
                                                 if($entrevista_anterior[0] -> es_avaliador2 != $dados_form['avaliador2']){
-                                                        $partes = explode("T",$dados_form['data']);
-                                                        $data = show_date($partes[0]);
+                                                        $partes = explode(" ",$dados_form['data']);
+                                                        $data = $partes[0];
                                                         $hora = $partes[1];
-                                                        
-                                                        $this -> envio_email2($entrevista_atual[0] -> nome2,$entrevista_atual[0] -> email2,$entrevista_atual[0]->nome_candidato,$dados_candidatura,$data,$hora,$dados_form['link'],'reagendamento_cancelamento',$tipo_entrevista,$vaga);
+                                                        $this -> envio_email2($entrevista_anterior[0] -> nome2,$entrevista_anterior[0] -> email2,$entrevista_anterior[0]->nome_candidato,$dados_candidatura,$data,$hora,$dados_form['link'],'reagendamento_cancelamento',$tipo_entrevista,$vaga);
                                                 }
 												
                                         }
-                                        //validação das variáveis
-                                        $data_entrevista = substr($entrevista_anterior[0] -> dt_entrevista, 0, 16) != str_replace("T"," ",$dados_form['data']);
-                                        $data_aderencia = strtotime(str_replace("T"," ",$dados_form['data2'])) != strtotime($dados_candidatura[0] -> dt_aderencia);
-                                        $link = $dados_form['link'] != $entrevista_anterior[0] -> vc_link;
-                                        $avaliador1 = $entrevista_anterior[0] -> es_avaliador1 != $dados_form['avaliador1'];
-                                        $avaliador2 = $tipo_entrevista == 'competencia' && ($entrevista_anterior[0] -> es_avaliador2 != $dados_form['avaliador2']);
-                                        if($data_entrevista || $data_aderencia || $link || $avaliador1 || $avaliador2){
-                                                //echo "email de reagendamento enviado";
+                                        //echo "'".substr($entrevista_anterior[0] -> dt_entrevista, 0, 16)."' - '".show_sql_date($dados_form['data'], true)."'<br>";
+                                        if(substr($entrevista_anterior[0] -> dt_entrevista, 0, 16) != show_sql_date($dados_form['data'], true)){
                                                 
-                                                //$this -> email -> to($entrevista_atual[0] -> email1.",".$entrevista_atual[0] -> email2);
+                                                
+                                                //$this -> email -> to($entrevista_anterior[0] -> email1.",".$entrevista_anterior[0] -> email2);
                                                 //if($dados_candidatura[0] -> es_status==10){
                                                         //$this -> email -> to();
-														//$this -> email -> to($entrevista_atual[0] -> email3);
+														//$this -> email -> to($entrevista_anterior[0] -> email3);
                                                 //}
                                                 
                                                 $this -> email -> from($this -> config -> item('email'), $this -> config -> item('nome'));
@@ -836,25 +661,25 @@ class Vagas extends CI_Controller {
                                                 $config['mailtype'] = 'html';
 
                                                 $this->email->initialize($config);*/
-                                                $partes = explode("T",$dados_form['data']);
-                                                $data = show_date($partes[0]);
+                                                $partes = explode(" ",$dados_form['data']);
+                                                $data = $partes[0];
                                                 $hora = $partes[1];
                                                 $this -> envio_email($dados_candidatura,$vaga,'reagendamento_candidato',$tipo_entrevista,$data,$hora,$dados_form['link']);
-                                                
-                                                $this -> envio_email2($entrevista_atual[0] -> nome1,$entrevista_atual[0] -> email1,$entrevista_atual[0]->nome_candidato,$dados_candidatura,$data,$hora,$dados_form['link'],'reagendamento',$tipo_entrevista,$vaga);
+
+                                                $this -> envio_email2($entrevista_anterior[0] -> nome1,$entrevista_anterior[0] -> email1,$entrevista_anterior[0]->nome_candidato,$dados_candidatura,$data,$hora,$dados_form['link'],'reagendamento',$tipo_entrevista,$vaga);
                                                 if($tipo_entrevista == 'competencia'){
-                                                        $this -> envio_email2($entrevista_atual[0] -> nome2,$entrevista_atual[0] -> email2,$entrevista_atual[0]->nome_candidato,$dados_candidatura,$data,$hora,$dados_form['link'],'reagendamento',$tipo_entrevista,$vaga);
+                                                        $this -> envio_email2($entrevista_anterior[0] -> nome2,$entrevista_anterior[0] -> email2,$entrevista_anterior[0]->nome_candidato,$dados_candidatura,$data,$hora,$dados_form['link'],'reagendamento',$tipo_entrevista,$vaga);
                                                 }
                                                 
                                         }
                                 }
                                 else{
                                         
-                                        $dados_form['tipo_entrevista'] = $tipo_entrevista;
-                                                                                                        
-                                        $this -> Candidaturas_model -> atualiza_entrevista($dados_form);
-                                        
-                                        $entrevista_atual = $this -> Candidaturas_model -> get_entrevistas('', $candidatura, $tipo_entrevista);
+										$dados_form['tipo_entrevista'] = $tipo_entrevista;
+																		
+										$this -> Candidaturas_model -> atualiza_entrevista($dados_form);
+										
+										$entrevista_atual = $this -> Candidaturas_model -> get_entrevistas('', $candidatura, $tipo_entrevista);
 										
                                         $dados_candidato = $this -> Candidatos_model -> get_candidatos($dados_candidatura[0] -> es_candidato);
                                         
@@ -865,8 +690,8 @@ class Vagas extends CI_Controller {
 
                                         
                                         
-                                        $partes = explode("T",$dados_form['data']);
-                                        $data = show_date($partes[0]);
+                                        $partes = explode(" ",$dados_form['data']);
+                                        $data = $partes[0];
                                         $hora = $partes[1];
                                         
                                         //$msg='Olá '.$dados_candidato->vc_nome.',<br/><br/>A entrevista foi marcada com sucesso.<br/>Data/horário novos: '.$dados_form['data'].'<br/><br/>Em caso de dúvidas, verifique no sistema do '.$this -> config -> item('nome').' a situação deste agendamento. Acesse o sistema por meio do link: '.base_url();
@@ -879,7 +704,11 @@ class Vagas extends CI_Controller {
                                         }
 
                                 }
-                                
+                                if(isset($entrevista_anterior[0])){
+										$dados_form['tipo_entrevista'] = $tipo_entrevista;
+																		
+										$this -> Candidaturas_model -> atualiza_entrevista($dados_form);
+								}
                                 //echo "candidatura: $candidatura<br>";
                                 if($dados_candidatura[0] -> es_status == 8){
                                         $this -> Candidaturas_model -> update_candidatura('es_status', 10,  $candidatura);
@@ -888,75 +717,60 @@ class Vagas extends CI_Controller {
                                 
 								
                                 //teste de aderencia
-				if(isset($questoes2) && $dados_candidatura[0] -> en_aderencia != '2' && $tipo_entrevista == 'competencia' && strtotime(str_replace("T"," ",$dados_form['data2'])) != strtotime($dados_candidatura[0] -> dt_aderencia)){
+								if(isset($questoes2) && $dados_candidatura[0] -> en_aderencia != '2' && $tipo_entrevista == 'competencia' && strtotime(show_sql_date($dados_form['data2'],true)) != strtotime($dados_candidatura[0] -> dt_aderencia)){
                                         //echo $dados_candidatura[0] -> dt_aderencia.show_sql_date($dados_form['data2'],true);
-                                        $this -> Candidaturas_model -> update_candidatura('dt_aderencia', $dados_form['data2'],  $candidatura);
+                                        $this -> Candidaturas_model -> update_candidatura('dt_aderencia', show_sql_date($dados_form['data2'], true),  $candidatura);
                                         $this -> Candidaturas_model -> update_candidatura('en_aderencia', '1',  $candidatura);
                                         if($dados_candidatura[0] -> en_hbdi != '2' && $dados_candidatura[0] -> en_hbdi != '1'){
-                                                $this -> Candidaturas_model -> update_candidatura('en_hbdi', '1',  $candidatura);
+                                            $this -> Candidaturas_model -> update_candidatura('en_hbdi', '1',  $candidatura);
                                                 
                                         }
                                         if(isset($questoes3) && $dados_candidatura[0] -> en_motivacao != '2' && $dados_candidatura[0] -> en_motivacao != '1'){
-                                                $this -> Candidaturas_model -> update_candidatura('en_motivacao', '1',  $candidatura);
+                                            $this -> Candidaturas_model -> update_candidatura('en_motivacao', '1',  $candidatura);
                                         }
 
-                                        if($dados_candidatura[0] -> en_situacao_funcional != '2' && $dados_candidatura[0] -> en_situacao_funcional != '1'){
-                                                $this -> Candidaturas_model -> update_candidatura('en_situacao_funcional', '1',  $candidatura);
+                                        $this->load->helper('emails');
+                                        $config = getEmailEnvConfigs();
+
+                                        $partes = explode(" ",$dados_form['data2']);
+                                        $data = $partes[0];
+                                        $hora = $partes[1];
+
+										$this->email->initialize($config);
+
+                                        $dados_candidato = $this -> Candidatos_model -> get_candidatos($dados_candidatura[0] -> es_candidato);
+
+										$this -> email -> from($this -> config -> item('email'), $this -> config -> item('nome'));
+										$this -> email -> to($dados_candidato -> vc_email);
+
+										$this -> email -> subject('['.$this -> config -> item('nome').'] Teste de aderência');
+										//$msg='Olá '.$dados_candidato->vc_nome.',<br/><br/>O teste de aderência deve ser preenchido.<br/><br/>Em caso de dúvidas, verifique no sistema do '.$this -> config -> item('nome').' a situação deste agendamento. Acesse o sistema por meio do link: '.base_url();
+										
+                                        // $this -> config -> item('nome'),
+                                        // $this -> config -> item('subTituloPlataforma'),
+                                        // $dados_candidato -> in_genero
+                                        // $dados_candidato -> vc_nome
+                                        // $vaga[0] -> vc_vaga
+                                        // $data
+                                        // $hora
+
+                                        $msg= loadTestesAderenciaPerfilHBDIMotivaçãoServicoPublicoHtml(
+                                            $this -> config -> item('nome'),
+                                            $this -> config -> item('subTituloPlataforma'),
+                                            $dados_candidato -> in_genero,
+                                            $dados_candidato -> vc_nome,
+                                            $vaga[0] -> vc_vaga,
+                                            $data,
+                                            $hora
+                                        );
+										$this -> email -> message($msg);
+										if(!$this -> email -> send()){
+                                                
+												$this -> Usuarios_model -> log('erro', 'Candidaturas/AgendamentoEntrevista', 'Erro de envio de e-mail de Teste de Aderência e HBDI do '.$dados_candidato->vc_nome.' feito pelo usuário '.$this -> session -> uid);
                                         }
-                                        if($dados_candidatura[0] -> dt_aderencia == '1'){
-
-                                        
-                                                $this->load->helper('emails');
-                                                $config = getEmailEnvConfigs();
-
-                                                $partes = explode(" ",$dados_form['data2']);
-                                                $data = $partes[0];
-                                                $hora = $partes[1];
-
-                                                $this->email->initialize($config);
-
-                                                $dados_candidato = $this -> Candidatos_model -> get_candidatos($dados_candidatura[0] -> es_candidato);
-
+                                        else{
                                                 
-                                                $this -> email -> from($this -> config -> item('email'), $this -> config -> item('nome'));
-
-                                                
-
-
-                                                $this -> email -> to($dados_candidato -> vc_email);
-
-                                                $this -> email -> subject('['.$this -> config -> item('nome').'] Teste de aderência');
-                                                //$msg='Olá '.$dados_candidato->vc_nome.',<br/><br/>O teste de aderência deve ser preenchido.<br/><br/>Em caso de dúvidas, verifique no sistema do '.$this -> config -> item('nome').' a situação deste agendamento. Acesse o sistema por meio do link: '.base_url();
-                                                                                        
-                                                // $this -> config -> item('nome'),
-                                                // $this -> config -> item('subTituloPlataforma'),
-                                                // $dados_candidato -> in_genero
-                                                // $dados_candidato -> vc_nome
-                                                // $vaga[0] -> vc_vaga
-                                                // $data
-                                                // $hora
-
-                                                $msg= loadTestesAderenciaPerfilHBDIMotivaçãoServicoPublicoHtml(
-                                                $this -> config -> item('nome'),
-                                                $this -> config -> item('subTituloPlataforma'),
-                                                $dados_candidato -> in_genero,
-                                                $dados_candidato -> vc_nome,
-                                                $vaga[0] -> vc_vaga,
-                                                $data,
-                                                $hora
-                                                );
-                                                $this -> email -> message($msg);
-                                                if(!$this -> email -> send()){
-                                                        
-                                                        $this -> Usuarios_model -> log('erro', 'Candidaturas/AgendamentoEntrevista', 'Erro de envio de e-mail de Teste de Aderência e HBDI do '.$dados_candidato->vc_nome.' feito pelo usuário '.$this -> session -> uid);
-                                                }
-                                                else{
-                                                        
-                                                        $this -> Usuarios_model -> log('sucesso', 'Candidaturas/AgendamentoEntrevista', 'E-mail de entrevista do '.$dados_candidato->vc_nome.' enviado com sucesso pelo usuário '.$this -> session -> uid);
-                                                }
-
-
-
+                                                $this -> Usuarios_model -> log('sucesso', 'Candidaturas/AgendamentoEntrevista', 'E-mail de entrevista do '.$dados_candidato->vc_nome.' enviado com sucesso pelo usuário '.$this -> session -> uid);
                                         }
                                         $this -> Usuarios_model -> log('sucesso', 'Candidaturas/AgendamentoEntrevista', 'Inserção/Alteração de data limite do Teste de aderência e HBDI pelo usuário '.$this -> session -> uid);
 								}
@@ -1006,15 +820,6 @@ class Vagas extends CI_Controller {
                 }
                 //$this -> load -> view('avaliacoes', $dados);
                 $this -> load -> view('vagas', $dados);
-        }
-
-        function teste_envio(){
-                $this -> load -> model('Candidaturas_model');
-                $this -> load -> model('Vagas_model');
-                $dados_candidatura = $this -> Candidaturas_model -> get_candidaturas(5369);
-                $vagas = $this -> Vagas_model ->get_vagas($dados_candidatura[0] -> es_vaga);
-                
-                $this -> envio_email($dados_candidatura,$vagas,'agendamento_entrevista','competencia','21/01/2022','13:00','http://www.teste.com.br','');
         }
         public function reprovar_restantes2(){
                 $this -> load -> model('Candidaturas_model');
@@ -1508,56 +1313,6 @@ class Vagas extends CI_Controller {
                                 </script>";
                }
         }
-
-        public function gerirAvaliadores(){
-                
-                $this -> load -> model('Usuarios_model');
-
-                $pagina['menu1']='Vagas';
-                $pagina['menu2']='gerirAvaliadores';
-                $pagina['url']='Vagas/gerirAvaliadores';
-                $pagina['nome_pagina']='Gerir avaliadores';
-                $pagina['icone']='fas fa-id-card-alt';
-                $dados=$pagina;
-                $vaga = $this -> uri -> segment(3);
-
-                $dados_form = $this -> input -> post(null,true);
-                if(isset($dados_form['codigo']) && strlen($dados_form['codigo'])>0){
-                        $vaga=$dados_form['codigo'];
-                }
-                $dados['codigo'] = $vaga;
-                $dados['adicionais'] = array('datatables' => true);
-                $dados['usuarios'] = $this -> Usuarios_model -> get_usuarios ('', '', 2,'',true);
-                $usuarios = $dados['usuarios'];
-                $dados['sucesso'] = '';
-                $dados['erro'] = '';
-                if(isset($dados_form['inserir_avaliadores'])){
-                        $this -> Vagas_model -> delete_vaga_avaliador($vaga);
-                        if($usuarios){
-                                foreach($usuarios as $usuario){
-
-                                        if(isset($dados_form['usuario'.$usuario->pr_usuario]) && $dados_form['usuario'.$usuario->pr_usuario] = $usuario->pr_usuario){
-                                                $this -> Vagas_model -> create_vaga_avaliador($dados_form,$vaga,$usuario->pr_usuario);
-                                        }
-                                }
-                        }
-                        $dados['sucesso'] = 'Os avaliadores marcados foram associados à vaga com sucesso.<br /><br /><a href="'.base_url('Vagas/index').'" class="btn btn-light">Voltar</a>';
-                }
-                $vagas_avaliadores = $this -> Vagas_model -> get_vagas_avaliadores($vaga);
-                
-                if($vagas_avaliadores){
-                        foreach($vagas_avaliadores as $vaga_avaliador){
-                               $dados['avaliador'][$vaga_avaliador->es_usuario] =  $vaga_avaliador->es_usuario;
-                        }
-                }
-                // $dados['sucesso'] = 'Os avaliadores marcados foram associados à vaga com sucesso.<br /><br /><a href="'.base_url('Vagas/index').'" class="btn btn-light">Voltar</a>';
-                
-
-                
-
-
-                $this -> load -> view('vagas', $dados);
-        }
         
         /*
 	public function questoes()	{
@@ -1750,7 +1505,7 @@ class Vagas extends CI_Controller {
                 //return true;
 				$candidatura = $this -> input -> post('codigo');
 				$tipo_entrevista = $this -> input -> post('tipo_entrevista');
-				$data = str_replace("T"," ",$this -> input ->post('data'));
+				$data = show_sql_date($this -> input ->post('data'),true);
 				$entrevista_anterior = $this -> Candidaturas_model -> get_entrevistas('', $candidatura, $tipo_entrevista);
 				if((isset($entrevista_anterior[0]->es_avaliador1) && $entrevista_anterior[0]->es_avaliador1==$avaliador) || (isset($entrevista_anterior[0]->es_avaliador2) && $entrevista_anterior[0]->es_avaliador2==$avaliador)){
 					return true;
@@ -1795,8 +1550,8 @@ class Vagas extends CI_Controller {
         }*/
 
         function data_maior($data){
-                $inicio = str_replace("T"," ",$data);
-                $fim = str_replace("T"," ",$this -> input -> post('fim'));
+                $inicio = show_sql_date($data,true);
+                $fim = show_sql_date($this -> input -> post('fim'),true);
                 
                 if(strtotime($inicio) >= strtotime($fim)){
                         $this -> form_validation -> set_message('data_maior', 'A data de Término deve ser maior que o \'Início das inscrições\'');
@@ -1806,7 +1561,7 @@ class Vagas extends CI_Controller {
         }
 
         function data_fim($data){
-                $fim = str_replace("T"," ",$data);
+                $fim = show_sql_date($data,true);
                 $atual = time();
                 $this -> load -> model('Candidaturas_model');
 
@@ -1829,7 +1584,7 @@ class Vagas extends CI_Controller {
 
         function valida_unico3($data){
                 //return true;
-				$data = str_replace("T"," ",$data);
+				$data = show_sql_date($data,true);
 				$candidatura = $this -> input -> post('codigo');
                 $tipo_entrevista = $this -> input -> post('tipo_entrevista');
                 
@@ -1865,7 +1620,7 @@ class Vagas extends CI_Controller {
         }
         
         function data_atual($data){
-                $data = str_replace("T"," ",$data);
+                $data = show_sql_date($data);
                 
                 if(strtotime($data)<=strtotime(date('Y-m-d'))){
                         $this -> form_validation -> set_message('data_atual', 'A data de agendamento deve ser maior que a atual.');
@@ -1875,38 +1630,11 @@ class Vagas extends CI_Controller {
                 return true;
         }
 
-        function verficaopcoes($data){
-                $soma = $this -> input -> post('atendimento',true)+$this -> input -> post('auditoria',true)+$this -> input -> post('compras',true)+$this -> input -> post('controladoria',true);
-                $soma += $this -> input -> post('desenvolvimentoEco',true)+$this -> input -> post('desenvSoc',true)+$this -> input -> post('dirHum',true)+$this -> input -> post('educacao',true);
-                $soma += $this -> input -> post('financeiro',true)+$this -> input -> post('gestContrat',true)+$this -> input -> post('gestPessoa',true)+$this -> input -> post('gestProcess',true);
-                $soma += $this -> input -> post('gestProj',true)+$this -> input -> post('infraestrutura',true)+$this -> input -> post('logistica',true)+$this -> input -> post('meioAmb',true);
-                $soma += $this -> input -> post('polPub',true)+$this -> input -> post('recHum',true)+$this -> input -> post('saude',true)+$this -> input -> post('tic',true);
-                if(!($soma > 0)){
-                        $this -> form_validation -> set_message('verficaopcoes', 'Deve ser escolhido ao menos 1 área envolvida.');
-                        return false;
-                }
-                return true;
-        }
-
         private function envio_email($candidatura,$vaga,$modelo,$tipo_entrevista,$data='',$hora='',$link='',$observacoes=''){
-                $this -> load -> model('Candidatos_model');
-                $this -> load -> model('Usuarios_model');
                 $candidato = $this -> Candidatos_model -> get_candidatos ($candidatura[0] -> es_candidato);
                 $titulo = array('agendamento_entrevista'=>'] Entrevista Marcada','reagendamento_candidato'=>'] Alteração de data/horário de entrevista');
                 
                 $this->load->helper('emails');
-
-                //Para carregar a data e hora dos testes
-                /*echo $candidatura[0] -> pr_candidatura;
-                $entrevista_atual = $this -> Candidaturas_model -> get_candidaturas($candidatura[0] -> pr_candidatura);*/
-
-                $array_data_teste = explode(" ",$candidatura[0] -> dt_aderencia);
-                //echo $candidatura[0] -> dt_aderencia;
-                $teste_data = show_date($array_data_teste[0]);
-                $teste_hora = $array_data_teste[1];
-
-                /*$teste_data = "17/02/2022";
-                $teste_hora = "13:00";*/
 
                 if($modelo == 'agendamento_entrevista'){
                         $msg['agendamento_entrevista']= loadAgendamentoDeEntrevistaHtml(
@@ -1918,13 +1646,8 @@ class Vagas extends CI_Controller {
                             $hora,
                             $vaga[0] -> vc_vaga,
                             $link,
-                            $observacoes,
-                            $teste_data,
-                            $teste_hora,
-                            $vaga[0] -> tx_documentacao
-
+                            $observacoes
                     );
-                    
                 }
                 else if($modelo == 'reagendamento_candidato'){
                         $msg['reagendamento_candidato']= loadReagendamentoDeEntrevistaHtml(
@@ -1936,10 +1659,8 @@ class Vagas extends CI_Controller {
                             $hora,
                             $tipo_entrevista,
                             $vaga[0] -> vc_vaga,
-                            $link,
-                            $vaga[0] -> tx_documentacao
+                            $link
                     );
-                    
                 }
                 
                 
@@ -1960,7 +1681,6 @@ class Vagas extends CI_Controller {
                 $this -> email -> message($msg[$modelo]);
                 //echo $msg[$modelo];
                 if(!$this -> email -> send()){
-                        
                         if($modelo == 'agendamento_entrevista'){
                                 $this -> Usuarios_model -> log('erro', 'Candidaturas/AgendamentoEntrevista', 'Erro de envio de e-mail de entrevista do '.$candidato->vc_nome);
                         }
@@ -1970,7 +1690,6 @@ class Vagas extends CI_Controller {
                         
                 }
                 else{
-                        
                         if($modelo == 'agendamento_entrevista'){
                                 $this -> Usuarios_model -> log('sucesso', 'Candidaturas/AgendamentoEntrevista', 'Envio de e-mail de entrevista do '.$candidato->vc_nome.' pelo usuário '. $this -> session -> uid.' feita com sucesso.');
                         }

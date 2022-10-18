@@ -274,7 +274,6 @@ class Csvmodel{
 		$handle=@fopen($arquivo,$parametro);
 		if(!$handle){
 			echo "Erro ao abrir o arquivo ".$arquivo,"O servidor ".$_SERVER["SERVER_NAME"]." apresenta problemas de permissão ou inexistência do arquivo. Verificar com o administrador.";
-			
 		}
 		//else{
 		return $handle;

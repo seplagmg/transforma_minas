@@ -170,8 +170,7 @@ if($menu2 == 'index'){
                                                     <div class=\"col-12\">
                                                             <a href=\"".base_url('Publico/recuperar')."\">Esqueceu sua senha?</a><br/>";
 
-        echo "<a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" class=\"kt-login__link\" alt=\"Fale conosco\">Fale conosco</a><br/>";
-        echo "<a href=\"". base_url('Publico/download_termo/geral')."\" target=\"_blank\">Termo de uso e política de privacidade</a>";
+        echo "<a href=\"" . base_url('Publico/contato') . "\" class=\"kt-login__link\" alt=\"Fale conosco\">Fale conosco</a>";
         /*echo "<a href=\"";
         echo 'https://www.mg.gov.br/transforma-minas/fale-conosco';
         echo "\" class=\"kt-login__link\" target=\"_blank\">Fale conosco</a>

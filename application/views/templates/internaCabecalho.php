@@ -51,8 +51,6 @@ if (in_array($this->session->perfil, array_keys($perfilTypes))) {
     <link rel="stylesheet" type="text/css" href="<?= base_url('assets/vendor/jquery-ui/jquery-ui.min.css') ?>">
     
     <!-- Custom styles for this template-->
-
-    <link rel="stylesheet" type="text/css" href="<?= base_url('bower_components\bootstrap-v-5\css\bootstrap.min.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/sb-admin-2.min.css') ?>">
     <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/transforma-minas-override.css') ?>">
 
@@ -73,7 +71,7 @@ if (in_array($this->session->perfil, array_keys($perfilTypes))) {
 
     <?php if(isset($adicionais['select2'])): ?>
         <!-- Select2 css -->
-        <link href="<?= base_url('assets/css/select2.min.css') ?>" rel="stylesheet" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/transforma-minas-select2.css') ?>" />
     <?php endif ?>
 
@@ -221,5 +219,5 @@ if (in_array($this->session->perfil, array_keys($perfilTypes))) {
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <div class="page-wrapper pt-2">
+                    <div class="page-wrapper p-2">
                         <div class="row">

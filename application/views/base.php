@@ -772,11 +772,9 @@ else if(strlen($sucesso) > 0){
                 //echo form_hidden('codigo_experiencia'.$i, $pr_experienca[$i]);
                 echo "
                                                                 </div>
-                                                        </div>";
-                                                        
-                /*echo "
-                                                        <div class=\"form-group row\">
-                                                                        <div class=\"col-lg-12\">
+                                                        </div>
+														<div class=\"form-group row\">
+																<div class=\"col-lg-12\">
 																		";
                 $attributes = array('class' => 'esquerdo control-label');
                 echo form_label('Comprovante', "comprovante{$i}", $attributes);
@@ -800,10 +798,8 @@ else if(strlen($sucesso) > 0){
 				}
                 echo form_upload($attributes, '', 'class="form-control"');
                 echo "
-                                                                        </div>
-                                                        </div>";*/
-                                                        
-                echo "
+																</div>
+														</div>
                                                 </fieldset>
                                         </div>
                                                                         ";

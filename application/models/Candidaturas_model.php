@@ -53,10 +53,10 @@ class Candidaturas_model extends CI_Model {
                 /*        $this -> db -> select('c.pr_candidatura, c.es_candidato, c.es_vaga, c.dt_candidatura, c.es_status, s.vc_status, v.vc_vaga, v.dt_fim, d.vc_nome, e.*, i.vc_sigla, i.vc_instituicao, c.en_aderencia, c.es_avaliador_competencia1, c.es_avaliador_competencia2');
                 }
                 else */if((strlen($avaliador) > 0 && $avaliador > 0) || (strlen($calendario) > 0 && $calendario > 0)){
-                        $this -> db -> select('c.dt_realizada,c.en_motivacao,c.en_hbdi,c.en_situacao_funcional,u.vc_nome as avaliador_competencia,c.pr_candidatura, c.es_candidato, c.es_vaga, c.dt_candidatura, c.es_status, s.vc_status, v.vc_vaga, v.dt_fim, d.vc_nome, e.*, i.vc_sigla, i.vc_instituicao, c.en_aderencia, c.dt_aderencia, c.es_avaliador_competencia1, c.es_avaliador_especialista, c.dt_cadastro');
+                        $this -> db -> select('c.dt_realizada,c.en_motivacao,c.en_hbdi,u.vc_nome as avaliador_competencia,c.pr_candidatura, c.es_candidato, c.es_vaga, c.dt_candidatura, c.es_status, s.vc_status, v.vc_vaga, v.dt_fim, d.vc_nome, e.*, i.vc_sigla, i.vc_instituicao, c.en_aderencia, c.dt_aderencia, c.es_avaliador_competencia1, c.es_avaliador_especialista, c.dt_cadastro');
                 }
                 else{
-                        $this -> db -> select('c.dt_realizada,c.en_motivacao,c.en_hbdi,c.en_situacao_funcional,u.vc_nome as avaliador_competencia,c.pr_candidatura, c.es_candidato, c.es_vaga, c.dt_candidatura, c.es_status, s.vc_status, v.vc_vaga, v.dt_fim, d.vc_nome, i.vc_sigla, i.vc_instituicao, c.en_aderencia, c.dt_aderencia, c.es_avaliador_competencia1, c.es_avaliador_especialista, c.tx_expectativa_momento, c.tx_observacoes_momento, c.tx_pontos_fortes, c.tx_pontos_melhorias, c.tx_feedback, c.tx_comentarios, c.dt_cadastro');
+                        $this -> db -> select('c.dt_realizada,c.en_motivacao,c.en_hbdi,u.vc_nome as avaliador_competencia,c.pr_candidatura, c.es_candidato, c.es_vaga, c.dt_candidatura, c.es_status, s.vc_status, v.vc_vaga, v.dt_fim, d.vc_nome, i.vc_sigla, i.vc_instituicao, c.en_aderencia, c.dt_aderencia, c.es_avaliador_competencia1, c.es_avaliador_especialista, c.tx_expectativa_momento, c.tx_observacoes_momento, c.tx_pontos_fortes, c.tx_pontos_melhorias, c.tx_feedback, c.tx_comentarios, c.dt_cadastro');
                 }
                 
                 $this -> db -> where('c.bl_removido', '0');
@@ -726,116 +726,6 @@ class Candidaturas_model extends CI_Model {
                         return NULL;
                 }
         }
-
-        public function atualiza_teste_situacao_funcional($dados){
-                if(!isset($dados['vinculo'])||strlen($dados['vinculo']) == 0){
-                        $dados['vinculo'] = null;
-                }
-                if(!isset($dados['tipovinculo'])||strlen($dados['tipovinculo']) == 0){
-                        $dados['tipovinculo'] = null;
-                }
-                if(!isset($dados['poder'])||strlen($dados['poder']) == 0){
-                        $dados['poder'] = null;
-                }
-                if(!isset($dados['esfera'])||strlen($dados['esfera']) == 0){
-                        $dados['esfera'] = null;
-                }
-                if(!isset($dados['instituicao'])||strlen($dados['instituicao']) == 0||$dados['instituicao'] == 0){
-                        $dados['instituicao'] = null;
-                }
-                if(!isset($dados['codCargo'])||strlen($dados['codCargo']) == 0){
-                        $dados['codCargo'] = null;
-                }
-                if(!isset($dados['masp'])||strlen($dados['masp']) == 0){
-                        $dados['masp'] = null;
-                }
-                if(!isset($dados['comprovanteVinc'])||strlen($dados['comprovanteVinc']) == 0){
-                        $dados['comprovanteVinc'] = null;
-                }
-                
-                $data=array(
-                        'es_candidatura' => $dados['candidatura'],                        
-                        'dt_situacao_funcional' => date('Y-m-d H:i:s'),
-                        'bl_vinculo' => $dados['vinculo'],
-                        'en_tipovinculo' => $dados['tipovinculo'],
-                        'en_poder' => $dados['poder'],
-                        'en_esfera' => $dados['esfera'],
-                        'es_instituicao' => $dados['instituicao'],
-                        'vc_instituicao' => $dados['instituicao2'],
-                        'vc_codCargo' => $dados['codCargo'],
-                        'in_masp' => $dados['masp'],
-                        'vc_comprovanteVinc' => $dados['comprovanteVinc'],
-                        'vc_mime' => $dados['mime'],
-                        'en_status' => $dados['status']
-                );
-                $this -> db -> replace ('tb_formulario_situacao_funcional', $data);
-                //echo $this -> db -> last_query();
-                return $this -> db -> insert_id();
-        }
-
-        public function get_teste_situacao_funcional($candidatura){
-                
-                $this -> db -> where('es_candidatura', $candidatura);
-                
-                $this -> db -> select('*');
-                $this -> db -> from('tb_formulario_situacao_funcional');
-               
-                $query = $this -> db -> get();
-                if($query -> num_rows() > 0){
-                        return $query -> row();
-                }
-                else{
-                        return NULL;
-                }
-        }
-
-        public function get_alteracao_status($id='', $candidatura='',$vaga=''){
-                if(strlen($id) > 0 && $id > 0){
-                        $this -> db -> where('a.pr_alteracao', $id);
-                }
-                if(strlen($candidatura) > 0){
-                        $this -> db -> where('a.es_candidatura', $candidatura);
-                }
-                if(strlen($vaga) > 0){
-                        $this -> db -> where('c.es_vaga', $vaga);
-                        $this -> db -> select('a.*,u.vc_nome as nome_responsavel,ca.vc_nome as nome_candidato');
-                }
-                else{
-                        $this -> db -> select('a.*,u.vc_nome');
-                }
-                
-                $this -> db -> from('tb_alteracao_data a');
-                $this -> db -> join('tb_usuarios u', 'a.es_usuario=u.pr_usuario');
-                if(strlen($vaga) > 0){
-                        $this -> db -> join('tb_candidaturas c', 'a.es_candidatura=u.pr_candidatura');
-                        $this -> db -> join('tb_candidatos ca', 'c.es_candidato=ca.pr_candidato');
-                }
-                
-                $this->db->order_by('a.dt_insercao', 'DESC');
-
-                $query = $this -> db -> get();
-                //echo $this -> db -> last_query();
-                if($query -> num_rows() > 0){
-                        return $query -> result();
-                }
-                else{
-                        return NULL;
-                }
-        }
-
-        public function create_alteracao_status($dados){
-                $data=array(
-                        'es_usuario' => $this -> session -> uid,
-                        'es_candidatura' => $dados['candidatura'],
-                        
-                        'dt_insercao' => date('Y-m-d H:i:s'),
-			'tx_justificativa' => $dados['justificativa']
-                );
-                $this -> db -> insert ('tb_alteracao_data', $data);
-                //echo $this -> db -> last_query();
-                return $this -> db -> insert_id();
-        }
-
         public function salvar_resposta($dados, $questao){
                 //var_dump($dados);
                 if(isset($dados['avaliador']) && strlen($dados['avaliador']) > 0){
@@ -933,7 +823,7 @@ class Candidaturas_model extends CI_Model {
                                 'es_avaliador1' => $dados['avaliador1'],
                                 'es_avaliador2' => $dados['avaliador2'],
 								
-                                'dt_entrevista' => $dados['data'],
+                                'dt_entrevista' => show_sql_date($dados['data'], true),
                                 'es_alterador' => $this -> session -> uid,
                                 'bl_tipo_entrevista' => $dados['tipo_entrevista'],
 				'vc_link' => $dados['link'],
@@ -946,7 +836,7 @@ class Candidaturas_model extends CI_Model {
                                 'es_candidatura' => $dados['codigo'],
                                 'es_avaliador1' => $dados['avaliador1'],
                                 
-                                'dt_entrevista' => $dados['data'],
+                                'dt_entrevista' => show_sql_date($dados['data'], true),
                                 'es_alterador' => $this -> session -> uid,
                                 'bl_tipo_entrevista' => $dados['tipo_entrevista'],
 				'vc_link' => $dados['link'],
@@ -957,7 +847,15 @@ class Candidaturas_model extends CI_Model {
                 $this -> db -> replace ('tb_entrevistas', $data);
                 return $this -> db -> insert_id();
                 
-                
+                /*
+                $data=array(
+                        'es_candidato' => $this -> session -> candidato,
+                        'es_vaga' => $dados['Vaga'],
+                        'es_status' => 1,
+                        'dt_candidatura' => date('Y-m-d H:i:s')
+                );
+                $this -> db -> insert ('tb_candidaturas', $data);
+                return $this -> db -> insert_id();*/
         }
         public function create_formacao($dados, $id){
 				if(!($dados["cargahoraria{$id}"])>0){

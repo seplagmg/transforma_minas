@@ -48,108 +48,71 @@ if($menu2 == 'index'){ //lista de candidaturas - perfil candidato
                                                                                     <tr>
                                                                                             <th>Data</th>
                                                                                             <th>Vaga</th>
-                                                                                            <th>Status da inscrição</th>
                                                                                             <th>Fim do período de inscrições</th>
-                                                                                            <th>Teste de aderência</th>
-                                                                                            <th>Teste HBDI</th>
-                                                                                            <th>Teste de Motivação</th>
-                                                                                            <th>Formulário de Situação Funcional</th>
-                                                                                            <th>Prazo testes e formulário</th>
-                                                                                            <th>Ações</th>
-                                                                                    </tr>
+                                                                                            <th>Prazo limite para o Teste de Aderência/HBDI/Teste de Motivação</th>
+                                                                                            <th>Status</th>
+                                                                                            <th>Ações</th
+>                                                                                    </tr>
                                                                             </thead>
                                                                             <tbody>";
         $atual =time();                                                                    
         if(isset($candidaturas)){
 
                 foreach ($candidaturas as $linha){
-                        $dt_candidatura = strtotime($linha -> dt_candidatura);
-                        $dt_fim = strtotime($linha -> dt_fim);
+                        $dt_candidatura = mysql_to_unix($linha -> dt_candidatura);
+                        $dt_fim = mysql_to_unix($linha -> dt_fim);
                         $dt_aderencia = strtotime($linha -> dt_aderencia);
                         echo "
                                                                                     <tr>
                                                                                             <td class=\"text-center\" data-search=\"".show_date($linha -> dt_candidatura)."\" data-order=\"$dt_candidatura\">".show_date($linha -> dt_candidatura)."</td>
-                                                                                            <td>".$linha -> vc_vaga."</td>";
-
+                                                                                            <td>".$linha -> vc_vaga."</td>
+                                                                                            <td class=\"text-center\" data-search=\"".show_date($linha -> dt_fim, true)."\" data-order=\"$dt_fim\">".show_date($linha -> dt_fim, true)."</td>
+                                                                                            <td class=\"text-center\" data-search=\"".show_date($linha -> dt_aderencia, true)."\" data-order=\"$dt_aderencia\">".show_date($linha -> dt_aderencia, true)."</td>
+                                                                                            ";
                         if(isset($linha -> es_status) && ($linha -> es_status == 1 || $linha -> es_status == 4 || $linha -> es_status == 6)){
-                                if (strlen($linha -> dt_fim)>0 && $dt_fim < $atual) {
-                                        echo "
-                                                                                            <td class=\"text-center\"><span class=\"badge badge-danger badge-lg\">Prazo expirado</span></td>";
-                                }
-                                else{
-                                        echo "
-                                                                                            <td class=\"text-center\"><span class=\"badge badge-warning badge-lg\">Inscrição pendente</span></td>";
-                                }
+                                echo "
+                                                                                            <td class=\"text-center\"><span class=\"badge badge-warning badge-lg\">Pendente</span></td>";
                         }
                         else{
                                 echo "
-                                                                                            <td class=\"text-center\"><span class=\"badge badge-success badge-lg\">Inscrição confirmada</span></td>";
+                                                                                            <td class=\"text-center\"><span class=\"badge badge-success badge-lg\">Concluído</span></td>";
                         }
-
-                        echo "                                                              <td class=\"text-center\" data-search=\"".show_date($linha -> dt_fim, true)."\" data-order=\"$dt_fim\">".show_date($linha -> dt_fim, true)."</td>
-
-                                                                                            <td class=\"text-center\">
-                                                                                            ".($linha -> en_aderencia == '2'?"<span class=\"badge badge-success badge-lg\">Teste concluído</span>":($linha -> en_aderencia == '1'?(strlen($linha->dt_aderencia)>0&&strtotime($linha->dt_aderencia)>=$atual?"<span class=\"badge badge-warning badge-lg\">Teste pendente</span>":"<span class=\"badge badge-danger badge-lg\">Teste expirado</span>"):"<span class=\"badge badge-secondary badge-lg\">Não solicitado</span>"))."
-                                                                                            </td>
-
-                                                                                            <td class=\"text-center\">
-                                                                                            ".($linha -> en_hbdi == '2'?"<span class=\"badge badge-success badge-lg\">Teste concluído</span>":($linha -> en_hbdi == '1'?(strlen($linha->dt_aderencia)>0&&strtotime($linha->dt_aderencia)>=$atual?"<span class=\"badge badge-warning badge-lg\">Teste pendente</span>":"<span class=\"badge badge-danger badge-lg\">Teste expirado</span>"):"<span class=\"badge badge-secondary badge-lg\">Não solicitado</span>"))."
-                                                                                            </td>
-
-                                                                                            <td class=\"text-center\">
-                                                                                            ".($linha -> en_motivacao == '2'?"<span class=\"badge badge-success badge-lg\">Teste concluído</span>":($linha -> en_motivacao == '1'?(strlen($linha->dt_aderencia)>0&&strtotime($linha->dt_aderencia)>=$atual?"<span class=\"badge badge-warning badge-lg\">Teste pendente</span>":"<span class=\"badge badge-danger badge-lg\">Teste expirado</span>"):"<span class=\"badge badge-secondary badge-lg\">Não solicitado</span>"))."
-                                                                                            </td>
-                                                                                            
-                                                                                            <td class=\"text-center\">
-                                                                                            ".($linha -> en_situacao_funcional == '2'?"<span class=\"badge badge-success badge-lg\">Formulário concluído</span>":($linha -> en_situacao_funcional == '1'?(strlen($linha->dt_aderencia)>0&&strtotime($linha->dt_aderencia)>=$atual?"<span class=\"badge badge-warning badge-lg\">Formulário pendente</span>":"<span class=\"badge badge-danger badge-lg\">Formulário expirado</span>"):"<span class=\"badge badge-secondary badge-lg\">Não solicitado</span>"))."
-                                                                                            </td>    
-
-                                                                                            <td class=\"text-center\" data-search=\"".show_date($linha -> dt_aderencia, true)."\" data-order=\"$dt_aderencia\">".show_date($linha -> dt_aderencia, true)."</td>
-                                                                                            ";
-
-                        if(($linha -> es_status == 10 || $linha -> es_status == 11 || $linha -> es_status == 12 || $linha -> es_status == 13)){
+                        if(($linha -> es_status == 10 || $linha -> es_status == 11 || $linha -> es_status == 12)){
                                 echo "
                                                                                             <td class=\"text-center\">";
                                 if(($dt_aderencia > $atual || strlen($linha -> dt_aderencia) == 0) && $linha -> en_aderencia == '1'){
-                                        echo anchor('Candidaturas/TesteAderencia/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-1 fa-calendar-check"></i> Teste de aderência', " class=\"btn btn-sm btn-square btn-danger\" title=\"Teste de aderência\"");
+                                        echo anchor('Candidaturas/TesteAderencia/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-calendar-check">Teste de aderência</i>', " class=\"btn btn-sm btn-square btn-danger\" title=\"Teste de aderência\"");
                                 }
                                 if(($dt_aderencia > $atual || strlen($linha -> dt_aderencia) == 0) && $linha -> en_hbdi == 1){
-                                        echo anchor('Candidaturas/HBDI/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-1 fa-calendar-check"></i> Formulário HBDI', " class=\"btn btn-sm btn-square btn-warning\" title=\"Formulário HBDI\"");
+                                        echo anchor('Candidaturas/HBDI/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-calendar-check">HBDI</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"HBDI\"");
                                 }
                                 if(($dt_aderencia > $atual || strlen($linha -> dt_aderencia) == 0) && $linha -> en_motivacao == 1){
-                                        echo anchor('Candidaturas/TesteMotivacao/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-1 fa-calendar-check"></i> Teste de Motivação', " class=\"btn btn-sm btn-square btn-primary\" title=\"Teste de Motivação\"");
+                                        echo anchor('Candidaturas/TesteMotivacao/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-calendar-check">Teste de Motivação</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Teste de Motivação\"");
                                 }                                                            
-                                if(($dt_aderencia > $atual || strlen($linha -> dt_aderencia) == 0) && $linha -> en_situacao_funcional == 1){
-                                        echo anchor('Candidaturas/FormSituaFunc/'.$linha -> pr_candidatura, '<i class="fas fa-id-card-alt mr-1"></i> Formulário de Situação Funcional', " class=\"btn btn-sm btn-square btn-primary\" title=\"Formulário de Situação Funcional\"");
-                                }                                                            
+                                
                         }
                         else if($dt_fim > time()){ //dentro do prazo
                                 echo "
                                                                                             <td class=\"text-center\">";
                                 
                                 if($linha -> es_status == 1){
-                                        echo anchor('Candidaturas/Prova/'.$linha -> es_vaga, '<i class="fa fa-lg mr-1 fa-edit"></i> Continuar preenchimento', " class=\"btn btn-sm btn-square btn-warning\" title=\"Continuar preenchimento\"");
+                                        echo anchor('Candidaturas/Prova/'.$linha -> es_vaga, '<i class="fa fa-lg mr-0 fa-edit">Continuar preenchimento</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Continuar preenchimento\"");
                                 }
                                 if($linha -> es_status == 4){
-                                        echo anchor('Candidaturas/Curriculo/'.$linha -> es_vaga, '<i class="fa fa-lg mr-1 fa-edit"></i> Continuar preenchimento', " class=\"btn btn-sm btn-square btn-warning\" title=\"Continuar preenchimento\"");
+                                        echo anchor('Candidaturas/Curriculo/'.$linha -> es_vaga, '<i class="fa fa-lg mr-0 fa-edit">Continuar preenchimento</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Continuar preenchimento\"");
                                 }
                                 if($linha -> es_status == 6){
-                                        echo anchor('Candidaturas/Questionario/'.$linha -> es_vaga, '<i class="fa fa-lg mr-1 fa-edit"></i> Continuar preenchimento', " class=\"btn btn-sm btn-square btn-warning\" title=\"Continuar preenchimento\"");
-                                
+                                        echo anchor('Candidaturas/Questionario/'.$linha -> es_vaga, '<i class="fa fa-lg mr-0 fa-edit">Continuar preenchimento</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Continuar preenchimento\"");
                                 }
-                                
 								
                         }
                         else{
                                 echo "
                                                                                             <td class=\"text-center\">";
                         }
-		        echo anchor('Candidaturas/DetalheAvaliacao/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-1 fa-search"></i> Detalhes', " class=\"btn btn-sm btn-square btn-primary\" title=\"Detalhes\"");
-                        if($dt_fim > time()){ //dentro do prazo
-                                 echo "
-                                                                                                    <a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Excluir candidatura\" onclick=\"confirm_delete(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-1 fa-times-circle\"></i> Excluir candidatura</a>";
-
-                        }
+						echo anchor('Candidaturas/DetalheAvaliacao/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-search">Detalhes</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Detalhes\"");
+						/*echo "
+                                                                                                    <a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Excluir candidatura\" onclick=\"confirm_delete(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\"></i></a>";*/
 
                         echo "
                                                                                             </td>
@@ -159,7 +122,7 @@ if($menu2 == 'index'){ //lista de candidaturas - perfil candidato
         else{
                 echo "
                                                                                     <tr>
-                                                                                            <td class=\"text-center\" colspan=\"11\">Você não possui candidaturas registradas</td>
+                                                                                            <td colspan=\"6\">Você não possui candidaturas registradas</td>
                                                                                     </tr>
                 ";
         }
@@ -170,20 +133,20 @@ if($menu2 == 'index'){ //lista de candidaturas - perfil candidato
                                                     </div>";
 
         $pagina['js'] = "
-					     <script type=\"text/javascript\">
+											<script type=\"text/javascript\">
                                                     function confirm_delete(id){
                                                             $(document).ready(function(){
                                                                     swal.fire({
                                                                         title: 'Aviso de exclusão de candidatura',
-                                                                        text: 'Prezado candidato(a), caso deseje confirmar a exclusão de sua candidatura para essa vaga. Deseja Confirmar?',
+                                                                        text: 'Prezado candidato(a), caso deseje confirmar a exclusão de sua candidatura para essa vaga, você não poderá se candidatar na mesma vaga novamente. Deseja Confirmar?',
                                                                         type: 'warning',
                                                                         showCancelButton: true,
-                                                                        cancelButtonText: 'Não, cancelar',
-                                                                        confirmButtonText: 'Sim, excluir'
+                                                                        cancelButtonText: 'Não, cancele',
+                                                                        confirmButtonText: 'Sim, exclui'
                                                                     })
                                                                     .then(function(result) {
                                                                         if (result.value) {
-                                                                            window.location = '".base_url('Candidaturas/delete/')."' + id ;
+                                                                            $(location).attr('href', '".base_url('Candidaturas/delete/')."' + id )
                                                                         }
                                                                     });
                                                             });
@@ -203,7 +166,7 @@ if($menu2 == 'index'){ //lista de candidaturas - perfil candidato
                                                                     }
                                                             ],
                                                             order: [
-                                                                [0, 'desc']
+                                                                [0, 'asc']
                                                             ],
                                                             language: {
                                                                         \"decimal\":        \"\",
@@ -229,7 +192,7 @@ if($menu2 == 'index'){ //lista de candidaturas - perfil candidato
                                                                             \"sortDescending\": \": clique para ordenar de forma decrescente\"
                                                                         }
                                                             }
-                                                        
+                                                        }
                                                     });
                                             </script>";
 }
@@ -300,31 +263,31 @@ else{
         else{
 				
                 if(isset($vaga)&&$vaga>0){
-                        if($menu2 == 'Prova' || $menu2 == 'Questionario'){
-                                /*if($menu2 == 'Questionario'){
-                                                $attributes["onsubmit"]="return(valida_formulario(this));";
-                                }*/
-                                echo form_open_multipart($url, $attributes, array('vaga' => $vaga));
-                        }
-                        else{
-                                echo form_open($url, $attributes, array('vaga' => $vaga));
-                        }
+						if($menu2 == 'Prova' || $menu2 == 'Questionario'){
+								/*if($menu2 == 'Questionario'){
+										$attributes["onsubmit"]="return(valida_formulario(this));";
+								}*/
+								echo form_open_multipart($url, $attributes, array('vaga' => $vaga));
+						}
+						else{
+								echo form_open($url, $attributes, array('vaga' => $vaga));
+						}
                         
                 }
                 else if(isset($candidatura)&&$candidatura>0){
-                        if($menu2 == 'Prova' || $menu2 == 'Questionario'|| $menu2 == 'FormSituaFunc'){
-                                echo form_open_multipart($url, $attributes, array('candidatura' => $candidatura));
-                        }
-                        else{
-                                echo form_open($url, $attributes, array('candidatura' => $candidatura));
-                        }
+						if($menu2 == 'Prova' || $menu2 == 'Questionario'){
+								echo form_open_multipart($url, $attributes, array('candidatura' => $candidatura));
+						}
+						else{
+								echo form_open($url, $attributes, array('candidatura' => $candidatura));
+						}
                         
                 }
                 else{
                         echo form_open($url, $attributes);
                 }
         }
-        if($menu2 != 'TesteAderencia' && $menu2!= 'delete' && $menu2 != 'editDossie' && $menu2 != 'HBDI' && $menu2 != 'TesteMotivacao' && $menu2 != 'FormSituaFunc'){
+        if($menu2 != 'TesteAderencia' && $menu2!= 'delete' && $menu2 != 'editDossie' && $menu2 != 'HBDI' && $menu2 != 'TesteMotivacao'){
                 echo "
                                                                             <div class=\"steps clearfix\">
                                                                                 <ul role=\"tablist\">";
@@ -443,188 +406,45 @@ else{
                                                                             <div class=\"clearfix\">
                                                                                 <fieldset class=\"body current\">";
         if($menu2 == 'create'){ //cadastro de candidatura
-                
-                        if(!isset($vaga)){
-
-                                echo "
-                                <div class=\"dt-responsive table-responsive p-2\">
-                                        <h5 class=\"mb-3\" style=\"font-weight:600\">Vagas disponíveis:</h5>
-                                        <table class=\"table table-striped table-bordered table-hover\" id=\"disponiveis_table\">
-                                                <thead>
-                                                        <tr>
-                                                                <th>Nome da vaga</th>
-                                                                
-                                                                <th>Início inscrições</th>
-                                                                <th>Fim inscrições</th>                                             
-                                                                <th>Ações</th>
-                                                        </tr>
-                                                </thead>
-                                                <tbody>";
-
-                                                if(isset($vagas)){
-                                                                
-                                                        if(strstr($erro, "'Vaga'")){
-                                                                echo "<td>Sem vagas abertas</td>";
-                                                        }
-                                                        else{
-
-                                                                $atual = time();
-                                                                foreach ($vagas as $linha){
-                                                                        $dt_inicio = strtotime($linha -> dt_inicio);
-                                                                        $dt_fim = strtotime($linha -> dt_fim);
-                                                                echo "
-                                                                                        <tr>
-                                                                                                <td>".$linha -> vc_vaga."</td>
-                                                                                                <td class=\"text-center\" data-search=\"".show_date($linha -> dt_inicio,true)."\" data-order=\"$dt_inicio\">".show_date($linha -> dt_inicio,true)."</td>
-                                                                                                <td class=\"text-center\" data-search=\"".show_date($linha -> dt_fim,true)."\" data-order=\"$dt_fim\">".show_date($linha -> dt_fim,true)."</td>
-                                                                                                <td class=\"text-center\"><a href=\"".base_url('Candidaturas/create/'.$linha -> pr_vaga)."\" class=\"btn btn-primary text-white\"><i class=\"fa fa-search mr-2\"></i>Visualizar informações</a>";
-                                                                                        // Romão - Ação de visualizar informações da vaga
-                                                                                echo "
-                                                                                                </td>
-                                                                                        </tr>";
-                                                                                        }
-                                                        }
-                                                }
-                                echo "
-                                        </tbody>
-                                </table>
-                        </div>
-                                                                                </div>";
-                        } else {
-
-                                echo "  
-                                <div class=\"row px-1\">
-                                        <div class=\"col-sm-12\">
-                                                <div class=\"form-group row lx-3\"></div>
-                                                <h5 class=\"mb-3\" style=\"font-weight:600\"><i class=\"fa fa-map-pin\" style=\"color:black\"></i> &nbsp; Informações da vaga: ".$vaga_detalhe[0] -> vc_vaga."</h4>
-                                                <div class=\"form-group row lx-3\"></div>
-                                                        
-                                                        
-                                                 
-                                                        <h6 style=\"font-weight:600\">Descrição das atribuições/competências da vaga:</h6>
-                                                        <p class=\"mb-3\">".$vaga_detalhe[0] -> tx_descricao."</p>
-                                                
-                                                        <h6 class=\"mt-4\" style=\"font-weight:600\">Início das inscrições:</h6>
-                                                        <p class=\"mb-3\">".show_date($vaga_detalhe[0] -> dt_inicio)."</p>
-                                     
-                                                        <h6 class=\"mt-4\" style=\"font-weight:600\">Término das inscrições:</h6>
-                                                        <p class=\"mb-3\">".show_date($vaga_detalhe[0] -> dt_fim)."</p>
-                                            
-                                                        <h6 class=\"mt-4\" style=\"font-weight:600\">Remuneração:</h6>
-                                                        <p class=\"mb-3\">R$".str_replace(".",",",$vaga_detalhe[0] -> vc_remuneracao)."</p>
-                    
-                                                        <h6 class=\"mt-4\" style=\"font-weight:600\">Documentação necessária:</h6>
-                                                        <p class=\"mb-3\">".$vaga_detalhe[0] -> tx_documentacao."</p>
-
-                                                        <h6 class=\"mt-4\" style=\"font-weight:600\">Informações adicionais ao candidato:</h6>
-                                                        <p class=\"mb-3\">".$vaga_detalhe[0] -> tx_orientacoes."</p>
-                                                        
-                                                        <div class=\"form-group row lx-3\"></div>
-
-                                                        <div class=\"j-footer\">
-                                                                <div class=\"row\">
-                                                                        <div class=\"col-sm-12 text-left\">";
-                                                                        $attributes = array('class' => 'btn btn-primary','id'=>'cadastrar');
-                                                                        echo form_submit('cadastrar', 'Iniciar candidatura', $attributes);
-                                echo "                                                                         
-                                                                        <button type=\"button\" class=\"btn btn-default mr-2\" onclick=\"window.location='".base_url('Candidaturas/create')."'\">Voltar</button>
-                                                                        </div>
-                                                                </div>
-                                                        </div>
-                                                </div>
-                                        
-                                        </div>
-                                </div>                ";   
-
-                                $pagina['js'] = "
-                                <script type=\"text/javascript\">
-                                $('#disponiveis_table').DataTable({
-                                        bDeferRender: true,
-                                        order: [
-                                            [5, 'desc']
-                                        ],
-                                        columnDefs: [
-                                                {
-                                                    'orderable': false,
-                                                    'targets': [-1]
-                                                },
-                                                {
-                                                    'searchable': false,
-                                                    'targets': [-1]
-                                                }
-                                        ],
-                                        
-                                        language: {
-                                                    \"decimal\":        \"\",
-                                                    \"emptyTable\":     \"Nenhum item encontrado\",
-                                                    \"info\":           \"Mostrando de  _START_ até _END_ de _TOTAL_ itens\",
-                                                    \"infoEmpty\":      \"Mostrando 0 até 0 de 0 itens\",
-                                                    \"infoFiltered\":   \"(filtrado de _MAX_ itens no total)\",
-                                                    \"infoPostFix\":    \"\",
-                                                    \"thousands\":      \",\",
-                                                    \"lengthMenu\":     \"Mostrar _MENU_\",
-                                                    \"loadingRecords\": \"Carregando...\",
-                                                    \"processing\":     \"Carregando...\",
-                                                    \"search\":         \"Pesquisar:\",
-                                                    \"zeroRecords\":    \"Nenhum item encontrado\",
-                                                    \"paginate\": {
-                                                        \"first\":      \"Primeira\",
-                                                        \"last\":       \"Última\",
-                                                        \"next\":       \"Próxima\",
-                                                        \"previous\":   \"Anterior\"
-                                                    },
-                                                    \"aria\": {
-                                                        \"sortAscending\":  \": clique para ordenar de forma crescente\",
-                                                        \"sortDescending\": \": clique para ordenar de forma decrescente\"
-                                                    }
-                                        }
-                                });
-                        </script>";               
-                        }                                                                        
-
-
-                                                                            
-
-                // echo "
+                echo "
 																					
-                //                                                                     <div class=\"form-group row\">
-                //                                                                         <div class=\"col-md-4 col-lg-2\">";
-                // $attributes = array('class' => 'control-label');
-                // echo form_label('Vaga <abbr title="Obrigatório">*</abbr>', 'Vaga', $attributes);
-                // echo "
-                //                                                                         </div>
-                //                                                                         <div class=\"col-md-8 col-lg-10\">";
-                // if(isset($vagas)){
-                //         $vagas=array(0 => '')+$vagas;
-                //         if(strstr($erro, "'Vaga'")){
-                //                 echo form_dropdown('Vaga', $vagas, set_value('Vaga'), "class=\"form-control is-invalid\" id=\"Vaga\"");
-                //         }
-                //         else{
-                //                 echo form_dropdown('Vaga', $vagas, set_value('Vaga'), "class=\"form-control\" id=\"Vaga\"");
-                //         }
-                // }
-                // echo "
-                //                                                                         </div>
-                //                                                                     </div>
-                //                                                                 </fieldset>
-                //                                                             </div>
-                //                                                             <div class=\"actions clearfix text-center\">";
-                // $attributes = array('class' => 'btn btn-primary');
-                // echo form_submit('cadastrar', 'Candidatar-se', $attributes);
-                // echo "
-                //                                                                 <button type=\"reset\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Cancelar</button>";
+                                                                                    <div class=\"form-group row\">
+                                                                                        <div class=\"col-md-4 col-lg-2\">";
+                $attributes = array('class' => 'control-label');
+                echo form_label('Vaga <abbr title="Obrigatório">*</abbr>', 'Vaga', $attributes);
+                echo "
+                                                                                        </div>
+                                                                                        <div class=\"col-md-8 col-lg-10\">";
+                if(isset($vagas)){
+                        $vagas=array(0 => '')+$vagas;
+                        if(strstr($erro, "'Vaga'")){
+                                echo form_dropdown('Vaga', $vagas, set_value('Vaga'), "class=\"form-control is-invalid\" id=\"Vaga\"");
+                        }
+                        else{
+                                echo form_dropdown('Vaga', $vagas, set_value('Vaga'), "class=\"form-control\" id=\"Vaga\"");
+                        }
+                }
+                echo "
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </fieldset>
+                                                                            </div>
+                                                                            <div class=\"actions clearfix text-center\">";
+                $attributes = array('class' => 'btn btn-primary');
+                echo form_submit('cadastrar', 'Candidatar-se', $attributes);
+                echo "
+                                                                                <button type=\"reset\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Cancelar</button>";
                 
-                // echo "
-                //                                                             </div>
-                //                                                         </form>
+                echo "
+                                                                            </div>
+                                                                        </form>
                                                                         
-                //                                                     </section>
-                //                                                 </div>
-                //                                             </div>
-                //                                         </div>
-                //                                     </div>
-                //                                 </div>";
-                
+                                                                    </section>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>";
         }
         else if($menu2 == 'Prova'){ //prova
                 if(!isset($questoes)){
@@ -694,9 +514,11 @@ else{
                 //var_dump($anexos);
                 if(strlen($sucesso) == 0 || (strlen($sucesso) > 0 && isset($_POST['cadastrar']) && $_POST['cadastrar'] == "Salvar dados")){
                         echo "
-                                                                                <div class=\"alert alert-primary d-flex align-items-center\" role=\"alert\">
-                                                                                        <span><span class=\"mr-2\"><i class=\"fas fa-info-circle\"></i></span>Caso esteja com dificuldades em completar o formulário, entre em contato com o nosso <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" style=\"text-decoration:underline\" target=\"_blank\"><b>Fale conosco</b></a></span>
-                                                                                </div>
+                                                                                    <div class=\"alert background-warning\">
+                                                                                            Link para o Fale Conosco: <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" class=\"kt-login__link\" target=\"_blank\">Fale conosco</a><br/><br />
+                                                                                            
+                                                                                    </div>
+
                         ";
                         $CI =& get_instance();
                         $CI -> mostra_questoes($questoes, $respostas, $opcoes, $erro, true, '', $anexos);
@@ -786,32 +608,21 @@ else{
                         echo " 
                                                                                 <!--</fieldset>-->
                                                                             </div>
-                                                                            <div class=\"actions clearfix\"></div>
-                                                                            <div class=\"row w-100 mx-0 mt-4\">
-                                                                                    <div class=\"col\">";
+                                                                            <div class=\"actions clearfix text-center\">";
                 
                         //echo form_submit('cadastrar', 'Candidatar-se', $attributes);
                         
-                        echo "
-                                                                                
-                                                                                <div class=\"float-left\">
-                                                                                <button type=\"reset\" class=\"btn btn-outline-primary\" onclick=\"window.location='#'\" disabled>Voltar</button>
-                                                                                <button type=\"reset\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Interromper preenchimento</button></div>";
                         if(isset($questoes)){
-                                        echo "                                  <div class=\"float-right\">";
-                                        $attributes = array('class' => 'btn btn-outline-primary');
-                                        $attributes['formnovalidate'] = 'formnovalidate';
-                                        echo form_submit('cadastrar', 'Salvar dados', $attributes);
-                                        $attributes = array('class' => 'btn btn-primary');
-                                        unset($attributes['formnovalidate']);
-                                        echo form_submit('cadastrar', 'Avançar', $attributes);
-                                        echo "                                  </div>";
+                                $attributes = array('class' => 'btn btn-primary');
+                                $attributes['formnovalidate'] = 'formnovalidate';
+                                echo form_submit('cadastrar', 'Salvar dados', $attributes);
+                                unset($attributes['formnovalidate']);
+                                echo form_submit('cadastrar', 'Avançar', $attributes);
                         }
+                        echo "
+                                                                                        <button type=\"reset\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Interromper preenchmento</button>";
 
                         echo "
-                                                                            
-                                                                                    
-                                                                                </div>
                                                                             </div>
                                                                         </form>
                                                                         
@@ -863,13 +674,17 @@ else{
                 //if(strlen($sucesso) == 0){
                         
                         echo "
-                                                                                        <div class=\"alert alert-danger\" role=\"alert\">
-                                                                                                <b>Observação:</b>
-                                                                                                <br>
-                                                                                                Caso tenha problemas para salvar os anexos, orientamos que salve o seu currículo a cada 03 (três) novos preenchimentos de experiências e/ou formações, pois o sistema realiza o upload de 8mb por vez.
-                                                                                                <br><br>
-                                                                                                <span>Caso esteja com dificuldades em completar o formulário, entre em contato com o nosso <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" style=\"text-decoration:underline\" target=\"_blank\"><b>Fale conosco</b></a></span>
-                                                                                        </div>	
+																					<div class=\"alert background-warning\">
+																							ATENÇÃO<br />
+																							Caso o Formulário de Dados Pessoais tenha sido preenchido antes de iniciar a inscrição nas vagas, o sistema apresentará aqui uma cópia dos dados e comprovantes inseridos nele.<br />
+																							Os dados copiados para a vaga poderão ser alterados pelo candidato durante a inscrição, mas essas alterações NÃO serão refletidas no currículo base, ou seja, no formulário de Dados Pessoais.<br />
+																							Após a escolha da vaga, qualquer alteração no currículo base (o formulário de Dados Pessoais) NÃO será refletida no Currículo que aparece na vaga.<br />
+																							Observação: caso tenha problema para salvar os anexos, salve os dados digitados para inserir posteriormente os anexos e prosseguir.
+																					</div>
+                                                                                    <div class=\"alert background-warning\">
+                                                                                            Link para o Fale Conosco: <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" class=\"kt-login__link\" target=\"_blank\">Fale conosco</a><br/><br />
+                                                                                            
+                                                                                    </div>	
                                                                                     <div class=\"kt-wizard-v4__form\" id=\"div_formacao\">";
                         for($i = 1; $i <= $num_formacao; $i++){
                                 echo "
@@ -1077,8 +892,8 @@ else{
                                                                                     <div class=\"j-footer\">
                                                                                         <div class=\"kt-form__actions\">
                                                                                             <div class=\"col-lg-12 text-center\">
-                                                                                                <button type=\"button\" id=\"adicionar_formacao\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-1 fa-plus\"></i> Adicionar formação</button>
-                                                                                                <button type=\"button\" id=\"remover_formacao\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-1 fa-minus\"></i> Remover formação</button></div>
+                                                                                                <button type=\"button\" id=\"adicionar_formacao\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-0 fa-plus\"></i> Adicionar formação</button>
+                                                                                                <button type=\"button\" id=\"remover_formacao\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-0 fa-minus\"></i> Remover formação</button></div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>";
@@ -1230,20 +1045,21 @@ else{
                                 //echo form_hidden('codigo_experiencia'.$i, $pr_experienca[$i]);
                                 echo "
                                                                                                     </div>
-                                                                                                </div>";
-                                                                                                
-                                /*echo "
-                                                                                                <div class=\"form-group row\">
-                                                                                                        <div class=\"col-lg-12\">
+                                                                                                </div>
+																								<div class=\"form-group row\">
+																									<div class=\"col-lg-12\">
 																										";
 								$attributes = array('class' => 'esquerdo control-label');
-								
+								/*$texto = "";
+								if(isset($anexos_experiencia[$i]) || isset($anexos_experiencia2[$i])){
+										$texto = "(já inserido)";
+								}*/
 								echo form_label('Comprovante (inserir arquivo pdf com tamanho máximo de 2MB)', "comprovante{$i}", $attributes);
 								echo " 
 																									   <br />";
 								$attributes = array('name' => "comprovante{$i}",
 													'class' => 'form-control',
-                                                                'onchange' => 'checkFile(this)');
+                                                    'onchange' => 'checkFile(this)');
 								if(strstr($erro, "comprovante da 'Experiência profissional {$i}'")){
 										$attributes['class'] = 'form-control is-invalid';
 								}
@@ -1257,13 +1073,13 @@ else{
 										$pr_arquivo = $anexos_experiencia2[$i][0]->pr_anexo;
 										echo "<a href=\"".site_url('Interna/download/'.$pr_arquivo)."\"><button type=\"button\" class=\"btn btn-primary btn-sm\"><i class=\"fa fa-download\"></i> ".$vc_anexo."</button></a>";
 								}
-                                
+                                /*else{
+                                        $attributes['required'] = 'required';
+                                }*/
 								echo form_upload($attributes, '', 'class="form-control"');
 								echo "
-                                                                                                        </div>
-                                                                                                </div>";*/
-                                                                                                
-                                echo "
+																									</div>
+																								</div>
                                                                                             </fieldset>
                                                                                         </div>
                                                                         ";
@@ -1274,37 +1090,29 @@ else{
                                                                                     <div class=\"j-footer\">
                                                                                         <div class=\"kt-form__actions\">
                                                                                             <div class=\"col-lg-12 text-center\">
-                                                                                                <button type=\"button\" id=\"adicionar_experiencia\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-1 fa-plus\"></i> Adicionar exp. profissional</button>
-                                                                                                <button type=\"button\" id=\"remover_experiencia\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-1 fa-minus\"></i> Remover exp. profissional</button></div>
+                                                                                                <button type=\"button\" id=\"adicionar_experiencia\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-0 fa-plus\"></i> Adicionar exp. profissional</button>
+                                                                                                <button type=\"button\" id=\"remover_experiencia\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-0 fa-minus\"></i> Remover exp. profissional</button></div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>";
                         echo "
                                                                                 </fieldset>
                                                                             </div>
-                                                                            <div class=\"actions clearfix\"></div>
-                                                                            <div class=\"row w-100 mx-0 mt-4\">
-                                                                                <div class=\"col\">";
+                                                                            <div class=\"actions clearfix text-center\">";
                         echo "
-                                                                                <div class=\"float-left\">
-                                                                                        <button type=\"reset\" class=\"btn btn-primary\" onclick=\"window.location='".base_url('Candidaturas/Prova/'.$vaga)."';\">Voltar</button>
-                                                                                        <button type=\"reset\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Interromper preenchimento</button>
-                                                                                </div>
-                                                                                <div class=\"float-right\">";
-
+                                                                                        <button type=\"reset\" class=\"btn btn-primary\" onclick=\"window.location='".base_url('Candidaturas/Prova/'.$vaga)."';\">Voltar</button>";
                         //echo form_submit('cadastrar', 'Candidatar-se', $attributes);
                         //if(isset($questoes)){
-                                        $attributes = array('class' => 'btn btn-outline-primary');
-                                        $attributes['formnovalidate'] = 'formnovalidate';
-                                        echo form_submit('cadastrar', 'Salvar dados', $attributes);
-                                        $attributes = array('class' => 'btn btn-primary');
-                                        unset($attributes['formnovalidate']);
-                                        echo form_submit('cadastrar', 'Avançar', $attributes);
+                                $attributes = array('class' => 'btn btn-primary');
+                                $attributes['formnovalidate'] = 'formnovalidate';
+                                echo form_submit('cadastrar', 'Salvar dados', $attributes);
+                                unset($attributes['formnovalidate']);
+                                echo form_submit('cadastrar', 'Avançar', $attributes);
                         //}
                         echo "
-                                                                                        ";
+                                                                                        <button type=\"reset\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Interromper preenchimento</button>";
 
-                        echo "                                                  </div>
+                        echo "
                                                                             </div>
                                                                         </form>
                                                                         
@@ -1321,7 +1129,7 @@ else{
                                                                                                                     <div class=\"j-footer\">
                                                                                                                             <div class=\"kt-form__actions\">
                                                                                                                                     <div class=\"col-lg-12 text-center\">
-                                                                                                                                            <button type=\"button\" id=\"adicionar_formacao\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-1 fa-plus\"></i> Adicionar formação</button>
+                                                                                                                                            <button type=\"button\" id=\"adicionar_formacao\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-0 fa-plus\"></i> Adicionar formação</button>
                                                                                                                                     </div>
                                                                                                                             </div>
                                                                                                                     </div>
@@ -1410,7 +1218,7 @@ else{
                                                                                                                     <div class=\"j-footer\">
                                                                                                                             <div class=\"kt-form__actions\">
                                                                                                                                     <div class=\"col-lg-12 text-center\">
-                                                                                                                                            <button type=\"button\" id=\"adicionar_experiencia\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-1 fa-plus\"></i> Adicionar exp. profissional</button>
+                                                                                                                                            <button type=\"button\" id=\"adicionar_experiencia\" class=\"btn btn-default\"><i class=\"fa fa-lg mr-0 fa-plus\"></i> Adicionar exp. profissional</button>
                                                                                                                                     </div>
                                                                                                                             </div>
                                                                                                                     </div>
@@ -1544,13 +1352,12 @@ else{
                         			
 						$attributes = array('class' => 'col-lg-12 col-form-label');
 						$pagina['js'] .= form_label('Principais atividades desenvolvidas <abbr title="Obrigatório">*</abbr>', "atividades' + valor_num + '", $attributes);
-						$pagina['js'] .= "<br /><textarea name=\"atividades' + valor_num + '\" rows=\"4\" required=\"required\" id=\"atividades' + valor_num + '\" class=\"form-control\" ></textarea></div>";//</div><div class=\"form-group row validated\"><div class=\"col-lg-12\">
+						$pagina['js'] .= "<br /><textarea name=\"atividades' + valor_num + '\" rows=\"4\" required=\"required\" id=\"atividades' + valor_num + '\" class=\"form-control\" ></textarea></div></div><div class=\"form-group row validated\"><div class=\"col-lg-12\">";
 						
-						/*$attributes = array('class' => 'col-lg-12 col-form-label');
+						$attributes = array('class' => 'col-lg-12 col-form-label');
 						$pagina['js'] .= form_label('Comprovante (inserir arquivo pdf com tamanho máximo de 2MB)', "comprovante' + valor_num + '", $attributes);
-						$pagina['js'] .= "<br /><input type=\"file\" name=\"comprovante' + valor_num + '\"  class=\"form-control\" onchange=\"checkFile(this)\" /></div>";*/
-						//</div>
-                                                $pagina['js'] .= "</fieldset>";
+						$pagina['js'] .= "<br /><input type=\"file\" name=\"comprovante' + valor_num + '\"  class=\"form-control\" onchange=\"checkFile(this)\" /></div>";
+						$pagina['js'] .= "</div></fieldset>";
 						$pagina['js'] .= "</div>';
                         $( '#div_experiencia' ).append( $(newElement) );
                         $('input[name=num_experiencia]').val(valor_num);
@@ -1608,37 +1415,31 @@ else{
 						if(strlen($sucesso) == 0 || (strlen($sucesso) > 0 && isset($_POST['cadastrar']) && $_POST['cadastrar'] == "Salvar dados")){
 
 								echo "
-                                                                                        <div class=\"alert alert-primary d-flex align-items-center\" role=\"alert\">
-                                                                                                <span><span class=\"mr-2\"><i class=\"fas fa-info-circle\"></i></span>Caso esteja com dificuldades em completar o formulário, entre em contato com o nosso <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" style=\"text-decoration:underline\" target=\"_blank\"><b>Fale conosco</b></a></span>
-                                                                                        </div>
-                                                                                                <div class=\"actions clearfix text-center\">
-                                                                                                                        Essa vaga não possui requisitos opcionais/desejáveis
-                                                                                                </div>
-                                                                                                <div class=\"actions clearfix\"></div>
-                                                                                                <div class=\"row w-100 mx-0 mt-4\">
-                                                                                                        <div class=\"col\">";
+                                                                                    <div class=\"alert background-warning\">
+                                                                                            Link para o Fale Conosco: <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" class=\"kt-login__link\" target=\"_blank\">Fale conosco</a><br/><br />
+                                                                                            
+                                                                                    </div>
+																					<div class=\"actions clearfix text-center\">
+																								Essa vaga não possui requisitos opcionais/desejáveis
+																					</div>
+																					<div class=\"actions clearfix text-center\">";
 						
 								//echo form_submit('cadastrar', 'Candidatar-se', $attributes);
 								echo "
-													<div class=\"float-left\">										
-                                                                                                        <button type=\"reset\" class=\"btn btn-primary\" onclick=\"window.location='".base_url('Candidaturas/Curriculo/'.$vaga)."';\">Voltar</button>
-                                                                                                        <button type=\"reset\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Interromper preenchimento</button>
-                                                                                                        </div>
-                                                                                                        
-                                                                                                        <div class=\"float-right\">";
+																								
+																								<button type=\"reset\" class=\"btn btn-primary\" onclick=\"window.location='".base_url('Candidaturas/Curriculo/'.$vaga)."';\">Voltar</button>";
 								//if(isset($questoes)){
-										$attributes = array('class' => 'btn btn-outline-primary');
+										$attributes = array('class' => 'btn btn-primary');
                                         $attributes['id'] = "Salvar";
                                         echo form_submit('cadastrar', 'Salvar dados', $attributes);
-                                        $attributes = array('class' => 'btn btn-primary');
                                         $attributes['id'] = "Concluir";
                                         //$attributes["onclick"] = "return false";
                                         echo form_submit('cadastrar', 'Finalizar inscrição', $attributes);
 								//}
 								echo "
-                                                                                                        </div>";
+                                                                                        <button type=\"reset\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Interromper preenchimento</button>";
 						}
-                        echo "                                                  </div>
+                        echo "
                                                                             </div>
                                                                         </form>
                                                                         
@@ -1652,9 +1453,10 @@ else{
                 else{
                         if(strlen($sucesso) == 0 || (strlen($sucesso) > 0 && isset($_POST['cadastrar']) && $_POST['cadastrar'] == "Salvar dados")){
                                 echo "
-                                                                                                                        <div class=\"alert alert-primary d-flex align-items-center\" role=\"alert\">
-                                                                                                                                <span><span class=\"mr-2\"><i class=\"fas fa-info-circle\"></i></span>Caso esteja com dificuldades em completar o formulário, entre em contato com o nosso <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" style=\"text-decoration:underline\" target=\"_blank\"><b>Fale conosco</b></a></span>
-                                                                                                                        </div>
+                                                                                    <div class=\"alert background-warning\">
+                                                                                            Link para o Fale Conosco: <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\" class=\"kt-login__link\" target=\"_blank\">Fale conosco</a><br/><br />
+                                                                                            
+                                                                                    </div>
                                 ";
                                 /*echo "
                                                                                                                                                                         <div class=\"kt-grid__item kt-grid__item--fluid kt-wizard-v4__wrapper\">
@@ -1753,31 +1555,25 @@ else{
                                 echo " 
                                                                                 <!--</fieldset>-->
                                                                             </div>
-                                                                            <div class=\"actions clearfix\"></div>
-                                                                                <div class=\"row w-100 mx-0 mt-4\">
-                                                                                        <div class=\"col\">
-                                                                                                <div class=\"float-left\">
-                                                                                                        <button type=\"reset\" class=\"btn btn-primary\" onclick=\"window.location='".base_url('Candidaturas/Curriculo/'.$vaga)."';\">Voltar</button>
-                                                                                                        <button type=\"reset\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Interromper preenchimento</button>
-                                                                                                </div>";
+                                                                            <div class=\"actions clearfix text-center\">";
                 
                                 //echo form_submit('cadastrar', 'Candidatar-se', $attributes);
-                                echo "                                                          <div class=\"float-right\">";
+                                echo "
+                                                                                        <button type=\"reset\" class=\"btn btn-primary\" onclick=\"window.location='".base_url('Candidaturas/Curriculo/'.$vaga)."';\">Voltar</button>";
                                 if(isset($questoes)){
-                                                $attributes = array('class' => 'btn btn-outline-primary');
+                                                $attributes = array('class' => 'btn btn-primary');
 												$attributes['id'] = "Salvar";
                                                 $attributes['formnovalidate'] = 'formnovalidate';
                                                 echo form_submit('cadastrar', 'Salvar dados', $attributes);
-                                                $attributes = array('class' => 'btn btn-primary');
                                                 unset($attributes['formnovalidate']);
 												$attributes['id'] = "Concluir";
 												//$attributes["onclick"] = "return false";
                                                 echo form_submit('cadastrar', 'Finalizar inscrição', $attributes);
                                 }
                                 echo "
-                                                                                                </div>";
+                                                                                        <button type=\"reset\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Interromper preenchimento</button>";
 
-                                echo "                                          </div>
+                                echo "
                                                                             </div>
                                                                         </form>
                                                                         
@@ -1809,467 +1605,49 @@ else{
 				
 				//valida_formulario
 				$pagina['js'] = "
-                                                
-                                                <script type=\"text/javascript\">";
-                                foreach($questoes as $questao){
-                                        if($questao -> in_tipo == '2'){
-                                                $pagina['js'].="
-                                                                dCounts('Questao".$questao -> pr_questao."',2000);
-                                                ";
-                                        }
-                                }                
-                                $pagina['js'].="
-                                                                function checkFile(oFile){
+																			<script type=\"text/javascript\">
+																					function checkFile(oFile){
                     
-                                                                if (oFile.files[0].size > 2097152) // 2 mb for bytes.
-                                                                {
-                                                                        alert(\"O arquivo deve ter tamanho máximo de 2mb!\");
-                                                                        oFile.value='';
-                                                                }
-                                                                else if(oFile.files[0].size == 0){
-                                                                        alert(\"O arquivo não pode ser vazio!\");
-                                                                        oFile.value='';
-                                                                }
-                                                                }
-                                                                jQuery(':submit').click(function (event) {
-                                                                        if (this.id == 'Concluir') {
-                                                                                event.preventDefault();
-                                                                                $(document).ready(function(){
-                                                                                        event.preventDefault();
-                                                                                        swal.fire({
-                                                                                                title: 'Aviso de conclusão da candidatura',
-                                                                                                text: 'Prezado candidato(a), ao concluir a candidatura NÃO será possível editar respostas ou inserir documentos, deseja prossegir? Será enviado um e-mail confirmando a candidatura.',
-                                                                                                type: 'warning',
-                                                                                                showCancelButton: true,
-                                                                                                cancelButtonText: 'Não',
-                                                                                                confirmButtonText: 'Sim, desejo concluir'
-                                                                                        })
-                                                                                        .then(function(result) {
-                                                                                                if (result.value) {
-                                                                                                        //desfaz as configurações do botão
-                                                                                                        $('#Concluir').unbind(\"click\");
-                                                                                                        //clica, concluindo o processo
-                                                                                                        $('#Concluir').click();
-                                                                                                }
-                                                                                                
-                                                                                        });
-                                                                                        
-                                                                                        
-                                                                        });
-                                                                                                                                                                                                                                                        }
-                                                                });
-                                                </script>
+                                                                                        if (oFile.files[0].size > 2097152) // 2 mb for bytes.
+                                                                                        {
+                                                                                            alert(\"O arquivo deve ter tamanho máximo de 2mb!\");
+                                                                                            oFile.value='';
+                                                                                        }
+                                                                                        else if(oFile.files[0].size == 0){
+                                                                                            alert(\"O arquivo não pode ser vazio!\");
+                                                                                            oFile.value='';
+                                                                                        }
+                                                                                    }
+																					jQuery(':submit').click(function (event) {
+																						if (this.id == 'Concluir') {
+																							event.preventDefault();
+																							$(document).ready(function(){
+																								event.preventDefault();
+																								swal.fire({
+																									title: 'Aviso de conclusão da candidatura',
+																									text: 'Prezado candidato(a), ao concluir a candidatura NÃO será possível editar respostas ou inserir documentos, deseja prossegir? Será enviado um e-mail confirmando a candidatura.',
+																									type: 'warning',
+																									showCancelButton: true,
+																									cancelButtonText: 'Não',
+																									confirmButtonText: 'Sim, desejo concluir'
+																								})
+																								.then(function(result) {
+																									if (result.value) {
+																										//desfaz as configurações do botão
+																										$('#Concluir').unbind(\"click\");
+																										//clica, concluindo o processo
+																										$('#Concluir').click();
+																									}
+																									
+																								});
+																								
+																								
+																						});
+																																												}
+																					});
+																			</script>
 				";
         }
-        else if($menu2 == 'FormSituaFunc') {
-
-                /*if(strlen($erro)>0){
-                        echo "
-                <div class=\"alert background-danger\">
-                        <div class=\"alert-text\">
-                                <strong>ERRO</strong>:<br/>$erro<br />
-                        </div>
-                </div>";
-                        
-                }
-                else if(strlen($sucesso) > 0){
-                        echo "
-                <div class=\"alert background-success\">
-                        <div class=\"alert-text\">
-                                $sucesso
-                        </div>
-                </div>";
-                }*/
-                if(strlen($sucesso) == 0){
-
-                
-                        echo "
-                                                        
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                             <h6>Prezado(a) candidato(a), o presente formulário tem por objetivo colher informações sobre sua situação funcional</h6>
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col-sm-12 col-md-6\">
-                             <label class=\"form-label\" for=\"nomeComp\">Nome completo:</label>
-                             <input class=\"form-control-plaintext\" name=\"nomeComp\" value=\"".$candidato -> vc_nome."\" readonly>
-                        </div>
-                        <div class=\"col-sm-12 col-md-6\">
-                             <label class=\"form-label\" for=\"cpfCand\">CPF:</label>
-                             <input class=\"form-control-plaintext\" name=\"cpfCand\" value=\"".$candidato -> ch_cpf."\" readonly>
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                             <label class=\"form-label\" for=\"processoSel\">Processo seletivo em que está participando:</label>
-                             <input class=\"form-control-plaintext\" name=\"processoSel\" value=\"".$candidaturas[0] -> vc_vaga."\" readonly>
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                             <span>Devido ao atual cenário fiscal do Estado, por orientação do CONFIN, o Programa Transforma Minas incorporou a etapa de Cálculo de Impacto Financeiro aos processos seletivos. Em função disso, queremos conhecer mais sobre sua situação funcional e estrutura remuneratória.</span>
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                             <span>Queremos assegurá-lo(a) de que suas respostas são confidenciais e serão utilizadas exclusivamente para fins desse processo. Todos os envolvidos no processo assinam um Termo de Confidencialidade e se comprometem com a segurança das suas informações.</span>
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">";                        
-                        if(strlen(set_value('vinculo')) > 0){
-                                $bl_vinculo = set_value('vinculo');
-                        } 
-                        ?>
-                             <label class="form-label" for="vinculo">Você possui vínculo com a Administração Pública? <strong>*</strong></label>                        
-                                     <div class="form-check">
-                                         <?php
-                                             $attributes = array(
-                                                 'name' => 'vinculo',
-                                                 'class' => 'form-check-input erro',
-                                                 'value' => '1'
-                                             );
-                                             echo form_radio($attributes, $bl_vinculo, ($bl_vinculo == '1' && strlen($bl_vinculo) > 0));
-                                         ?>
-                                         <label class="form-check-label <?= strstr($erro, "'Vínculo'") ? 'is-invalid' : '' ?>" for="vinculo1">
-                                             Sim.
-                                         </label>
-                                     </div>
-                                     <div class="form-check">
-                                         <?php
-                                             $attributes = array(
-                                                 'name' => 'vinculo',
-                                                 'class' => 'form-check-input erro',
-                                                 'value' => '0'
-                                             );
-                                             echo form_radio($attributes, $bl_vinculo, ($bl_vinculo == '0' && strlen($bl_vinculo) > 0));
-                                         ?>
-                                         <label class="form-check-label <?= strstr($erro, "'Vínculo'") ? 'is-invalid' : '' ?>" for="vinculo">
-                                             Não.
-                                         </label>
-                                     </div>
-       <?php                      echo"
-                     </div>
-                </div>
-                <div id=\"div_vinculo\">
-                <div class=\"row mb-3\">
-                        <div class=\"col\"> ";
-                        if(strlen(set_value('tipovinculo')) > 0){
-                                $en_tipovinculo = set_value('tipovinculo');
-                        }
-                        ?>
-                        
-                        <label class="form-label" for="tipovinculo">Você é: <strong>*</strong></label>                        
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '1'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '1' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Você é'") ? 'is-invalid' : '' ?>" for="tipovinculo">
-                                             Servidor(a) Público(a) Efetivo(a).
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '2'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '2' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Você é'") ? 'is-invalid' : '' ?>" for="tipovinculo">
-                                             Servidor(a) Público(a) em Função Comissionada.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '3'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '3' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Você é'") ? 'is-invalid' : '' ?>" for="tipovinculo">
-                                             Empregado(a) Público(a).
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '4'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '4' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Você é'") ? 'is-invalid' : '' ?>" for="tipovinculo">
-                                             Militar.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'tipovinculo',
-                                            'class' => 'form-check-input',
-                                            'value' => '5'
-                                        );
-                                        echo form_radio($attributes, $en_tipovinculo, ($en_tipovinculo == '5' && strlen($en_tipovinculo) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Você é'") ? 'is-invalid' : '' ?>" for="tipovinculo">
-                                             Aposentado(a).
-                                    </label>
-                                </div>
-     <?php                      echo"
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">";
-                        if(strlen(set_value('poder')) > 0){
-                               $en_poder =  set_value('poder');
-                        }
-                        ?>
-                        <label class="form-label" for="poder">De qual poder? <strong>*</strong></label>                        
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'poder',
-                                            'class' => 'form-check-input',
-                                            'value' => '1'
-                                        );
-                                        echo form_radio($attributes, $en_poder, ($en_poder == '1' && strlen($en_poder) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Poder'") ? 'is-invalid' : '' ?>" for="poder">
-                                             Executivo.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'poder',
-                                            'class' => 'form-check-input',
-                                            'value' => '2'
-                                        );
-                                        echo form_radio($attributes, $en_poder, ($en_poder == '2' && strlen($en_poder) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Poder'") ? 'is-invalid' : '' ?>" for="poder">
-                                             Legislativo.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'poder',
-                                            'class' => 'form-check-input',
-                                            'value' => '3'
-                                        );
-                                        echo form_radio($attributes, $en_poder, ($en_poder == '3' && strlen($en_poder) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Poder'") ? 'is-invalid' : '' ?>" for="poder">
-                                             Judiciário.
-                                    </label>
-                                </div>
-     <?php                      echo"
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">";
-                                if(strlen(set_value('esfera')) > 0){
-                                        $en_esfera = set_value('esfera');
-                                }
-                        ?>
-                        <label class="form-label" for="esfera">De qual esfera? <strong>*</strong></label>                        
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'esfera',
-                                            'class' => 'form-check-input',
-                                            'value' => '1'
-                                        );
-                                        echo form_radio($attributes, $en_esfera, ($en_esfera == '1' && strlen($en_esfera) > 0));
-                                    ?>
-                                    <label class="form-check-label" for="esfera">
-                                             Federal.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'esfera',
-                                            'class' => 'form-check-input',
-                                            'value' => '2'
-                                        );
-                                        echo form_radio($attributes, $en_esfera, ($en_esfera == '2' && strlen($en_esfera) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Esfera'") ? 'is-invalid' : '' ?>" for="esfera">
-                                             Estadual de Minas Gerais.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'esfera',
-                                            'class' => 'form-check-input',
-                                            'value' => '3'
-                                        );
-                                        echo form_radio($attributes, $en_esfera, ($en_esfera == '3' && strlen($en_esfera) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Esfera'") ? 'is-invalid' : '' ?>" for="esfera">
-                                             Estadual de outra Unidade Federativa.
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <?php
-                                        $attributes = array(
-                                            'name' => 'esfera',
-                                            'class' => 'form-check-input',
-                                            'value' => '4'
-                                        );
-                                        echo form_radio($attributes, $en_esfera, ($en_esfera == '4' && strlen($en_esfera) > 0));
-                                    ?>
-                                    <label class="form-check-label <?= strstr($erro, "'Esfera'") ? 'is-invalid' : '' ?>" for="esfera">
-                                             Municipal.
-                                    </label>
-                                </div>
-     <?php                      echo"
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                                <label class=\"form-label\" for=\"instituicao\">Sigla do Órgão ou Entidade que está vinculado(a):</label>
-                                <div id=\"div_instituicao1\">
-                             ";
-                if(strlen(set_value('instituicao')) > 0){
-                        $es_instituicao = set_value('instituicao');
-                }             
-                $instituicoes=array(0 => 'Sigla do Órgão ou Entidade que está vinculado(a)')+$instituicoes;
-                if(strstr($erro, "'Sigla do Órgão ou Entidade'")){
-                        echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-select form-control is-invalid\" id=\"instituicao\"");
-                }
-                else{
-                        echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-select form-control\" id=\"instituicao\"");
-                }
-                if(strlen(set_value('instituicao2')) > 0){
-                        $vc_instituicao = set_value('instituicao2');
-                }
-                $string_erro = "";
-                if(strstr($erro, "'Sigla do Órgão ou Entidade'")){
-                        $string_erro = " is-invalid";
-                }                     
-                echo "
-                                </div>
-                                <div id=\"div_instituicao2\">
-                                <input class=\"form-control{$string_erro}\" type=\"text\" name=\"instituicao2\" value=\"".$vc_instituicao."\" placeholder=\"Digite o instituição\" title=\"Instituição\">
-                                </div>
-                        </div>
-                </div>
-                <div class=\"row mb-3\">";
-                if(strlen(set_value('codCargo')) > 0){
-                        $vc_codCargo = set_value('codCargo');
-                }
-                $string_erro = "";
-                if(strstr($erro, "'Cargo/Função'")){
-                        $string_erro = " is-invalid";
-                }
-                echo "
-                        <div class=\"col\">
-                             <label class=\"form-label\" for=\"codCargo\">Nome/Código do Cargo ou Função Gratificada que ocupa: *</label>
-                             <input class=\"form-control{$string_erro}\" type=\"text\" name=\"codCargo\" value=\"".$vc_codCargo."\" placeholder=\"Digite o nome/código da função\" title=\"Nome/Código do Cargo ou Função Gratificada que ocupa:\">
-                        </div>
-                </div>
-                <div class=\"row mb-3\">";
-                if(strlen(set_value('masp')) > 0){
-                        $in_masp = set_value('masp');
-                }
-                $string_erro = "";
-                if(strstr($erro, "'MASP'")){
-                        $string_erro = " is-invalid";
-                }
-                echo "
-                        <div class=\"col\">
-                             <label class=\"form-label\" for=\"masp\">MASP para o caso de ser servidor do Estado de Minas Gerais:</label>
-                             <input class=\"form-control{$string_erro}\" type=\"text\" name=\"masp\" maxlength=\"20\" value=\"".$in_masp."\" title=\"MASP para o caso de ser servidor do Estado de Minas Gerais:\">
-                        </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                             <label class=\"form-label\" for=\"comprovanteVinc\">Anexar comprovante de vínculo com o Estado (Contra-cheque): *</label>";
-                if(strlen($vc_comprovanteVinc) > 0){
-                        echo "
-                             <br><a href=\"".base_url("Candidaturas/download/".$candidatura)."\">{$vc_comprovanteVinc}</a>
-                        ";
-                }
-                echo "
-                             <input class=\"form-control\" type=\"file\" name=\"comprovanteVinc\" title=\"Anexar comprovante de vínculo com o Estado (Contra-cheque)\">
-                        </div>
-                </div>
-                </div>
-                <div class=\"row mb-3\">
-                        <div class=\"col\">
-                                <div class=\"float-left\">
-                                        <button type=\"reset\" class=\"btn btn-outline-secondary\" onclick=\"window.location='".base_url("Candidaturas/index")."';\">Cancelar</button>
-                                </div>   
-                                <div class=\"float-right\">
-                                        <input type=\"submit\" name=\"salvar\" class=\"btn btn-outline-primary\" value=\"Salvar\">
-                                        <input type=\"submit\" name=\"salvar\" class=\"btn btn-primary\" value=\"Concluir\">
-                                </div>           
-                        </div>
-                </div>                       
-             ";
-                        $pagina['js'] = "
-                <script type=\"text/javascript\">
-                        function visualizar_esfera(){
-                                var esfera = document.forms['form_candidatura'].elements['esfera'].value;
-                                if(esfera == '2'){
-                                        $('#div_instituicao1').show();
-                                        $('#div_instituicao2').hide();
-                                }
-                                else{
-                                        $('#div_instituicao1').hide();
-                                        $('#div_instituicao2').show();
-                                }
-                        }
-                        visualizar_esfera();
-                        $('input[name=\"esfera\"]').click(function(){
-                                visualizar_esfera();
-                        });
-                        function visualizar_vinculo(){
-                                var vinculo = document.forms['form_candidatura'].elements['vinculo'].value;
-                                if(vinculo == '1'){
-                                        $('#div_vinculo').show();
-                                }
-                                else{
-                                        $('#div_vinculo').hide();
-                                }
-                        }
-                        visualizar_vinculo();
-                        $('input[name=\"vinculo\"]').click(function(){
-                                visualizar_vinculo();  
-                        });
-                </script>";
-                        /*$pagina['js'] = "
-                <script type=\"text/javascript\">
-                        $('input[name=\"vinculo\"]').click(function(){
-                                var vinculo = document.forms['form_candidatura'].elements['vinculo'].value;
-                                if(vinculo == '1'){
-                                        
-                                }
-                                else{
-
-                                }
-                        });
-                </script>
-                        ";*/
-                }
-
-        }
-
         else if($menu2 == 'TesteAderencia'){ //Teste de aderência
                 
                 if(strlen($sucesso) == 0){
@@ -2280,26 +1658,21 @@ else{
                         echo " 
                                                                                 
                                                                             </div>
-                                                                            <div class=\"actions clearfix\"></div>
-                                                                                <div class=\"row\">
-                                                                                        <div class=\"col\">
-                                                                                                <div class=\"float-left\">
-                                                                                                        <button type=\"reset\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Cancelar</button>
-                                                                                                </div>
-                                                                                                <div class=\"float-right\">";
+                                                                            <div class=\"actions clearfix text-center\">";
                 
                         
                         if(isset($questoes)){
-                                $attributes = array('class' => 'btn btn-outline-primary');
+                                $attributes = array('class' => 'btn btn-primary');
                                 $attributes['formnovalidate'] = 'formnovalidate';
                                 echo form_submit('salvar', 'Salvar', $attributes);
-                                $attributes = array('class' => 'btn btn-primary');
                                 unset($attributes['formnovalidate']);
                                 echo form_submit('salvar', 'Concluir', $attributes);
                         }
-                        echo "                                                                  </div>
-                                                                                     </div>
-                                                                                </div>
+                        echo "
+                                                                                        <button type=\"reset\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Cancelar</button>";
+
+                        echo "
+                                                                            </div>
                                                                         </form>
                                                                         
                                                                     </section>
@@ -2322,34 +1695,29 @@ else{
                         echo " 
                                                                                 
                                                                             </div>
-                                                                            <div class=\"actions clearfix\"></div>
-                                                                            <div class=\"row\">
-                                                                                    <div class=\"col\">
-                                                                                            <div class=\"float-left\">
-                                                                                                    <button type=\"reset\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Cancelar</button>
-                                                                                            </div>
-                                                                                            <div class=\"float-right\">";
+                                                                            <div class=\"actions clearfix text-center\">";
                 
                         
                         if(isset($questoes)){
-                                $attributes = array('class' => 'btn btn-outline-primary');
+                                $attributes = array('class' => 'btn btn-primary');
                                 $attributes['formnovalidate'] = 'formnovalidate';
                                 echo form_submit('salvar', 'Salvar', $attributes);
-                                $attributes = array('class' => 'btn btn-primary');
                                 unset($attributes['formnovalidate']);
                                 echo form_submit('salvar', 'Concluir', $attributes);
                         }
-                        echo "                                                              </div>
-                                                                                        </div>
-                                                                                </div>
+                        echo "
+                                                                                        <button type=\"reset\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Cancelar</button>";
+
+                        echo "
+                                                                            </div>
                                                                         </form>
-                                                                                
-                                                                </section>
+                                                                        
+                                                                    </section>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                </div>
-                                        </div>
-                                </div>
-                        </div>";
+                                                    </div>
+                                                </div>";
                         
                         
                 }
@@ -4315,7 +3683,7 @@ else{
                                 $Frase6 = set_value('Frase6');
                         }
                         $attributes = array('id'=>'Frase6','name' => 'Frase6', 'value' => '1','onchange'=>"questao12(6,'Frase')");
-                        echo form_checkbox($attributes, set_value('Frase6'), ($Frase6=='1' && strlen($Frase6)>0));
+                        echo form_checkbox($attributes, set_value('Frase6'), (set_value('Frase6')=='1' && strlen(set_value('Frase6'))>0));
                         echo "
                                                                                                 <span>12.6 Vamos ver o desenvolvimento de equipe</span><br />";
                         $Frase7 = '';
@@ -4396,33 +3764,27 @@ else{
                          
                                                                                 
                                                                             </div>
-                                                                            <div class=\"actions clearfix\"></div>
-                                                                            <div class=\"row\">
-                                                                                    <div class=\"col\">
-                                                                                            <div class=\"float-left\">
-                                                                                                    <button type=\"reset\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Cancelar</button>
-                                                                                            </div>
-                                                                                            <div class=\"float-right\">";
+                                                                            <div class=\"actions clearfix text-center\">";
                 
                         
                         //if(isset($questoes)){
-                                $attributes = array('class' => 'btn btn-outline-primary');
-                                echo form_submit('salvar', 'Salvar', $attributes);
                                 $attributes = array('class' => 'btn btn-primary');
+                                echo form_submit('salvar', 'Salvar', $attributes);
                                 echo form_submit('salvar', 'Concluir', $attributes);
                         //}
-                        echo "                                                              </div>
-                                                                                        </div>
-                                                                                </div>
+                        echo "
+                                                                                        <button type=\"reset\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Candidaturas/index')."';\">Cancelar</button>";
+
+                        echo "
+                                                                            </div>
                                                                         </form>
-                                                                                
-                                                                </section>
+                                                                        
+                                                                    </section>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                </div>
-                                        </div>          
-                                </div>
-                        </div>";
-                        
+                                                    </div>
+                                                </div>";
                         $pagina['js']="
                                                 <script type=\"text/javascript\">
                                                         function questao20(questao,enunciado){

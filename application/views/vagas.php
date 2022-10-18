@@ -40,7 +40,7 @@ if($menu2 != 'index' && strlen($sucesso) == 0 && ($menu2 == 'create' || $menu2 =
         echo "
                                                                     <div class=\"col-lg-4 text-right\">
                                                                             <button type=\"button\" class=\"btn btn-primary\" onclick=\"document.getElementById('form_vagas').submit();\"> Salvar </button>
-                                                                            <button type=\"button\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Vagas/index')."';\">Cancelar</button>
+                                                                            <button type=\"button\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Vagas/index')."'\">Cancelar</button>
                                                                     </div>";
 }
 if($menu2 == 'resultado' && $vagas[0] -> bl_finalizado != '1'&&$this -> session -> perfil != 'avaliador'){
@@ -89,7 +89,7 @@ if($menu2 == 'resultado' && $vagas[0] -> bl_finalizado != '1'&&$this -> session 
         
         echo "
                                                                                 <button type=\"button\" class=\"btn btn-primary btn-square\" onclick=\"window.location='".base_url('Vagas/recalcular_nota/'.$vagas[0] -> pr_vaga)."'\">Recalcular nota bruta</button>
-										
+										<button type=\"button\" class=\"btn btn-primary btn-square\" onclick=\"window.location='".base_url('Vagas/resultado3/'.$vagas[0] -> pr_vaga)."'\">Reprovadas na Habilitação</button>
                                                                                 <button type=\"button\" class=\"btn btn-primary btn-square\" onclick=\"window.location='".base_url('Vagas/resultado2/'.$vagas[0] -> pr_vaga)."'\">Detalhamento por competência</button>
 																			
                                                                     </div>";
@@ -177,19 +177,18 @@ if($menu2 == 'index'){
                                                 //echo anchor('Vagas/selecionar_entrevista/'.$linha -> pr_vaga, '<i class="fa fa-lg mr-0 fa-edit"></i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Selecionar candidatos\"");
                                         //}
                                         //echo anchor('Vagas/visualizar_nota/'.$linha -> pr_vaga, '<i class="fa fa-lg mr-0 fa-file-alt"></i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Visualizar candidato\"");
-                                        echo anchor('Vagas/resultado/'.$linha -> pr_vaga, '<i class="fa fa-lg mr-1 fa-sort-amount-down"></i> Resultados', " class=\"btn btn-sm btn-square btn-info\" title=\"Resultados\"");
+                                        echo anchor('Vagas/resultado/'.$linha -> pr_vaga, '<i class="fa fa-lg mr-0 fa-sort-amount-down">Resultados</i>', " class=\"btn btn-sm btn-square btn-info\" title=\"Resultados\"");
                                 }
                                 if($linha -> bl_finalizado != '1' && $this -> session -> perfil != 'avaliador'){
-                                                echo anchor('Vagas/edit/'.$linha -> pr_vaga, '<i class="fa fa-lg mr-1 fa-edit"></i> Editar', " class=\"btn btn-sm btn-square btn-warning\" title=\"Editar vaga\"");
-                                                echo anchor('Vagas/gerirAvaliadores/'.$linha -> pr_vaga, '<i class="fas fa-id-card-alt mr-1"></i> Gerir avaliadores', " class=\"btn btn-sm btn-square btn-warning\" title=\"Gerir avaliadores\"");
+                                                echo anchor('Vagas/edit/'.$linha -> pr_vaga, '<i class="fa fa-lg mr-0 fa-edit">Editar</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Editar vaga\"");
                                                 if(!($linha -> bl_liberado == '1')){
-                                                                echo anchor('Vagas/liberar_vaga/'.$linha -> pr_vaga, '<i class="fa fa-lg mr-1 fa-check-square"></i> Liberar para inscrição', " class=\"btn btn-sm btn-square btn-primary\" title=\"Liberar para inscrição\"");
+                                                                echo anchor('Vagas/liberar_vaga/'.$linha -> pr_vaga, '<i class="fa fa-lg mr-0 fa-check-square">Liberar para inscrição</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Liberar para inscrição\"");
                                                 }
-                                                echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Desativar vaga\" onclick=\"confirm_delete(".$linha -> pr_vaga.");\"><i class=\"fa fa-lg mr-1 fa-times-circle\"></i> Desativar</a>";
+                                                echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Desativar vaga\" onclick=\"confirm_delete(".$linha -> pr_vaga.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\">Desativar</i></a>";
                                 }
                         }
-                        else {
-                                echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-success\" title=\"Reativar vaga\" onclick=\"confirm_reactivate(".$linha -> pr_vaga.");\"><i class=\"fa fa-lg mr-1 fa-plus-circle\"></i> Reativar</a>";
+                        else{
+                                echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-success\" title=\"Reativar vaga\" onclick=\"confirm_reactivate(".$linha -> pr_vaga.");\"><i class=\"fa fa-lg mr-0 fa-plus-circle\">Reativar</i></a>";
                         }
 
                         echo "
@@ -317,11 +316,10 @@ else if($menu2 == 'create' || $menu2 == 'edit'){
                 }
 				
 				$atual = time();
-		//gambiarra para liberar a edição de vaga liberada	
-                /*if(!isset($bl_liberado)){
+			
+                if(!isset($bl_liberado)){
                         $bl_liberado = '0';
-                }*/
-                $bl_liberado = '0';
+                }
                 $attributes = array('class' => 'kt-form',
                                     'id' => 'form_vagas');
                 if($menu2 == 'edit' && isset($codigo) && $codigo > 0){
@@ -330,756 +328,232 @@ else if($menu2 == 'create' || $menu2 == 'edit'){
                 else{
                         echo form_open($url, $attributes);
                 }
-        ?>
-        <div class="row mb-3">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'form-label');
-                        echo form_label('Título da vaga: <abbr title="Obrigatório">*</abbr>', 'nome', $attributes);
-                        if(!isset($vc_vaga) || (strlen($vc_vaga) == 0 && strlen(set_value('nome')) > 0)){
-                                $vc_vaga = set_value('nome');
-                        }
-
-                        $attributes = array('name' => 'nome',
-                        'maxlength'=>'250',
-                        'class' => 'form-control');
-                                                                                                                        
-                        if(strstr($erro, "'Nome'")){
-                                $attributes['class'] = 'form-control is-invalid';
-                        }
-                        if($bl_liberado == '1' && $atual > $inicio){
-                                $attributes['onclick'] = "this.value = '{$vc_vaga}';alert('Não é possível alterar o título de vaga já liberada para inscrições!')";
-                        }
-                        echo form_input($attributes, $vc_vaga);
-                        ?>        
-                </div>
-        </div>
-
-        <div class="row mb-3">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'form-label');
-                        echo form_label('Instituição: <abbr title="Obrigatório">*</abbr>', 'instituicao', $attributes);
-                        $instituicoes=array(0 => '')+$instituicoes;
-                        if(!isset($es_instituicao) || (strlen($es_instituicao) == 0 && strlen(set_value('instituicao')) > 0)){
-                                $es_instituicao = set_value('instituicao');
-                        }
-                        if($bl_liberado == '1' && $atual > $inicio){
-                                echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-select form-control\" onchange=\"this.value = '{$es_instituicao}';alert('Não é possível modificar a instituição de vaga de uma vaga já liberada para inscrições!')\"");
-                        }
-                        else if(strstr($erro, "'Instituição'")){
-                                echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-select form-control is-invalid\"");
+                echo "
+                                                                            <div class=\"kt-portlet__body\">
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label text-right');
+                echo form_label('Nome <abbr title="Obrigatório">*</abbr>', 'nome', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-6\">";
+                if(!isset($vc_vaga) || (strlen($vc_vaga) == 0 && strlen(set_value('nome')) > 0)){
+                        $vc_vaga = set_value('nome');
+                }
+                
+                
+                
+                $attributes = array('name' => 'nome',
+                                    'maxlength'=>'250',
+                                    'class' => 'form-control');
+									
+									
+                if(strstr($erro, "'Nome'")){
+                        $attributes['class'] = 'form-control is-invalid';
+                }
+                if($bl_liberado == '1' && $atual > $inicio){
+                        $attributes['onclick'] = "this.value = '{$vc_vaga}';alert('Não pode modificar o nome uma vaga já liberada para inscrições!')";
+                }
+                echo form_input($attributes, $vc_vaga);
+                echo "
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label text-right');
+                echo form_label('Descrição <abbr title="Obrigatório">*</abbr>', 'descricao', $attributes);
+                echo "
+                                                                                                    <div class=\"col-lg-6\">";
+                if(!isset($tx_descricao) || (strlen($tx_descricao) == 0 && strlen(set_value('descricao')) > 0)){
+                        $tx_descricao = set_value('descricao');
+                }
+                $attributes = array('name' => 'descricao',
+                                    'rows'=>'3',
+                                    'class' => 'form-control');
+                if(strstr($erro, "'Descrição'")){
+                        $attributes['class'] = 'form-control is-invalid';
+                }
+                if($bl_liberado == '1' && $atual > $inicio){
+                        $attributes['onclick'] = "this.value = '{$tx_descricao}';alert('Não pode modificar a descrição de uma vaga já liberada para inscrições!')";
+                }
+                echo form_textarea($attributes, $tx_descricao);
+                echo "
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label text-right');
+                echo form_label('Instituição <abbr title="Obrigatório">*</abbr>', 'instituicao', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-3\">";
+                $instituicoes=array(0 => '')+$instituicoes;
+                if(!isset($es_instituicao) || (strlen($es_instituicao) == 0 && strlen(set_value('instituicao')) > 0)){
+                        $es_instituicao = set_value('instituicao');
+                }
+                if($bl_liberado == '1' && $atual > $inicio){
+                        echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-control\" onchange=\"this.value = '{$es_instituicao}';alert('Não pode modificar a instituição de vaga de uma vaga já liberada para inscrições!')\"");
+                }
+                else if(strstr($erro, "'Instituição'")){
+                        echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-control is-invalid\"");
+                }
+                else{
+                        echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-control\"");
+                }
+                echo "
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label text-right');
+                echo form_label('Grupo da vaga <abbr title="Obrigatório">*</abbr>', 'grupo', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-5\">";
+                //var_dump($grupos);
+                foreach ($grupos as $linha){
+                        $dados_grupos[$linha -> pr_grupovaga] = $linha -> vc_grupovaga;
+                }
+                if(!is_array($dados_grupos)) {
+                        $dados_grupos = array();
+                }
+                $dados_grupos=array(0 => '')+$dados_grupos;
+                if(!isset($es_grupoVaga) || (strlen($es_grupoVaga) == 0 && strlen(set_value('grupo')) > 0)){
+                        $es_grupoVaga = set_value('grupo');
+                }
+                
+                if($bl_liberado == '1' && $atual > $inicio){
+                        echo form_dropdown('grupo', $dados_grupos, $es_grupoVaga, "class=\"form-control\"  onchange=\"this.value = '{$es_grupoVaga}';alert('Não pode modificar o grupo de vaga de uma vaga já liberada para inscrições!')\"");
+                }
+                else{
+                        if(strstr($erro, "'Grupo da vaga'")){
+                                echo form_dropdown('grupo', $dados_grupos, $es_grupoVaga, "class=\"form-control is-invalid\"");
                         }
                         else{
-                                echo form_dropdown('instituicao', $instituicoes, $es_instituicao, "class=\"form-select form-control\"");
+                                echo form_dropdown('grupo', $dados_grupos, $es_grupoVaga, "class=\"form-control\"");
                         }
-                        ?>
-                </div>
-        </div>
-
-        <div class="row mb-3">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'form-label');
-                        echo form_label('Grupo de questões da vaga: <abbr title="Obrigatório">*</abbr>', 'grupo', $attributes);
-
-                        foreach ($grupos as $linha){
-                                $dados_grupos[$linha -> pr_grupovaga] = $linha -> vc_grupovaga;
+                }
+                echo "
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label text-right');
+                echo form_label('Início das inscrições <abbr title="Obrigatório">*</abbr>', 'inicio', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-3\">";
+                if(!isset($dt_inicio) || (strlen($dt_inicio) == 0 && strlen(set_value('inicio')) > 0)){
+                        $dt_inicio = show_sql_date(set_value('inicio'), true);
+                }
+                $attributes = array('name' => 'inicio',
+                                    'id' => 'inicio',
+                                    'class' => 'form-control');
+                if(strstr($erro, "'Início das inscrições'")){
+                        $attributes['class'] = 'form-control is-invalid';
+                }
+				if($bl_liberado == '1' && $atual > $inicio){
+                        $attributes['onclick'] = "this.value = '".show_date($dt_inicio, true)."';alert('Não pode modificar a data de início de uma vaga já liberada para inscrições!')";
+                }
+                echo form_input($attributes, show_date($dt_inicio, true));
+                echo "
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label text-right');
+                echo form_label('Término das inscrições <abbr title="Obrigatório">*</abbr>', 'fim', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-3\">";
+                if(!isset($dt_fim) || (strlen($dt_fim) == 0 && strlen(set_value('inicio')) > 0)){
+                        $dt_fim = show_sql_date(set_value('fim'), true);
+                }
+                $attributes = array('name' => 'fim',
+                                    'id' => 'fim',
+                                    'class' => 'form-control');
+                if(strstr($erro, "'Término das inscrições'")){
+                        $attributes['class'] = 'form-control is-invalid';
+                }
+                echo form_input($attributes, show_date($dt_fim, true));
+				
+                echo "
+                                                                                            </div>
+                                                                                    </div>";
+																					
+				/*echo "
+																					<div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label text-right');
+                echo form_label('Tipo de vaga <abbr title="Obrigatório">*</abbr>', 'brumadinho', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-5\">";
+                
+                $dados_tipo=array('0' => 'Transforma Minas','1' => 'Editais');
+                if(!isset($bl_brumadinho) || (strlen($bl_brumadinho) == 0 && strlen(set_value('brumadinho')) > 0)){
+                        $bl_brumadinho = set_value('brumadinho');
+                }
+                
+                
+				if(strstr($erro, "'Tipo de vaga'")){
+						echo form_dropdown('brumadinho', $dados_tipo, $bl_brumadinho, "class=\"form-control is-invalid\"");
+				}
+				else{
+						echo form_dropdown('brumadinho', $dados_tipo, $bl_brumadinho, "class=\"form-control\"");
+				}
+                
+                echo "
+                                                                                            </div>
+                                                                                    </div>";*/
+																					
+				echo "
+                                                                                    <div class=\"row\" style=\"margin-top: 20px; margin-bottom: 10px;\">
+                                                                                            <legend>Avaliadores de currículo</legend>
+                                                                                            
+                ";
+                
+                
+                foreach($usuarios as $usuario){
+                        echo "
+                                                                                    
+                                                                                            <div class=\"col-md-12\">";
+                        $attributes = array('class' => 'col-lg-3 col-form-label text-right');
+                        
+                        echo form_label($usuario->vc_nome, 'usuario'.$usuario->pr_usuario, $attributes);
+                        if(!isset($avaliador[$usuario->pr_usuario]) || (strlen($avaliador[$usuario->pr_usuario]) == 0 && strlen(set_value('usuario'.$usuario->pr_usuario)) > 0)){
+                                $avaliador[$usuario->pr_usuario] = show_sql_date(set_value('usuario'.$usuario->pr_usuario), true);
                         }
-                        if(!is_array($dados_grupos)) {
-                                $dados_grupos = array();
-                        }
-                        $dados_grupos=array(0 => '')+$dados_grupos;
-                        if(!isset($es_grupoVaga) || (strlen($es_grupoVaga) == 0 && strlen(set_value('grupo')) > 0)){
-                                $es_grupoVaga = set_value('grupo');
-                        }
-
-                        if($bl_liberado == '1' && $atual > $inicio){
-                                echo form_dropdown('grupo', $dados_grupos, $es_grupoVaga, "class=\"form-select form-control\"  onchange=\"this.value = '{$es_grupoVaga}';alert('Não é possível modificar o grupo de questões de uma vaga já liberada para inscrições!')\"");
+                        if($avaliador[$usuario->pr_usuario] == $usuario->pr_usuario){
+                                echo form_checkbox('usuario'.$usuario->pr_usuario, $usuario->pr_usuario, TRUE);
                         }
                         else{
-                                if(strstr($erro, "'Grupo da vaga'")){
-                                        echo form_dropdown('grupo', $dados_grupos, $es_grupoVaga, "class=\"form-select form-control is-invalid\"");
-                                }
-                                else{
-                                        echo form_dropdown('grupo', $dados_grupos, $es_grupoVaga, "class=\"form-select form-control\"");
-                                }
-                        }
-                        ?>
-                </div>
-        </div>    
-            
-        <div class="row">
-                <div class="col-sm-12 col-md-6 mb-3">
-                        <?php
-                        $attributes = array('class' => 'form-label');
-                        echo form_label('Início das inscrições: <abbr title="Obrigatório">*</abbr>', 'inicio', $attributes);
-                
-                        if(!isset($dt_inicio) || (strlen($dt_inicio) == 0 && strlen(set_value('inicio')) > 0)){
-                                $dt_inicio = set_value('inicio');
-                        }
-                        $attributes = array('name' => 'inicio',
-                                        'id' => 'inicio',
-                                        'class' => 'form-control',
-                                        'type' => 'datetime-local');
-                        if(strstr($erro, "'Início das inscrições'")){
-                                $attributes['class'] = 'form-control is-invalid';
-                        }
-
-                        if($bl_liberado == '1' && $atual > $inicio){
-                                $attributes['onclick'] = "this.value = '".show_date($dt_inicio, true)."';alert('Não é possível modificar a data de início de uma vaga já liberada para inscrições!')";
-                        }
-                        echo form_input($attributes, str_replace(" ","T",$dt_inicio));
-                        ?>
-                </div>
-                <div class="col-sm-12 col-md-6 mb-3">
-                        <?php
-                        $attributes = array('class' => 'form-label');
-                        echo form_label('Término das inscrições: <abbr title="Obrigatório">*</abbr>', 'fim', $attributes);
-                
-                        if(!isset($dt_fim) || (strlen($dt_fim) == 0 && strlen(set_value('inicio')) > 0)){
-                                $dt_fim = set_value('fim');
-                        }
-                        $attributes = array('name' => 'fim',
-                                        'id' => 'fim',
-                                        'class' => 'form-control',
-                                        'type' => 'datetime-local');
-                        if(strstr($erro, "'Término das inscrições'")){
-                                $attributes['class'] = 'form-control is-invalid';
-                        }
-
-                        echo form_input($attributes, str_replace(" ","T",$dt_fim));
-                        ?>
-                </div>
-        </div>         
-
-        <div class="row mb-3">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'form-label');
-                        echo form_label('Remuneração da vaga: <abbr title="Obrigatório">*</abbr>', 'remuneracao', $attributes);
-                        if(!isset($vc_remuneracao) || (strlen($vc_remuneracao) == 0 && strlen(set_value('remuneracao')) > 0)){
-                                $vc_remuneracao = set_value('remuneracao');
-                        }
-                        $attributes = array('name' => 'remuneracao',
-                        'id' => 'remuneracao',
-                        'type' => 'text',
-                        'maxlength'=>'250',
-                        'class' => 'form-control',
-                        'onpaste' => 'return false;',
-                        'onKeyPress'=> "return(moeda(this,'.',',',event))");
-                        if(strstr($erro, "'Remuneração'")){
-                                $attributes['class'] = 'form-control is-invalid';
-                        }
-                        if($bl_liberado == '1'){
-                                $attributes['onclick'] = "this.value = '{$vc_remuneracao}';alert('Não é possível modificar a remuneração de uma vaga já liberada para inscrições!')";
+                                echo form_checkbox('usuario'.$usuario->pr_usuario, $usuario->pr_usuario, FALSE);
                         }
                         
-                        echo form_input($attributes, $vc_remuneracao);
-                        ?>
-                </div>
-        </div>                
-
-        <div class="row mb-3">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'form-label');
-                        echo form_label('Atribuições e competências da vaga: <abbr title="Obrigatório">*</abbr>', 'descricao', $attributes);
-                        if(!isset($tx_descricao) || (strlen($tx_descricao) == 0 && strlen(set_value('descricao')) > 0)){
-                                $tx_descricao = set_value('descricao');
-                        }
-                        $attributes = array('name' => 'descricao',
-                                            'rows'=>'3',
-                                            'class' => 'form-control');
-                        if(strstr($erro, "'Descrição'")){
-                                $attributes['class'] = 'form-control is-invalid';
-                        }
-                        if($bl_liberado == '1' && $atual > $inicio){
-                                $attributes['onclick'] = "this.value = '{$tx_descricao}';alert('Não é possível modificar a descrição das competências e atribuições de uma vaga já liberada para inscrições!')";
-                        }
-                        echo form_textarea($attributes, $tx_descricao);
-                        ?>
-                </div>
-        </div>
-        
-        <div class="row mb-3">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'form-label', 'title' => 'Insira neste campo a lista de documentos exigidos para habilitação do candidato à vaga', 'alt' => 'Lista de documentos exigidos e definidos em edital');
-                        echo form_label('Documentação Necessária: <abbr title="Obrigatório">*</abbr>', 'descricao', $attributes);
-
-                        if(!isset($tx_documentacao) || (strlen($tx_documentacao) == 0 && strlen(set_value('documentacao')) > 0)){
-                                $tx_documentacao = set_value('documentacao');
-                        }
-                        $attributes = array('name' => 'documentacao',
-                                        'rows'=>'6',
-                                        'class' => 'form-control');
-                        if(strstr($erro, "'Documentação necessária'")){
-                                $attributes['class'] = 'form-control is-invalid';
-                        }
-                        if($bl_liberado == '1'){
-                                $attributes['onclick'] = "this.value = '{$tx_documentacao}';alert('Não é possível modificar a documentação necessária de vaga já liberada para inscrições!')";
-                        }
-                        echo form_textarea($attributes, $tx_documentacao);
-                        ?>
-                </div>
-        </div>
-        
-        <div class="row">
-                <div class="col">
-                        <label class="form-label" for="todasAreaInt">Defina as opções de área de interesse em atuação profissional em que a vaga se encaixa:<abbr title="Obrigatório">*</abbr></label>                                 
-                </div>
-        </div>        
-        <div class="row">
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'atendimento', 'class' => 'form-check-input');
-                                if(strlen(set_value('atendimento')) > 0){
-                                        $en_atendimento = set_value('atendimento');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_atendimento == '1'));
-                                ?>
-                                <span>Atendimento</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'auditoria', 'class' => 'form-check-input');
-                                if(strlen(set_value('auditoria')) > 0){
-                                        $en_auditoria = set_value('auditoria');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_auditoria == '1'));
-                                ?>
-                                <span>Auditoria</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'compras', 'class' => 'form-check-input');
-                                if(strlen(set_value('compras')) > 0){
-                                        $en_compras = set_value('compras');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_compras == '1'));
-                                ?>
-                                <span>Compras</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'controladoria', 'class' => 'form-check-input');
-                                if(strlen(set_value('controladoria')) > 0){
-                                        $en_controladoria = set_value('controladoria');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_controladoria == '1'));
-                                ?>
-                                <span>Controladoria</span>
-                        </div>
-                </div>
-        </div>
-        <div class="row">
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                if(strlen(set_value('desenvolvimentoEco')) > 0){
-                                        $en_desenvolvimento_eco = set_value('desenvolvimentoEco');
-                                }
-                                
-                                $attributes = array('name' => 'desenvolvimentoEco', 'class' => 'form-check-input');
-                                echo form_checkbox($attributes, '1', ($en_desenvolvimento_eco == '1'));
-                                ?>
-                                <span>Desenvolvimento econômico</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                if(strlen(set_value('desenvSoc')) > 0){
-                                        $en_desenv_soc = set_value('desenvSoc');
-                                }
-                                
-                                $attributes = array('name' => 'desenvSoc', 'class' => 'form-check-input');
-                                echo form_checkbox($attributes, '1', ($en_desenv_soc == '1'));
-                                ?>
-                                <span>Desenvolvimento social</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                if(strlen(set_value('dirHum')) > 0){
-                                        $en_dir_hum = set_value('dirHum');
-                                }
-                                
-                                $attributes = array('name' => 'dirHum', 'class' => 'form-check-input');
-                                echo form_checkbox($attributes, '1', ($en_dir_hum == '1'));
-                                ?>
-                                <span>Direitos Humanos</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                if(strlen(set_value('controladoria')) > 0){
-                                        $en_educacao = set_value('controladoria');
-                                }
-                                
-                                $attributes = array('name' => 'educacao', 'class' => 'form-check-input');
-                                echo form_checkbox($attributes, '1', ($en_educacao == '1'));
-                                ?>
-                                <span>Educação</span>
-                        </div>
-                </div>
-        </div>
-        <div class="row">
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                if(strlen(set_value('financeiro')) > 0){
-                                        $en_financeiro = set_value('financeiro');
-                                }
-                                $attributes = array('name' => 'financeiro', 'class' => 'form-check-input');
-                                echo form_checkbox($attributes, '1', ($en_financeiro == '1'));
-                                ?>
-                                <span>Financeiro</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                if(strlen(set_value('gestContrat')) > 0){
-                                        $en_gest_contrat = set_value('gestContrat');
-                                }
-                                
-                                $attributes = array('name' => 'gestContrat', 'class' => 'form-check-input');
-                                echo form_checkbox($attributes, '1', ($en_gest_contrat == '1'));
-                                ?>
-                                <span>Gestão de contratos</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                if(strlen(set_value('gestPessoa')) > 0){
-                                        $en_gest_pessoa = set_value('gestPessoa');
-                                }
-                                
-                                $attributes = array('name' => 'gestPessoa', 'class' => 'form-check-input');
-                                echo form_checkbox($attributes, '1', ($en_gest_pessoa == '1'));
-                                ?>
-                                <span>Gestão de pessoas</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'gestProcess', 'class' => 'form-check-input');
-                                if(strlen(set_value('gestProcess')) > 0){
-                                        $en_gest_process = set_value('gestProcess');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_gest_process == '1'));
-                                ?>
-                                <span>Gestão de processos</span>
-                        </div>
-                </div>
-        </div>
-        <div class="row">
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                if(strlen(set_value('gestProj')) > 0){
-                                        $en_gest_proj = set_value('gestProj');
-                                }
-                                $attributes = array('name' => 'gestProj', 'class' => 'form-check-input');
-                                echo form_checkbox($attributes, '1', ($en_gest_proj == '1'));
-                                ?>
-                                <span>Gestão de projetos</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'infraestrutura', 'class' => 'form-check-input');
-                                if(strlen(set_value('infraestrutura')) > 0){
-                                        $en_infraestrutura = set_value('infraestrutura');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_infraestrutura == '1'));
-                                ?>
-                                <span>Infraestrutura</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'logistica', 'class' => 'form-check-input');
-                                if(strlen(set_value('logistica')) > 0){
-                                        $en_logistica = set_value('logistica');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_logistica == '1'));
-                                ?>
-                                <span>Logística</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'meioAmb', 'class' => 'form-check-input');
-                                if(strlen(set_value('meioAmb')) > 0){
-                                        $en_meio_amb = set_value('meioAmb');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_meio_amb == '1'));
-                                ?>
-                                <span>Meio Ambiente</span>
-                        </div>
-                </div>
-        </div>
-        <div class="row">
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'polPub', 'class' => 'form-check-input');
-                                if(strlen(set_value('polPub')) > 0){
-                                        $en_pol_pub = set_value('polPub');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_pol_pub == '1'));
-                                ?>
-                                <span>Políticas Públicas</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'recHum', 'class' => 'form-check-input');
-                                if(strlen(set_value('recHum')) > 0){
-                                        $en_rec_hum = set_value('recHum');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_rec_hum == '1'));
-                                ?>
-                                <span>Recursos Humanos</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'saude', 'class' => 'form-check-input');
-                                if(strlen(set_value('saude')) > 0){
-                                        $en_saude = set_value('saude');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_saude == '1'));
-                                ?>
-                                <span>Saúde</span>
-                        </div>
-                </div>
-                <div class="col-sm-12 col-md-3 mb-3">
-                        <div class="form-check my-2">
-                                <?php
-                                $attributes = array('name' => 'tic', 'class' => 'form-check-input');
-                                if(strlen(set_value('tic')) > 0){
-                                        $en_tic = set_value('tic');
-                                }
-                                echo form_checkbox($attributes, '1', ($en_tic == '1'));
-                                ?>
-                                <span>Tecnologia da informação</span>
-                        </div>
-                </div>
-        </div>
-
-        <div class="row mb-3">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'form-label');
-                        echo form_label('Defina o grupo de atividades/órgão de interesse em que a vaga se encaixa: <abbr title="Obrigatório">*</abbr>', 'grupoatividade', $attributes);
-                        $gruposatividades = array_merge(array(0 => ''),$gruposatividades);
-                        if(!isset($es_grupoatividade) || (strlen($es_grupoatividade) == 0 && strlen(set_value('grupoatividade')) > 0)){
-                                $es_grupoatividade = set_value('grupoatividade');
-                        }
-                        if($bl_liberado == '1' && $atual > $inicio){
-                                echo form_dropdown('grupoatividade', $gruposatividades, $es_grupoatividade, "class=\"form-select form-control\" onchange=\"this.value = '{$es_grupoatividade}';alert('Não é possível alterar o grupo de atividades/órgãos de uma vaga já liberada para inscrições!')\"");
-                        }
-                        else if(strstr($erro, "'Grupo de Atividade'")){
-                                echo form_dropdown('grupoatividade', $gruposatividades, $es_grupoatividade, "class=\"form-select form-control is-invalid\"");
-                        }
-                        else{
-                                echo form_dropdown('grupoatividade', $gruposatividades, $es_grupoatividade, "class=\"form-select form-control\"");
-                        }
-                        ?>
-                </div>
-        </div>
-
-        <div class="row mb-3">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'form-label', 'title' => 'Caso necessário, insira aqui quaisquer informações úteis ao candidato', 'alt' => 'Informações adicionais sobre a vaga');
-                        echo form_label('Informações adicionais para o candidato:', 'orientacoes', $attributes);
-
-                        if(!isset($tx_orientacoes) || (strlen($tx_orientacoes) == 0 && strlen(set_value('descricao')) > 0)){
-                                $tx_orientacoes = set_value('orientacoes');
-                        }
-                        $attributes = array('name' => 'orientacoes',
-                                        'rows'=>'6',
-                                        'class' => 'form-control');
-                        if(strstr($erro, "'Orientações'")){
-                                $attributes['class'] = 'form-control is-invalid';
-                        }
-                        if($bl_liberado == '1'){
-                                $attributes['onclick'] = "this.value = '{$tx_orientacoes}';alert('Não é possível modificar as informações adicionais de vaga já liberada para inscrições!')";
-                        }
-                        echo form_textarea($attributes, $tx_orientacoes);
-                        ?>
-                </div>
-        </div>
-
-        <div class="row mb-3">
-                <div class="col">
-                <?php
-                $attributes = array('class' => 'btn btn-primary mr-1');
+                        
+                        echo "</div>
+                                                                                    ";
+                }
+                echo "
+                                                                                    
+                                                                                    
+                                                                                    </div>         
+                                                                            </div>
+                                                                            <div class=\"j-footer\"><hr>
+                                                                                    <div class=\"row\">
+                                                                                            <div class=\"col-lg-12 text-center\">";
+                $attributes = array('class' => 'btn btn-primary');
                 echo form_submit('salvar_vaga', 'Salvar', $attributes);
-                echo "<button type=\"button\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Vagas/index')."'\">Cancelar</button>";
-                ?>        
-                </div>
-        </div>
-        </form>
-        <?php         
-																					
-              
+                echo "
+                                                                                                    <button type=\"button\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Vagas/index')."'\">Cancelar</button>
+                                                                                            </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                    </form>
+                                                            </div>";
                 $pagina['js']="
         <script type=\"text/javascript\">
-            
-            function moeda(a, e, r, t) {
-                let n = \"\"
-                  , h = j = 0
-                  , u = tamanho2 = 0
-                  , l = ajd2 = \"\"
-                  , o = window.Event ? t.which : t.keyCode;
-                if (13 == o || 8 == o)
-                    return !0;
-                if (n = String.fromCharCode(o),
-                -1 == \"0123456789\".indexOf(n))
-                    return !1;
-                for (u = a.value.length,
-                h = 0; h < u && (\"0\" == a.value.charAt(h) || a.value.charAt(h) == r); h++)
-                    ;
-                for (l = \"\"; h < u; h++)
-                    -1 != \"0123456789\".indexOf(a.value.charAt(h)) && (l += a.value.charAt(h));
-                if (l += n,
-                0 == (u = l.length) && (a.value = \"\"),
-                1 == u && (a.value = \"0\" + r + \"0\" + l),
-                2 == u && (a.value = \"0\" + r + l),
-                u > 2) {
-                    for (ajd2 = \"\",
-                    j = 0,
-                    h = u - 3; h >= 0; h--)
-                        3 == j && (ajd2 += e,
-                        j = 0),
-                        ajd2 += l.charAt(h),
-                        j++;
-                    for (a.value = \"\",
-                    tamanho2 = ajd2.length,
-                    h = tamanho2 - 1; h >= 0; h--)
-                        a.value += ajd2.charAt(h);
-                    a.value += r + l.substr(u - 2, u)
-                }
-                return !1
-            }
-                tinymce.init({
-                            
-                            selector: 'textarea',
-                            height: 300,
-                            menubar: false,
-                            plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime table paste code help wordcount'
-                            ],
-                            toolbar: 'undo redo | formatselect | ' +
-                            'bold italic backcolor | alignleft aligncenter ' +
-                            'alignright alignjustify | bullist numlist outdent indent | ' +
-                            'removeformat | help'
-                        });
-
+            $('#inicio').datetimepicker({
+                language: 'pt-BR',
+                autoclose: true,
+                format: 'dd/mm/yyyy hh:ii'
+            });
+            $('#fim').datetimepicker({
+                language: 'pt-BR',
+                autoclose: true,
+                format: 'dd/mm/yyyy hh:ii'
+            });
         </script>";
         }
 }
-
-else if($menu2 == 'gerirAvaliadores'){
-        if(strlen($erro)>0){
-                echo "
-                                                            <div class=\"alert alert-danger background-danger background-danger\" role=\"alert\">
-                                                                    <div class=\"alert-text\">
-                                                                            <strong>ERRO</strong>:<br /> $erro
-                                                                    </div>
-                                                            </div>";
-        //$erro='';
-        }
-        else if(strlen($sucesso) > 0){
-                echo "
-                                                            <div class=\"alert alert-success background-success background-success\" role=\"alert\">
-                                                                    <div class=\"alert-text\">
-                                                                            $sucesso
-                                                                    </div>
-                                                            </div>";
-        }
-        $attributes = array('id' => 'form_avaliadores');
-        //if($menu2 == 'edit' && isset($codigo) && $codigo > 0){
-                echo form_open($url, $attributes, array('codigo' => $codigo));
-        /*}
-        else{
-                echo form_open($url, $attributes);
-        }*/
-
-        ?>
-
-        <div class="row mb-3">
-                <div class="col">
-                        <h5>Avaliadores da vaga: <?php echo $avaliador -> vc_nome ?></h5>
-                </div>
-        </div>
-
-        <div class="row mb-3">
-                <div class="col">
-                        <div class="dt-responsive table-responsive">
-                                <table class="table table-striped table-bordered table-hover" id="cad_avaliadores_table">
-                                        <thead>
-                                              <tr>
-                                                <th>
-                                                <?php
-                                                $attributes = array('id'=>'todos','name' => 'todos', 'value' => '1');
-                                                echo form_checkbox($attributes, FALSE);  
-                                                ?>    
-                                                </th>
-                                                <th>Nome</th>
-                                                <th>CPF</th>
-                                                
-                                              </tr>  
-                                        </thead>
-                                        <tbody>
-                                              <?php
-                                               if(isset($usuarios) || isset($usuarios2)){
-                                                        if(isset($usuarios)){
-                                                                foreach ($usuarios as $linha){
-                                                                        echo "
-                                                                                        <tr>
-                                                                                                <td>";
-                                                                                $attributes = array('id'=>'usuario'.$linha->pr_usuario,'name' => 'usuario'.$linha->pr_usuario, 'value' => $linha->pr_usuario, 'class'=>'usuario_checkbox');                        
-                                                                                if(isset($avaliador[$linha->pr_usuario]) && $avaliador[$linha->pr_usuario] == $linha->pr_usuario){
-                                                                                        echo form_checkbox($attributes,$linha->pr_usuario,TRUE);
-                                                                                }
-                                                                                else{
-                                                                                        echo form_checkbox($attributes,$linha->pr_usuario,FALSE);
-                                                                                }                        
-                                                                                echo "</td>
-                                                                                                <td>".$linha -> vc_nome."</td>
-                                                                                                <td>".$linha -> vc_login."</td>
-                                                                                                ";  
-
-                                                                                echo "          
-                                                                                        </tr>";
-                                                                                } 
-                                                                        }                
-                                                        else {
-                                                                echo "                  <tr>
-                                                                                                <td colspan=\"5\">Não foi encontrado nenhum avaliador cadastrado para o órgão</td>                                                                                                                
-                                                                                        </tr>";
-                                                        }
-                                                                                                        
-                                                }
-                                              ?>
-                                        </tbody>
-                                </table>        
-                        </div>        
-                </div>
-        </div>
-
-        <div class="row">
-                <div class="col">
-                        <?php
-                        $attributes = array('class' => 'btn btn-primary','id'=>'inserir_avaliadores');
-                        echo form_submit('inserir_avaliadores', 'Inserir avaliadores', $attributes);
-                        
-                        echo "<button type=\"button\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Vagas/index')."'\">Cancelar</button>";
-                        ?>       
-                </div>
-        </div>
-
-
-        <?php
-        $pagina['js']="
-        <script type=\"text/javascript\">
-        $('#cad_avaliadores_table').DataTable({
-                order: [
-                    [1, 'asc']
-                ],
-                columnDefs: [
-                        {
-                            'orderable': false,
-                            'targets': [-1]
-                        },
-                        {
-                            'searchable': false,
-                            'targets': [-1]
-                        }
-                ],
-                language: {
-                            \"decimal\":        \"\",
-                            \"emptyTable\":     \"Nenhum item encontrado\",
-                            \"info\":           \"Mostrando de  _START_ até _END_ de _TOTAL_ itens\",
-                            \"infoEmpty\":      \"Mostrando 0 até 0 de 0 itens\",
-                            \"infoFiltered\":   \"(filtrado de _MAX_ itens no total)\",
-                            \"infoPostFix\":    \"\",
-                            \"thousands\":      \",\",
-                            \"lengthMenu\":     \"Mostrar _MENU_\",
-                            \"loadingRecords\": \"Carregando...\",
-                            \"processing\":     \"Carregando...\",
-                            \"search\":         \"Pesquisar:\",
-                            \"zeroRecords\":    \"Nenhum item encontrado\",
-                            \"paginate\": {
-                                \"first\":      \"Primeira\",
-                                \"last\":       \"Última\",
-                                \"next\":       \"Próxima\",
-                                \"previous\":   \"Anterior\"
-                            },
-                            \"aria\": {
-                                \"sortAscending\":  \": clique para ordenar de forma crescente\",
-                                \"sortDescending\": \": clique para ordenar de forma decrescente\"
-                            }
-                },
-                lengthMenu: [
-                        [-1],
-                        [\"Todos\"]
-                    ]
-        });
-
-        jQuery(':submit').click(function (event) {
-                if (this.id == 'inserir_avaliadores') {
-                        event.preventDefault();
-                        $(document).ready(function(){
-                                event.preventDefault();
-                                if($('input[type=\"search\"]').val().length > 0){
-                                        alert('Limpe o campo de busca antes de salvar');
-                                }
-                                else{
-                                        //desfaz as configurações do botão
-                                        $('#inserir_avaliadores').unbind(\"click\");
-                                        //clica, concluindo o processo
-                                        $('#inserir_avaliadores').click();
-                                }
-
-                                
-
-
-                });
-                                                                                                                                                                                                }
-        });
-        
-       
-</script>
-        ";
-
-}
-
 else if($menu2 == 'resultado'){
         echo "
                                                             <div class=\"dt-responsive table-responsive\">
@@ -1091,7 +565,6 @@ else if($menu2 == 'resultado'){
                                                                                             <th>Teste de Aderência</th>
                                                                                             <th>Teste de Motivação</th>
                                                                                             <th>Teste de HBDI</th>
-                                                                                            <th>Formulário de Situação Funcional</th>
                                                                                             ";
         if($this -> session -> perfil != 'avaliador'){
                 echo "
@@ -1147,7 +620,6 @@ else if($menu2 == 'resultado'){
                                                                                             <td class=\"text-center\">".($linha -> en_aderencia == '2'?"Realizado":($linha -> en_aderencia == '1'?(strlen($linha->dt_aderencia)>0&&strtotime($linha->dt_aderencia)>=$atual?"Solicitado":"Expirado"):"Não solicitado"))."</td>
                                                                                             <td class=\"text-center\">".($linha -> en_motivacao == '2'?"Realizado":($linha -> en_motivacao == '1'?(strlen($linha->dt_aderencia)>0&&strtotime($linha->dt_aderencia)>=$atual?"Solicitado":"Expirado"):"Não solicitado"))."</td>
                                                                                             <td class=\"text-center\">".($linha -> en_hbdi == '2'?"Realizado":($linha -> en_hbdi == '1'?(strlen($linha->dt_aderencia)>0&&strtotime($linha->dt_aderencia)>=$atual?"Solicitado":"Expirado"):"Não solicitado"))."</td>
-                                                                                            <td class=\"text-center\">".($linha -> en_situacao_funcional == '2'?"Realizado":($linha -> en_situacao_funcional == '1'?(strlen($linha->dt_aderencia)>0&&strtotime($linha->dt_aderencia)>=$atual?"Solicitado":"Expirado"):"Não solicitado"))."</td>
                                                                                             ";
                         /*
                         echo "
@@ -1269,7 +741,7 @@ else if($menu2 == 'resultado'){
                                                                                             <td class=\"text-center\">";
 
 
-                        echo anchor('Candidaturas/DetalheAvaliacao/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-search"></i> Detalhes', " class=\"btn btn-sm btn-square btn-primary\" title=\"Detalhes\"");
+                        echo anchor('Candidaturas/DetalheAvaliacao/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-search">Detalhes</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Detalhes\"");
                         /*
                         echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-success\" title=\"Aprovar para entrevista\" onclick=\"confirm_aprovacao(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-plus-circle\"></i></a>";
                         echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Reprovar currículo\" onclick=\"confirm_reprovacao(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\"></i></a>";
@@ -1279,28 +751,25 @@ else if($menu2 == 'resultado'){
 							
 								if($linha -> es_status == 8 || $linha -> es_status == 10){ //candidatura realizada ou selecionado para entrevista por competência
                                                                                 if($this -> session -> perfil != 'avaliador'){
-                                                                                        echo anchor('Vagas/AgendamentoEntrevista/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-calendar-check"></i> Agendamento competência', " class=\"btn btn-sm btn-square btn-warning\" title=\"Agendar entrevista por competência\"");
-                                                                                        echo anchor('Vagas/AgendamentoEntrevista/'.$linha -> pr_candidatura.'/especialista', '<i class="fa fa-lg mr-0 fa-calendar-check"></i> Agendamento especialista', " class=\"btn btn-sm btn-square btn-primary\" title=\"Agendar entrevista com especialista\"");
+                                                                                        echo anchor('Vagas/AgendamentoEntrevista/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-calendar-check">Agendamento competência</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Agendar entrevista por competência\"");
+                                                                                        echo anchor('Vagas/AgendamentoEntrevista/'.$linha -> pr_candidatura.'/especialista', '<i class="fa fa-lg mr-0 fa-calendar-check">Agendamento especialista</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Agendar entrevista com especialista\"");
                                                                                         /*if(strlen($linha -> en_aderencia) == 0 && $linha -> es_status == 10){
                                                                                                         echo anchor('Vagas/teste_aderencia/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt">Solicitar teste de aderência</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Solicitar teste de aderência\"");
                                                                                         }*/
-                                                                                        if($linha -> es_status == 8){
-                                                                                                echo anchor('Vagas/AlterarStatus/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt"></i> Alterar status', " class=\"btn btn-sm btn-square btn-secondary\" title=\"Avaliar entrevista\"");
-                                                                                        }
                                                                                 }
                                                                                 if($linha -> es_status == 10){
                                                                                         //echo $entrevistas[$linha -> pr_candidatura]['competencia']->es_avaliador2;
                                                                                         if(isset($entrevistas[$linha -> pr_candidatura]['competencia'])&&(($this -> session -> perfil == 'sugesp' && ($this -> session -> uid == $entrevistas[$linha -> pr_candidatura]['competencia'] -> es_avaliador1 || $this -> session -> uid == $entrevistas[$linha -> pr_candidatura]['competencia'] -> es_avaliador2)) || $this -> session -> perfil == 'avaliador') && (strlen($linha -> es_avaliador_competencia1) == 0 || strlen($linha -> es_avaliador_competencia2) == 0)){ //avaliador
                                                                                                 if(strtotime($entrevistas[$linha -> pr_candidatura]['competencia']->dt_entrevista) <= $atual){
                                                                                                         echo "<br />";
-                                                                                                        echo anchor('Candidaturas/AvaliacaoEntrevista/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-video-camera"></i> Entrevista', " class=\"btn btn-sm btn-square btn-primary\" title=\"Avaliar entrevista\"");
+                                                                                                        echo anchor('Candidaturas/AvaliacaoEntrevista/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-video-camera">Entrevista</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Avaliar entrevista\"");
                                                                                                         echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Confirmar não comparecimento da entrevista\" onclick=\"confirm_delete(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\">Não Comparecimento</i></a>";
                                                                                                 }
                                                                                         }
                                                                                         else if(isset($entrevistas[$linha -> pr_candidatura]['especialista'])&&(($this -> session -> perfil == 'sugesp' && $this -> session -> uid == $entrevistas[$linha -> pr_candidatura]['especialista'] -> es_avaliador1) || $this -> session -> perfil == 'avaliador') && $entrevistas[$linha -> pr_candidatura]['especialista'] -> es_avaliador2 == '') { //avaliador
                                                                                                 if(strtotime($entrevistas[$linha -> pr_candidatura]['especialista']->dt_entrevista) <= $atual){
                                                                                                         echo "<br />";
-                                                                                                        echo anchor('Candidaturas/AvaliacaoEntrevistaEspecialista/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-video-camera"></i> Entrevista', " class=\"btn btn-sm btn-square btn-primary\" title=\"Avaliar entrevista\"");
+                                                                                                        echo anchor('Candidaturas/AvaliacaoEntrevistaEspecialista/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-video-camera">Entrevista</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Avaliar entrevista\"");
                                                                                                         echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Confirmar não comparecimento da entrevista\" onclick=\"confirm_delete(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\">Não Comparecimento</i></a>";
                                                                                                 }
                                                                                         }
@@ -1309,7 +778,7 @@ else if($menu2 == 'resultado'){
 
 								else if($linha -> es_status == 11){ //candidatura com entrevista com especialista já realizada
                                                                                 if($this -> session -> perfil != 'avaliador'){
-										                echo anchor('Vagas/AgendamentoEntrevista/'.$linha -> pr_candidatura.'/especialista', '<i class="fa fa-lg mr-0 fa-calendar-check"></i> Agendamento especialista', " class=\"btn btn-sm btn-square btn-warning\" title=\"Agendar entrevista com especialista\"");
+										                echo anchor('Vagas/AgendamentoEntrevista/'.$linha -> pr_candidatura.'/especialista', '<i class="fa fa-lg mr-0 fa-calendar-check">Agendamento especialista</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Agendar entrevista com especialista\"");
                                                                                 }
                                                                                                 /*if(strlen($linha -> en_aderencia) == 0){
 												echo anchor('Vagas/teste_aderencia/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt">Solicitar teste de aderência</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Solicitar teste de aderência\"");
@@ -1323,14 +792,14 @@ else if($menu2 == 'resultado'){
                                                                                 if(isset($entrevistas[$linha -> pr_candidatura]['especialista'])&&(($this -> session -> perfil == 'sugesp' && $this -> session -> uid == $entrevistas[$linha -> pr_candidatura]['especialista'] -> es_avaliador1) || $this -> session -> perfil == 'avaliador') && strlen($entrevistas[$linha -> pr_candidatura]['especialista'] -> es_avaliador2) == 0 ){ //avaliador
                                                                                         if(strtotime($entrevistas[$linha -> pr_candidatura]['especialista'] -> dt_entrevista) <= $atual){
                                                                                                 echo "<br />";
-                                                                                                echo anchor('Candidaturas/AvaliacaoEntrevistaEspecialista/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-video-camera"></i> Entrevista', " class=\"btn btn-sm btn-square btn-primary\" title=\"Avaliar entrevista\"");
+                                                                                                echo anchor('Candidaturas/AvaliacaoEntrevistaEspecialista/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-video-camera">Entrevista</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Avaliar entrevista\"");
                                                                                                 echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Confirmar não comparecimento da entrevista\" onclick=\"confirm_delete(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\">Não Comparecimento</i></a>";
                                                                                         }
                                                                                 }
                                                                 }
                                                                 else if($linha -> es_status == 12){
                                                                                 if(strlen($linha -> es_avaliador_competencia1) == 0){
-                                                                                        echo anchor('Vagas/AgendamentoEntrevista/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-calendar-check"></i> Agendamento Competência', " class=\"btn btn-sm btn-square btn-warning\" title=\"Agendar entrevista por competência\"");
+                                                                                        echo anchor('Vagas/AgendamentoEntrevista/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-calendar-check">Agendamento Competência</i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Agendar entrevista por competência\"");
                                                                                 }
 										/*if($linha -> en_aderencia == '1'){
 												echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Eliminar candidatura pelo não preenchimento do teste de aderência\" onclick=\"confirm_reprovacao_entrevista(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\">Eliminar por Teste de Aderência</i></a>";
@@ -1341,41 +810,36 @@ else if($menu2 == 'resultado'){
                                                                                 if(isset($entrevistas[$linha -> pr_candidatura]['competencia']) && ((($this -> session -> perfil == 'sugesp' && ($this -> session -> uid == $entrevistas[$linha -> pr_candidatura]['competencia'] -> es_avaliador1 || $this -> session -> uid == $entrevistas[$linha -> pr_candidatura]['competencia'] -> es_avaliador2)) || $this -> session -> perfil == 'avaliador') && (strlen($linha -> es_avaliador_competencia1) == 0))){ //avaliador
                                                                                         if(strtotime($linha -> dt_entrevista) <= strtotime(date('Y-m-d'))){
                                                                                                 echo "<br />";
-                                                                                                echo anchor('Candidaturas/AvaliacaoEntrevista/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-video-camera"></i> Entrevista', " class=\"btn btn-sm btn-square btn-primary\" title=\"Avaliar entrevista\"");
+                                                                                                echo anchor('Candidaturas/AvaliacaoEntrevista/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-video-camera">Entrevista</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Avaliar entrevista\"");
                                                                                                 echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Confirmar não comparecimento da entrevista\" onclick=\"confirm_delete(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\">Não Comparecimento</i></a>";
                                                                                         }
                                                                                 }
 								}
 								else if($linha -> es_status == 14 && $this -> session -> perfil != 'avaliador'){
-										echo anchor('Candidaturas/editDossie/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt"></i> Dossiê', " class=\"btn btn-sm btn-square btn-primary\" title=\"Dossiê\" target=\"blank\"");
+										echo anchor('Candidaturas/editDossie/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt">Dossiê</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Dossiê\" target=\"blank\"");
 								}
 								else if($linha -> es_status == 16 && $this -> session -> perfil != 'avaliador'){
-                                                                                echo anchor('Candidaturas/Dossie/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt"></i> Dossiê', " class=\"btn btn-sm btn-square btn-primary\" title=\"Dossiê\" target=\"blank\"");
+                                                                                echo anchor('Candidaturas/Dossie/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt">Dossiê</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Dossiê\" target=\"blank\"");
 										echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-success\" title=\"Aprovar candidato\" onclick=\"confirm_aprovacao_final(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-plus-circle\">Aprovar candidato</i></a>";
 								}
                                                                 else if(($linha -> es_status == 18 || $linha -> es_status == 19)&& $this -> session -> perfil != 'avaliador'){
-                                                                                echo anchor('Candidaturas/Dossie/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt"></i> Dossiê', " class=\"btn btn-sm btn-square btn-primary\" title=\"Dossiê\" target=\"blank\"");
+                                                                                echo anchor('Candidaturas/Dossie/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt">Dossiê</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Dossiê\" target=\"blank\"");
                                                                 }
 								else if(($linha -> es_status == 20 || $linha -> es_status == 7) && $dt_fim < $atual){
 										if($this -> session -> perfil == 'sugesp' || $this -> session -> perfil == 'orgaos' || $this -> session -> perfil == 'administrador' || $this -> session -> perfil == 'avaliador'){
-												echo anchor('Candidaturas/AvaliacaoCurriculo/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-file-alt"></i> Currículo', " class=\"btn btn-sm btn-square btn-primary\" title=\"Analisar Currículo\"");
+												echo anchor('Candidaturas/AvaliacaoCurriculo/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-file-alt">Currículo</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Analisar Currículo\"");
 												
 												if($linha -> es_status == 20){
 														echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Confirmar reprovação por habilitação\" onclick=\"confirm_reprovacao_habilitacao(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\">Confirmar reprovação por habilitação</i></a>";
 												}
 										}
 								}
-                                                                if(strlen($linha -> dt_aderencia) > 0 && strtotime($linha -> dt_aderencia) < $atual && ($linha -> en_aderencia == '1' || $linha -> en_hbdi == '1' || $linha -> en_mtivacao == '1' || $linha -> en_situacao_funcional == '1')){
-                                                                        echo anchor('Vagas/ProrrogarAderencia/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt"></i> Prorrogar testes', " class=\"btn btn-sm btn-square btn-danger\" title=\"Prorrogar testes\"");
-                                                                        //echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Prorrogar teste de aderência\"><i class=\"fa fa-lg mr-0 fa-file-alt\">Prorrogar teste de aderência</i></a>";
-                                                                }
 								/*if($linha -> es_status != 19 && $linha -> es_status != 20){
 										echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Eliminar candidatura por revisão de requisitos\" onclick=\"confirm_reprovacao_requisitos(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\"></i></a>";
 								}*/
 						}
                         else if(($linha -> es_status == 16 || $linha -> es_status == 18 || $linha -> es_status == 19)&& $this -> session -> perfil != 'avaliador'){
-                                
-                                echo anchor('Candidaturas/Dossie/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt"></i> Dossiê', " class=\"btn btn-sm btn-square btn-primary\" title=\"Dossiê\" target=\"blank\"");
+                                echo anchor('Candidaturas/Dossie/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-file-alt">Dossiê</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Dossiê\" target=\"blank\"");
                         }
                         //echo anchor('Candidaturas/RevisaoRequisitos/'.$linha -> pr_candidatura, '<i class="fa fa-lg mr-0 fa-calendar-check"></i>', " class=\"btn btn-sm btn-square btn-warning\" title=\"Revisão de requisitos\"");
                          
@@ -1620,121 +1084,6 @@ else if($menu2 == 'resultado'){
         
 
 }
-else if($menu2 == 'AlterarStatus'){
-        if(strlen($erro)>0){
-                echo "
-                                                                    <div class=\"alert alert-danger background-danger\" role=\"alert\">
-                                                                            <div class=\"alert-icon\">
-                                                                                    <i class=\"fa fa-exclamation-triangle\"></i>
-                                                                            </div>
-                                                                            <div class=\"alert-text\">
-                                                                                    <strong>ERRO</strong>:<br /> $erro
-                                                                            </div>
-                                                                    </div>";
-        //$erro='';
-        }
-        else if(strlen($sucesso) > 0){
-                echo "
-                                                                    <div class=\"alert alert-success background-success\" role=\"alert\">
-                                                                            <div class=\"alert-icon\">
-                                                                                    <i class=\"fa fa-check-circle\"></i>
-                                                                            </div>
-                                                                            <div class=\"alert-text\">
-                                                                                    $sucesso
-                                                                            </div>
-                                                                    </div>";
-        }
-        if(strlen($sucesso) == 0){
-                $attributes = array('class' => 'kt-form',
-                                    'id' => 'form_alteracao');
-                echo form_open($url, $attributes, array('codigo' => $codigo,'se_pagina_candidatura'=>$se_pagina_candidatura));
-
-                echo "                                          <div class=\"container-fluid\">
-                                                                        <div class=\"row\">
-                                                                                <div class=\"col\">
-                                                                                        <div class=\"alert alert-danger mb-4\">
-                                                                                                <h5 class=\"mb-2\">Atenção!</h5>
-                                                                                                <p class=\"mb-2\">Essa funcionalidade irá alterar o status de uma candidatura com currículo já avaliado!</p>
-                                                                                                <p>Elabore sua justificativa de forma detalhada e respeitando o limite máximo de 4000 caracteres indicado no campo abaixo.</p>
-                                                                                        </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div class=\"row mb-3\">
-                                                                                <div class=\"col\">
-                                                                                        <h5>Dados da candidatura</h5>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div class=\"row\">
-                                                                                <div class=\"col-sm-12 col-md-6 mb-3\">";
-                                                                                        $attributes = array('class' => 'form-label');
-                                                                                        echo form_label('Candidato(a):', 'NomeCompleto', $attributes);
-                        //print_r($candidatura);
-                        echo "                                                          </br>
-                                                                                        ".$candidato -> vc_nome." 
-                                                                                </div>
-                                                                                <div class=\"col-sm-12 col-md-6 mb-3\">";
-                                                                                        $attributes = array('class' => 'form-label');
-                                                                                        echo form_label('Status da candidatura', 'statusCandidatura', $attributes);
-                        echo "                                                          </br>
-                                                                                        ".$candidatura -> vc_status."
-                                                                                </div>
-                                                                        </div>
-                                                                        <div class=\"row mb-3\">        
-                                                                                <div class=\"col-sm-12 col-md-6 mb-3\">";
-                                                                                        $attributes = array('class' => 'form-label');
-                                                                                        echo form_label('Nome da Vaga:', 'nomeVaga', $attributes);
-                        echo "                                                          </br>
-                                                                                        ".$candidatura -> vc_vaga."
-                                                                                </div>
-                                                                                <div class=\"col-sm-12 col-md-6 mb-3\">";
-                                                                                        $attributes = array('class' => 'form-label');
-                                                                                        echo form_label('Avaliador(a):', 'avaliador', $attributes);
-                        echo "                                                          </br>
-                                                                                        ".$candidatura -> avaliador_curriculo."
-                                                                                </div>
-                                                                        </div>
-                                                                        <div class=\"row mb-3\">
-                                                                                <div class=\"col\">";
-                                                                                        $attributes = array('class' => 'form-label');
-                                                                                        echo form_label('Justificativa <abbr title="Obrigatório">*</abbr>', 'data', $attributes);
-                                                                                        $attributes = array('name' => 'justificativa',
-                                                                                                            'id' => 'justificativa',
-                                                                                                            'rows'=>'5',
-                                                                                                            'class' => 'form-control');
-                                                                                        if(strstr($erro, "'Justificativa'")){
-                                                                                                $attributes['class'] = 'form-control is-invalid';
-                                                                                        }
-                                                                                        echo form_textarea($attributes, set_value('justificativa'));
-                        echo "                                                                                
-                                                                                </div>
-                                                                        </div>
-                                                                        <div class=\"row\">
-                                                                                <div class=\"col\">";
-                                                                                $attributes = array('class' => 'btn btn-primary');
-                                                                                echo form_submit('alterar_entrevista', 'Alterar', $attributes);
-                        if($se_pagina_candidatura == '1'){
-                                echo "                                                                          
-                                                                                        <button type=\"button\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Candidaturas/ListaAvaliacao/')."'\">Cancelar</button>";
-                        }
-                        else{
-                                echo "                                                                          
-                                                                                        <button type=\"button\" class=\"btn btn-default\" onclick=\"window.location='".base_url('Vagas/resultado/'.$candidatura -> es_vaga)."'\">Cancelar</button>";
-                        }
-                        echo "
-                                                                                </div>
-                                                                        </div>
-                                                                </div>
-                                                        </form>";
-
-                                                $pagina['js'] .= "
-                                                <script type=\"text/javascript\">
-                                                        dCounts('justificativa',4000);
-                                                </script>
-                                                ";
-
-
-        }
-}
 else if($menu2 == 'resultado2'){
         echo "
                                                             <div class=\"dt-responsive table-responsive\">
@@ -1893,7 +1242,7 @@ else if($menu2 == 'resultado3'){
                                                                                             <td class=\"text-center\">";
 
 
-                        echo anchor('Candidaturas/DetalheAvaliacao/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-search"></i> Detalhes', " class=\"btn btn-sm btn-square btn-primary\" title=\"Detalhes\"");
+                        echo anchor('Candidaturas/DetalheAvaliacao/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-search">Detalhes</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Detalhes\"");
                         /*
                         echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-success\" title=\"Aprovar para entrevista\" onclick=\"confirm_aprovacao(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-plus-circle\"></i></a>";
                         echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Reprovar currículo\" onclick=\"confirm_reprovacao(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\"></i></a>";
@@ -1901,7 +1250,7 @@ else if($menu2 == 'resultado3'){
 
 
                         
-			echo anchor('Candidaturas/AvaliacaoCurriculo/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-file-alt"></i> Currículo', " class=\"btn btn-sm btn-square btn-primary\" title=\"Analisar Currículo\"");
+			echo anchor('Candidaturas/AvaliacaoCurriculo/'.$linha -> pr_candidatura.'/'.$linha->es_vaga, '<i class="fa fa-lg mr-0 fa-file-alt">Currículo</i>', " class=\"btn btn-sm btn-square btn-primary\" title=\"Analisar Currículo\"");
                         if($linha -> es_status == 20 && $this -> session -> perfil != 'avaliador'){
                                 echo "<a href=\"javascript:/\" class=\"btn btn-sm btn-square btn-danger\" title=\"Confirmar reprovação por habilitação\" onclick=\"confirm_reprovacao_habilitacao(".$linha -> pr_candidatura.");\"><i class=\"fa fa-lg mr-0 fa-times-circle\">Confirmar reprovação por habilitação</i></a>";
                         }
@@ -1983,146 +1332,6 @@ else if($menu2 == 'resultado3'){
         
 
 }
-else if($menu2 == 'ProrrogarAderencia'){
-        if(strlen($erro)>0){
-                echo "
-                                                                    <div class=\"alert alert-danger background-danger\" role=\"alert\">
-                                                                            <div class=\"alert-icon\">
-                                                                                    <i class=\"fa fa-exclamation-triangle\"></i>
-                                                                            </div>
-                                                                            <div class=\"alert-text\">
-                                                                                    <strong>ERRO</strong>:<br /> $erro
-                                                                            </div>
-                                                                    </div>";
-        
-        }
-        else if(strlen($sucesso) > 0){
-                echo "
-                                                                    <div class=\"alert alert-success background-success\" role=\"alert\">
-                                                                            <div class=\"alert-icon\">
-                                                                                    <i class=\"fa fa-check-circle\"></i>
-                                                                            </div>
-                                                                            <div class=\"alert-text\">
-                                                                                    $sucesso
-                                                                            </div>
-                                                                    </div>";
-        }
-        if(strlen($sucesso) == 0){
-                $attributes = array('id' => 'form_prorrogacoes');
-                echo form_open($url, $attributes, array('codigo' => $codigo));
-                ?>
-                <div class="row mb-3">
-                        <div class="col">
-                                <h5>Dados da candidatura:</h5>
-                        </div>
-                </div>
-                <div class="row">
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Candidato(a):', 'NomeCompleto', $attributes);
-                                echo "</br>";
-                                echo $candidato -> vc_nome; 
-                                ?>                       
-                        </div>
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label ');
-                                echo form_label('E-mail:', 'Email', $attributes);
-                                echo "</br>";
-                                echo $candidato -> vc_email;
-                                ?>
-                        </div>
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Telefone(s):', 'Telefones', $attributes);
-                                echo "</br>";
-                                echo $candidato -> vc_telefone;
-                                if(strlen($candidato -> vc_telefoneOpcional) > 0){
-                                        echo ' - '.$candidato -> vc_telefoneOpcional;
-                                }
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-4">
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Vaga:', 'Vaga', $attributes);
-                                echo "</br>";
-                                echo $vc_vaga;
-                                ?>
-                        </div>
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Status da candidatura:', 'status', $attributes);
-                                echo "</br>";
-                                echo $vc_status;
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-3">
-                        <div class="col">
-                                <h5>Data de teste de aderência:</h5>
-                        </div>
-                </div>
-                <div class="row mb-3">
-                        <div class="col-sm-12">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Data atual do teste de aderência', 'data2', $attributes);
-                                
-                                $dt_aderencia = str_replace(' ',"T",$dt_aderencia);
-                        
-                                if(strlen(set_value('data2')) > 0){
-                                        $dt_aderencia = set_value('data2');
-                                }
-                                $attributes = array('name' => 'data2',
-                                                'id' => 'data2',
-                                                'class' => 'form-control',
-                                                'type' => 'datetime-local',
-                                                'disabled' => 'disabled');
-                                
-                                echo form_input($attributes, $dt_aderencia);
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-3">
-                        <div class="col-sm-12">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Nova data do teste de aderência', 'data2', $attributes);
-                                
-                                
-                        
-                                
-                                $attributes = array('name' => 'data2_nova',
-                                                'id' => 'data2_nova',
-                                                'class' => 'form-control',
-                                                'type' => 'datetime-local'
-                                                );
-                                if(strstr($erro, "'Nova data do teste de aderência'")){
-                                        $attributes['class'] = 'form-control is-invalid';
-                                }
-                                echo form_input($attributes, set_value('data2_nova'));
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-3">
-                        <div class="col">
-                                <?php
-                                $attributes = array('class' => 'btn btn-primary ml-1');
-                                
-                                echo form_submit('salvar_entrevista', 'Salvar', $attributes);
-                                echo "<button type=\"button\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Vagas/resultado/'.$es_vaga)."'\">Cancelar</button>";
-                                ?> 
-                        </div>
-                </div>
-                <?php
-        }
-}
 else if($menu2 == 'AgendamentoEntrevista'){ //agendamento da entrevista 
         if(strlen($erro)>0){
                 echo "
@@ -2134,7 +1343,7 @@ else if($menu2 == 'AgendamentoEntrevista'){ //agendamento da entrevista
                                                                                     <strong>ERRO</strong>:<br /> $erro
                                                                             </div>
                                                                     </div>";
-        
+        //$erro='';
         }
         else if(strlen($sucesso) > 0){
                 echo "
@@ -2148,234 +1357,256 @@ else if($menu2 == 'AgendamentoEntrevista'){ //agendamento da entrevista
                                                                     </div>";
         }
         if(strlen($sucesso) == 0){
-
-                $attributes = array('id' => 'form_avaliacoes');
+                $attributes = array('class' => 'kt-form',
+                                    'id' => 'form_avaliacoes');
                 echo form_open($url, $attributes, array('codigo' => $codigo,'tipo_entrevista'=>$tipo_entrevista));
-                ?>
-                <div class="row mb-3">
-                        <div class="col">
-                                <h5>Dados da candidatura:</h5>
-                        </div>
-                </div>
-                <div class="row">
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Candidato(a):', 'NomeCompleto', $attributes);
-                                echo "</br>";
-                                echo $candidato -> vc_nome; 
-                                ?>                       
-                        </div>
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label ');
-                                echo form_label('E-mail:', 'Email', $attributes);
-                                echo "</br>";
-                                echo $candidato -> vc_email;
-                                ?>
-                        </div>
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Telefone(s):', 'Telefones', $attributes);
-                                echo "</br>";
-                                echo $candidato -> vc_telefone;
-                                if(strlen($candidato -> vc_telefoneOpcional) > 0){
-                                        echo ' - '.$candidato -> vc_telefoneOpcional;
-                                }
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-4">
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Vaga:', 'Vaga', $attributes);
-                                echo "</br>";
-                                echo $candidatura[0] -> vc_vaga;
-                                ?>
-                        </div>
-                        <div class="col-sm-12 col-md-4 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Status da candidatura:', 'status', $attributes);
-                                echo "</br>";
-                                echo $candidatura[0] -> vc_status;
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-3">
-                        <div class="col">
-                                <h5>Dados da Entrevista:</h5>
-                        </div>
-                </div>
-                <div class="row">
-                        <div class="col-sm-12 col-md-6 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Avaliador 1 <abbr title="Obrigatório">*:</abbr>', 'avaliador1', $attributes);
-                                $dados_usuarios[0] = '';
-                                foreach($usuarios as $linha){
-                                        $dados_usuarios[$linha -> pr_usuario] = $linha -> vc_nome;
-                                }
-                                $avaliador1='';
-                                if(isset($entrevista[0] -> es_avaliador1) && strlen($entrevista[0] -> es_avaliador1)>0){
-                                        $avaliador1=$entrevista[0] -> es_avaliador1;
-                                }
-                
-                
-                                if(strlen(set_value('avaliador1')) > 0){
-                                        $avaliador1 = set_value('avaliador1');
-                                }
-                                if(strstr($erro, "'Avaliador 1'")){
-                                        echo form_dropdown('avaliador1', $dados_usuarios, $avaliador1, "class=\"form-select form-control is-invalid\" id=\"avaliador1\"");
-                                }
-                                else{
-                                        echo form_dropdown('avaliador1', $dados_usuarios, $avaliador1, "class=\"form-select form-control\" id=\"avaliador1\"");
-                                }
-                                ?>
-                        </div>
-<?php if($tipo_entrevista != 'competencia'){ ?>
-                </div>
-<?php        }?>                     
-<?php if($tipo_entrevista == 'competencia'){ ?>
-                        <div class="col-sm-12 col-md-6 mb-3">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Avaliador 2 <abbr title="Obrigatório">*</abbr>', 'avaliador2', $attributes);   
-                                $avaliador2='';
-                                if(isset($entrevista[0] -> es_avaliador2) && strlen($entrevista[0] -> es_avaliador2)>0){
-                                        $avaliador2 = $entrevista[0] -> es_avaliador2;
-                                }
+                echo "
+                                                                            <div class=\"kt-portlet__body\">";
+                echo form_fieldset('Dados da candidatura');
+                echo "
+                                                                                    <div class=\"row\">";
+                $attributes = array('class' => 'col-lg-3 direito bolder');
+                echo form_label('Candidato(a):', 'NomeCompleto', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-9\">";
+                echo $candidato -> vc_nome;
+                echo "
+                                                                          
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"row\">";
+                $attributes = array('class' => 'col-lg-3 direito bolder');
+                echo form_label('E-mail:', 'Email', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-9\">";
+                echo $candidato -> vc_email;
+                echo "
+                                                                          
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"row\">";
+                $attributes = array('class' => 'col-lg-3 direito bolder');
+                echo form_label('Telefone(s):', 'Telefones', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-6\">";
+                echo $candidato -> vc_telefone;
+                if(strlen($candidato -> vc_telefoneOpcional) > 0){
+                        echo ' - '.$candidato -> vc_telefoneOpcional;
+                }
+                echo "
+                                                                          
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"row\">";
+                $attributes = array('class' => 'col-lg-3 direito bolder');
+                echo form_label('Vaga:', 'Vaga', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-9\">";
+                echo $candidatura[0] -> vc_vaga;
+                echo "
+                                                                          
+                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class=\"row\">";
+                $attributes = array('class' => 'col-lg-3 direito bolder');
+                echo form_label('Status da candidatura:', 'status', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-6\">";
+                echo $candidatura[0] -> vc_status;
+                echo "
+                                                                          
+                                                                                            </div>
+                                                                                    </div>";
+                echo form_fieldset_close();
+                echo "
+                                                                                    <div class=\"kt-separator kt-separator--border-dashed kt-separator--space-lg\"></div>";
+                echo form_fieldset('Entrevista');
+                //var_dump($entrevista);
+                echo "
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label direito');
+                echo form_label('Avaliador 1 <abbr title="Obrigatório">*</abbr>', 'avaliador1', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-3\">";
+                //var_dump($usuarios);
+                //$usuarios=array(0 => '')+$usuarios;
+                $dados_usuarios[0] = '';
+                foreach($usuarios as $linha){
+                        $dados_usuarios[$linha -> pr_usuario] = $linha -> vc_nome;
+                }
+                $avaliador1='';
+                if(isset($entrevista[0] -> es_avaliador1) && strlen($entrevista[0] -> es_avaliador1)>0){
+                        $avaliador1=$entrevista[0] -> es_avaliador1;
+                }
 
-                                if(strlen(set_value('avaliador2')) > 0){
-                                        $avaliador2 = set_value('avaliador2');
-                                }
-                                if(strstr($erro, "'Avaliador 2'")){
-                                        echo form_dropdown('avaliador2', $dados_usuarios, $avaliador2, "class=\"form-select form-control is-invalid\" id=\"avaliador2\"");
-                                }
-                                else{
-                                        echo form_dropdown('avaliador2', $dados_usuarios, $avaliador2, "class=\"form-select form-control\" id=\"avaliador2\"");
-                                }
-                                ?>
-                        </div>
-                </div>     
-<?php   if(isset($questoes2)){ ?>       
-                <div class="row mb-3">
-                        <div class="col-sm-12">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Data/Horário máximo para preenchimento dos testes (Aderência, HBDI e Perfil)<abbr title="Obrigatório">*</abbr>', 'data2', $attributes);
+
+                if(strlen(set_value('avaliador1')) > 0){
+                        $avaliador1 = set_value('avaliador1');
+                }
+                if(strstr($erro, "'Avaliador 1'")){
+                        echo form_dropdown('avaliador1', $dados_usuarios, $avaliador1, "class=\"form-control is-invalid\" id=\"avaliador1\"");
+                }
+                else{
+                        echo form_dropdown('avaliador1', $dados_usuarios, $avaliador1, "class=\"form-control\" id=\"avaliador1\"");
+                }
+                echo "
+                                                                                            </div>
+                                                                                    </div>";
+                if($tipo_entrevista == 'competencia'){
+                        echo "
+                                                                                    <div class=\"form-group row\">";
+                        $attributes = array('class' => 'col-lg-3 col-form-label direito');
+                        echo form_label('Avaliador 2 <abbr title="Obrigatório">*</abbr>', 'avaliador2', $attributes);
+                        echo "
+                                                                                                    <div class=\"col-lg-3\">";
+                        //var_dump($usuarios);
+                        //$usuarios=array(0 => '')+$usuarios;
+                        $avaliador2='';
+                        if(isset($entrevista[0] -> es_avaliador2) && strlen($entrevista[0] -> es_avaliador2)>0){
+                                $avaliador2 = $entrevista[0] -> es_avaliador2;
+                        }
+
+                        if(strlen(set_value('avaliador2')) > 0){
+                                $avaliador2 = set_value('avaliador2');
+                        }
+                        if(strstr($erro, "'Avaliador 2'")){
+                                echo form_dropdown('avaliador2', $dados_usuarios, $avaliador2, "class=\"form-control is-invalid\" id=\"avaliador2\"");
+                        }
+                        else{
+                                echo form_dropdown('avaliador2', $dados_usuarios, $avaliador2, "class=\"form-control\" id=\"avaliador2\"");
+                        }
+                        echo "
+                                                                                            </div>
+                                                                                    </div>";
+                        if(isset($questoes2)){
+
+                                                                                    
+                                echo "
+                                                                                    <div class=\"form-group row\">";
+                                $attributes = array('class' => 'col-lg-3 col-form-label direito');
+                                echo form_label('Data/Horário máximo para preenchimento do teste de aderência <abbr title="Obrigatório">*</abbr>', 'data2', $attributes);
+                                echo "
+                                                                                            <div class=\"col-lg-3\">";
                                 $data_aderencia = '';
                                 if(isset($candidatura[0] -> dt_aderencia) && strlen($candidatura[0] -> dt_aderencia)>0){
                                         $data_aderencia = $candidatura[0] -> dt_aderencia;
-                                        $data_aderencia = str_replace(' ','T',$data_aderencia);
                                 }
                         
                                 if(strlen(set_value('data2')) > 0){
-                                        $data_aderencia = set_value('data2');
+                                        $data_aderencia = show_sql_date(set_value('data2'), true);
                                 }
                                 $attributes = array('name' => 'data2',
                                                 'id' => 'data2',
-                                                'class' => 'form-control',
-                                                'type' => 'datetime-local');
+                                                'class' => 'form-control');
                                 if(strstr($erro, "'Data/Horário máximo'")){
                                         $attributes['class'] = 'form-control is-invalid';
                                 }
-                                echo form_input($attributes, $data_aderencia);
-                                ?>
-                        </div>
-                </div>                
-        <?php  } ?>
-<?php   } ?>       
-                <div class="row mb-3">
-                        <div class="col">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Horário da entrevista <abbr title="Obrigatório">*</abbr>', 'data', $attributes);
-                                $data_entrevista = '';
-                                if(isset($entrevista[0] -> dt_entrevista) && strlen($entrevista[0] -> dt_entrevista)>0){
-                                        $data_entrevista = $entrevista[0] -> dt_entrevista;
-                                        $data_entrevista = str_replace(' ','T',$data_entrevista);
-                                }
-                                        
-                                if(strlen(set_value('data')) > 0){
-                                        $data_entrevista = set_value('data');
-                                }
-                                $attributes = array('name' => 'data',
-                                                'id' => 'data',
-                                                'class' => 'form-control',
-                                                'type' => 'datetime-local');
-                                if(strstr($erro, "'Horário da entrevista'")){
-                                        $attributes['class'] = 'form-control is-invalid';
-                                }
-                                echo form_input($attributes, $data_entrevista);
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-3">
-                        <div class="col">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Link para a entrevista online<abbr title="Obrigatório">*</abbr>', 'link', $attributes);
-                                $link = '';
-                                if(isset($entrevista[0] -> vc_link) && strlen($entrevista[0] -> vc_link)>0){
-                                        $link = $entrevista[0] -> vc_link;
-                                }
-                                        
-                                if(strlen(set_value('link')) > 0){
-                                        $link = set_value('link');
-                                }
-                                $attributes = array('name' => 'link',
-                                                'id' => 'link',
-                                                                                        'type' => 'text',
-                                                                                        'maxlength' => '600',
-                                                'class' => 'form-control');
-                                if(strstr($erro, "'Horário da entrevista'")){
-                                        $attributes['class'] = 'form-control is-invalid';
-                                }
-                                echo form_input($attributes, $link);
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-3">
-                        <div class="col">
-                                <?php
-                                $attributes = array('class' => 'form-label');
-                                echo form_label('Observações', 'link', $attributes);
-                                $observacoes = '';
-                                if(isset($entrevista[0] -> tx_observacoes) && strlen($entrevista[0] -> tx_observacoes)>0){
-                                        $observacoes = $entrevista[0] -> tx_observacoes;
-                                }
-                                        
-                                if(strlen(set_value('observacoes')) > 0){
-                                        $observacoes = set_value('observacoes');
-                                }
-                                $attributes = array('name' => "observacoes",
-                                                        'id' => "observacoes",
-                                                        'rows' => '4',
-                                                        'class' => 'form-control');
+                                echo form_input($attributes, show_date($data_aderencia, true));
+                                echo "
+                                                                                            </div>
+                                                                                    </div>";
+                        }
+																					
+                }
+                echo "
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label direito');
+                echo form_label('Horário da entrevista <abbr title="Obrigatório">*</abbr>', 'data', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-3\">";
+                $data_entrevista = '';
+                if(isset($entrevista[0] -> dt_entrevista) && strlen($entrevista[0] -> dt_entrevista)>0){
+                        $data_entrevista = $entrevista[0] -> dt_entrevista;
+                }
+                        
+                if(strlen(set_value('data')) > 0){
+                        $data_entrevista = show_sql_date(set_value('data'), true);
+                }
+                $attributes = array('name' => 'data',
+                                    'id' => 'data',
+                                    'class' => 'form-control');
+                if(strstr($erro, "'Horário da entrevista'")){
+                        $attributes['class'] = 'form-control is-invalid';
+                }
+                echo form_input($attributes, show_date($data_entrevista, true));
+                echo "
+                                                                                            </div>
+                                                                                    </div>";
+																					
+				echo "
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label direito');
+                echo form_label('Link para a entrevista <abbr title="Obrigatório">*</abbr>', 'link', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-3\">";
+                $link = '';
+                if(isset($entrevista[0] -> vc_link) && strlen($entrevista[0] -> vc_link)>0){
+                        $link = $entrevista[0] -> vc_link;
+                }
+                        
+                if(strlen(set_value('link')) > 0){
+                        $link = set_value('link');
+                }
+                $attributes = array('name' => 'link',
+                                    'id' => 'link',
+									'type' => 'text',
+									'maxlength' => '600',
+                                    'class' => 'form-control');
+                if(strstr($erro, "'Horário da entrevista'")){
+                        $attributes['class'] = 'form-control is-invalid';
+                }
+                echo form_input($attributes, $link);
+                echo "
+                                                                                            </div>
+                                                                                    </div>";
 
-                                echo form_textarea($attributes, $observacoes);
-                                ?>
-                        </div>
-                </div>
-                <div class="row mb-3">
-                        <div class="col">
-                                <?php
-                                $attributes = array('class' => 'btn btn-primary ml-1');
-                                if($tipo_entrevista == 'competencia'){
-                                        if(!isset($questoes2)){
-                                                $attributes['id'] = 'salvar_entrevista';
-                                        }
-                                }
-                                echo form_submit('salvar_entrevista', 'Salvar', $attributes);
-                                echo "<button type=\"button\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Vagas/resultado/'.$candidatura[0] -> es_vaga)."'\">Cancelar</button>";
-                                ?> 
-                        </div>
-                </div>
-        </form>
-        <?php
+                echo "
+                                                                                    <div class=\"form-group row\">";
+                $attributes = array('class' => 'col-lg-3 col-form-label direito');
+                echo form_label('Observações', 'link', $attributes);
+                echo "
+                                                                                            <div class=\"col-lg-3\">";
+                $observacoes = '';
+                if(isset($entrevista[0] -> tx_observacoes) && strlen($entrevista[0] -> tx_observacoes)>0){
+                        $observacoes = $entrevista[0] -> tx_observacoes;
+                }
+                        
+                if(strlen(set_value('observacoes')) > 0){
+                        $observacoes = set_value('observacoes');
+                }
+                $attributes = array('name' => "observacoes",
+                                    'id' => "observacoes",
+                                    'rows' => '4',
+                                    'class' => 'form-control');
+
+                echo form_textarea($attributes, $observacoes);
+                
+                
+                echo "
+                                                                                            </div>
+                                                                                    </div>";                                                                    																	
+																					
+                echo form_fieldset_close();
+                echo "
+                                                                            </div>
+                                                                            <div class=\"j-footer\"><hr>
+                                                                                    <div class=\"kt-form__actions\">
+                                                                                            <div class=\"row\">
+                                                                                                    <div class=\"col-lg-12 text-center\">";
+                $attributes = array('class' => 'btn btn-primary');
+                if($tipo_entrevista == 'competencia'){
+                        if(!isset($questoes2)){
+                                $attributes['id'] = 'salvar_entrevista';
+                        }
+                }
+                echo form_submit('salvar_entrevista', 'Salvar', $attributes);
+                echo "
+                                                                                                            <button type=\"button\" class=\"btn btn-outline-dark\" onclick=\"window.location='".base_url('Vagas/resultado/'.$candidatura[0] -> es_vaga)."'\">Cancelar</button>
+                                                                                                    </div>
+                                                                                            </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                    </form>";
                 $pagina['js']="
                 <script type=\"text/javascript\">
                      jQuery(':submit').click(function (event) {
@@ -2385,7 +1616,7 @@ else if($menu2 == 'AgendamentoEntrevista'){ //agendamento da entrevista
                                         event.preventDefault();
                                         swal.fire({
                                                 title: 'Aviso de não inserção dos testes',
-                                                text: 'Prezado(a) Gestor(a) não foram incluídas questões para a etapa de Teste de Aderência e/ou Teste de Motivação.<br><br>Se continuar os candidatos não poderão responder os testes.<br><br> Deseja confirmar essa ação?',
+                                                text: 'Não existem questões para a etapa de Teste de Aderência e/ou Teste de Motivação, por essa razão eles não estarão disponíveis para o candidato. Deseja continuar?',
                                                 type: 'warning',
                                                 showCancelButton: true,
                                                 cancelButtonText: 'Não',
@@ -2405,8 +1636,20 @@ else if($menu2 == 'AgendamentoEntrevista'){ //agendamento da entrevista
                         });
                                                                                                                                                                                                         }
                     });
-                    ";
-                
+                    $('#data').datetimepicker({
+                        language: 'pt-BR',
+                        autoclose: true,
+                        format: 'dd/mm/yyyy hh:ii'
+                    });";
+                if(isset($questoes2)){
+                        $pagina['js'].="
+                    $('#data2').datetimepicker({
+                        language: 'pt-BR',
+                        autoclose: true,
+                        format: 'dd/mm/yyyy hh:ii'
+                    });";
+
+                }
                         $pagina['js'].="
                     $('#avaliador1').select2();";
                 if($tipo_entrevista == 'competencia'){    
@@ -2849,3 +2092,4 @@ echo "
 
 $this->load->view('templates/internaRodape', $pagina);
 
+?>

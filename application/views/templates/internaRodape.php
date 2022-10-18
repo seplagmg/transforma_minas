@@ -7,7 +7,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer w-100 bg-white">
+            <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Desenvolvido pela SUGESP - SEPLAG/MG</span>
@@ -22,12 +22,11 @@
     </div>
     <!-- End of Page Wrapper -->
 
-    <!-- Scroll to Top Button
+    <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    -->
-    
+
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -105,7 +104,6 @@
     <script src="<?= base_url('assets/vendor/jquery/jquery.min.js') ?>"></script>
     <script src="<?= base_url('assets/vendor/jquery-ui/jquery-ui.min.js') ?>"></script>
     <script src="<?= base_url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
-    <script src="<?= base_url('bower_components\bootstrap-v-5\js\bootstrap.bundle.min.js') ?>"></script>
 
     <!-- Moment -->
     <script src="https://momentjs.com/downloads/moment-with-locales.js"></script>
@@ -126,14 +124,6 @@
     <!-- sweet alert js -->
     <script src="<?= base_url('bower_components/sweetalert2/dist/sweetalert2.min.js') ?>" type="text/javascript"></script>
 
-    <!-- tinymce -->
-    <script src="<?= base_url('bower_components\tinymce\js\tinymce\tinymce.min.js') ?>" type="text/javascript"></script>
-
-    <?php if(isset($adicionais['dCountsjs'])): ?>
-        <!-- dcounts-js.js -->
-        <script type="text/javascript" src="<?= base_url('bower_components/dCountsjs/src/dcounts-js.js') ?>"></script>
-    <?php endif ?>
-
     <?php if(isset($adicionais['datatables'])): ?>
         <!-- data-table js -->
         <script type=text/javascript src="<?= base_url('bower_components\datatables.net\js\jquery.dataTables.min.js') ?>"></script>
@@ -146,9 +136,6 @@
         <script type=text/javascript src="<?= base_url('bower_components\datatables.net-bs4\js\dataTables.bootstrap4.min.js') ?>"></script>
         <script type=text/javascript src="<?= base_url('bower_components\datatables.net-responsive\js\dataTables.responsive.min.js') ?>"></script>
         <script type=text/javascript src="<?= base_url('bower_components\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js') ?>"></script>
-        <script type="text/javascript">
-            $('input[type="search"]').prop('autocomplete', 'off');
-        </script>
     <?php endif ?>
 
     <?php if(isset($adicionais['inputmasks'])): ?>
@@ -207,6 +194,7 @@
                 $(document).ready(function(){
                         $('#trocarsenha').modal('show');
                 });
+                
             </script>
     <?php endif ?>
 

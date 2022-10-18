@@ -202,7 +202,7 @@ class Publico extends CI_Controller {
 	}
 		
 		function download_termo($termo){
-				$termos = array('responsabilidade'=>'responsabilidade.pdf','privacidade'=>'privacidade.pdf');
+				$termos = array('responsabilidade'=>'responsabilidade.pdf','privacidade'=>'privacidade.pdf','geral'=>'geral.pdf');
 				if(isset($termos[$termo])){
 						$arq='./termos/'.$termos[$termo];
 						$fp = fopen($arq, 'rb');

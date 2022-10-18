@@ -750,6 +750,7 @@ class Relatorios extends CI_Controller {
 														$nota += round((@intval($respostas2[$candidatura -> pr_candidatura][$questao -> pr_questao] -> tx_resposta)/3) * intval($questao -> in_peso));
 														$valores=array(0=>"Nenhum",1=>"Básico",2=>"Intermediário",3=>"Avançado");
 														$conteudo['campo'.$questao->pr_questao] = @utf8_decode($valores[$respostas2[$candidatura -> pr_candidatura][$questao -> pr_questao] -> tx_resposta]);
+														$conteudo['valor'.$questao->pr_questao] = $nota;
 														$total+=$nota;
 														$maximo += intval($questao -> in_peso);
 												}

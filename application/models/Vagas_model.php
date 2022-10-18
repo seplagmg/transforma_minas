@@ -21,7 +21,7 @@ class Vagas_model extends CI_Model {
                                         $this -> db -> where('v.bl_removido', '0');
                         }
                         if(strlen($not_candidato) > 0){
-                                $this -> db -> where("v.pr_vaga not in (select es_vaga from tb_candidaturas where es_candidato={$not_candidato})");
+                                $this -> db -> where("v.pr_vaga not in (select es_vaga from tb_candidaturas where es_candidato={$not_candidato} and bl_removido = '0')");
                         }
                         if($periodo==1){
                                 $this -> db -> where("v.dt_inicio<=now() and v.dt_fim>=now() and v.bl_liberado='1'");
@@ -47,7 +47,7 @@ class Vagas_model extends CI_Model {
                 if(strlen($avaliador) > 0){
                         $this -> db -> where("v.pr_vaga in (select es_vaga from rl_vagas_avaliadores where es_usuario={$avaliador})");
                 }		
-                $this -> db -> select ('v.pr_vaga, v.vc_vaga, v.dt_inicio, v.dt_fim, v.tx_descricao, v.es_instituicao, v.es_grupoVaga, v.bl_removido, g.vc_grupovaga, i.vc_sigla, v.bl_liberado, v.bl_brumadinho, v.bl_finalizado');
+                $this -> db -> select ('v.pr_vaga, v.vc_vaga, v.dt_inicio, v.dt_fim, v.tx_descricao, v.vc_remuneracao, v.tx_documentacao, v.en_atendimento, v.en_auditoria, v.en_compras, v.en_controladoria, v.en_desenvolvimento_eco, v.en_desenv_soc, v.en_dir_hum, v.en_educacao, v.en_financeiro, v.en_gest_contrat, v.en_gest_pessoa, v.en_gest_process, v.en_gest_proj, v.en_infraestrutura, v.en_logistica, v.en_meio_amb, v.en_pol_pub, v.en_rec_hum, v.en_saude, v.en_tic, v.es_grupoatividade, v.tx_orientacoes, v.es_instituicao, v.es_grupoVaga, v.bl_removido, g.vc_grupovaga, i.vc_sigla, v.bl_liberado, v.bl_brumadinho, v.bl_finalizado');
                 $this -> db -> from('tb_vagas v');
                 $this -> db -> join('tb_gruposvagas g', 'v.es_grupoVaga=g.pr_grupovaga');
                 $this -> db -> join('tb_instituicoes2 i', 'v.es_instituicao=i.pr_instituicao');
@@ -94,21 +94,132 @@ class Vagas_model extends CI_Model {
                 return $this -> db -> affected_rows();
         }
         public function create_vaga($dados){
+                if(!isset($dados['atendimento'])){
+                        $dados['atendimento'] = null;
+                }
+                if(!isset($dados['auditoria'])){
+                        $dados['auditoria'] = null;
+                }
+                if(!isset($dados['compras'])){
+                        $dados['compras'] = null;
+                }
+                if(!isset($dados['controladoria'])){
+                        $dados['controladoria'] = null;
+                }
+                if(!isset($dados['desenvolvimentoEco'])){
+                        $dados['desenvolvimentoEco'] = null;
+                }
+                if(!isset($dados['desenvSoc'])){
+                        $dados['desenvSoc'] = null;
+                }
+                if(!isset($dados['dirHum'])){
+                        $dados['dirHum'] = null;
+                }
+                if(!isset($dados['educacao'])){
+                        $dados['educacao'] = null;
+                }
+                if(!isset($dados['financeiro'])){
+                        $dados['financeiro'] = null;
+                }
+                if(!isset($dados['gestContrat'])){
+                        $dados['gestContrat'] = null;
+                }
+                if(!isset($dados['gestPessoa'])){
+                        $dados['gestPessoa'] = null;
+                }
+                if(!isset($dados['gestProcess'])){
+                        $dados['gestProcess'] = null;
+                }
+                if(!isset($dados['gestProj'])){
+                        $dados['gestProj'] = null;
+                }
+                if(!isset($dados['infraestrutura'])){
+                        $dados['infraestrutura'] = null;
+                }
+                if(!isset($dados['logistica'])){
+                        $dados['logistica'] = null;
+                }
+                if(!isset($dados['meioAmb'])){
+                        $dados['meioAmb'] = null;
+                }
+                if(!isset($dados['polPub'])){
+                        $dados['polPub'] = null;
+                }
+                if(!isset($dados['recHum'])){
+                        $dados['recHum'] = null;
+                }
+                if(!isset($dados['saude'])){
+                        $dados['saude'] = null;
+                }
                 $data=array(
                         'vc_vaga' => $dados['nome'],
                         'tx_descricao' => $dados['descricao'],
-                        'dt_inicio' => show_sql_date($dados['inicio'], true),
-                        'dt_fim' => show_sql_date($dados['fim'], true),
+                        'tx_documentacao' => $dados['documentacao'],
+                        'vc_remuneracao' => $dados['remuneracao'],
+                        'dt_inicio' => $dados['inicio'],
+                        'dt_fim' => $dados['fim'],
                         'es_instituicao' => $dados['instituicao'],
                         'es_grupoVaga' => $dados['grupo'],
                         'in_statusVaga' => '1',
-						'bl_brumadinho' => $dados['brumadinho'],
+			'bl_brumadinho' => $dados['brumadinho'],
                         'es_usuarioCadastro' => $this -> session -> uid,
+                        'vc_remuneracao' => $dados['remuneracao'],
+                        'tx_documentacao' => $dados['documentacao'],
+                        'en_atendimento' => $dados['atendimento'],
+                        'en_auditoria' => $dados['auditoria'],
+                        'en_compras' => $dados['compras'],
+                        'en_controladoria' => $dados['controladoria'],
+                        'en_desenvolvimento_eco' => $dados['desenvolvimentoEco'],
+                        'en_desenv_soc' => $dados['desenvSoc'],
+                        'en_dir_hum' => $dados['dirHum'],
+                        'en_educacao' => $dados['educacao'],
+                        'en_financeiro' => $dados['financeiro'],
+                        'en_gest_contrat' => $dados['gestContrat'],
+                        'en_gest_pessoa' => $dados['gestPessoa'],
+                        'en_gest_process' => $dados['gestProcess'],
+                        'en_gest_proj' => $dados['gestProj'],
+                        'en_infraestrutura' => $dados['infraestrutura'],
+                        'en_logistica' => $dados['logistica'],
+                        'en_meio_amb' => $dados['meioAmb'],
+                        'en_pol_pub' => $dados['polPub'],
+                        'en_rec_hum' => $dados['recHum'],
+                        'en_tic' => $dados['tic'],
+                        'en_saude' => $dados['saude'],
+                        'es_grupoatividade' => $dados['grupoatividade'],
+                        'tx_orientacoes' => $dados['orientacoes'],
                         'dt_cadastro' => date('Y-m-d H:i:s')
                 );
                 $this -> db -> insert ('tb_vagas', $data);
                 //print_r($this->db->error()); 
                 return $this -> db -> insert_id();
+        }
+
+        public function get_gruposatividades($id='', $instituicao='') {
+                if(strlen($id) > 0){
+                        $this -> db -> where('g.pr_grupovaga', $id);
+                }
+                if(strlen($instituicao) > 0){
+                        $this -> db -> where ('g.es_instituicao', '0');
+                }
+                
+                $grupos = array();
+                $this -> db -> select ('g.*, i.vc_sigla');
+                $this -> db -> from ('tb_gruposatividades g');
+                $this -> db -> join('tb_instituicoes2 i', 'g.es_instituicao=i.pr_instituicao','left');
+                $this -> db -> order_by ('g.vc_grupoatividade', 'ASC');
+                $query = $this -> db -> get();
+                //echo $this -> db -> last_query();
+                if ($query -> num_rows() > 0) {
+                        
+                        $results = $query -> result_array();
+                        //print_r($results);
+                        $grupos = array_column($results, 'vc_grupoatividade', 'pr_grupoatividade');
+                        
+                        
+                        
+                        return $grupos;
+                }
+                return $grupos;
         }
         
         public function get_vagas_avaliadores($vaga='',$usuario=''){

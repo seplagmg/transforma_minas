@@ -23,16 +23,15 @@ echo "
                                                     <div class=\"card\">
                                                         <div class=\"card-block\">
                                                             <div class=\"row sub-title\" style=\"letter-spacing:0px\">
-                                                                    <div class=\"col-lg-8\">
+                                                                    <div class=\"col-md-3\">
                                                                         <h4><i class=\"$icone\" style=\"color:black\"></i> &nbsp; {$nome_pagina}</h4>
                                                                     </div>";
 if($menu2 == 'index'){
         echo "
-                                                                    <div class=\"col-lg-4 text-right\">
-                                                                            <a href=\"".base_url('GruposVagas/create')."\" class=\"btn btn-primary btn-square\"> <i class=\"fa fa-plus-circle\"></i> Novo grupo de vagas </a>
-                                                                            <br />
-                                                                            <a href=\"".base_url('GruposVagas/historico_duplicate_total')."\" class=\"btn btn-warning btn-square\"> <i class=\"fa fa-lg mr-0 fa-sort-amount-down\"></i> Histórico de duplicações </a>
-                                                                            <a href=\"".base_url('GruposVagas/historico_duplicate_quantitativo')."\" class=\"btn btn-danger btn-square\"> <i class=\"fa fa-lg mr-0 fa-sort-amount-down\"></i> Quantitativo de duplicações </a>
+                                                                    <div class=\"col-md-9 text-right\">
+                                                                    <a href=\"".base_url('GruposVagas/historico_duplicate_total')."\" class=\"btn btn-warning btn-square\"> <i class=\"fa fa-lg mr-0 fa-sort-amount-down\"></i> Histórico de duplicações </a>
+                                                                    <!-- <a href=\"".base_url('GruposVagas/historico_duplicate_quantitativo')."\" class=\"btn btn-danger btn-square\"> <i class=\"fa fa-lg mr-0 fa-sort-amount-down\"></i> Quantitativo de duplicações </a> -->
+                                                                    <a href=\"".base_url('GruposVagas/create')."\" class=\"btn btn-primary btn-square\"> <i class=\"fa fa-plus-circle\"></i> Novo grupo de vagas </a>
                                                                     </div>";
 }
 if($menu2 != 'index' && strlen($sucesso) == 0 && ($menu2 == 'create' || $menu2 == 'edit' || $menu2 == 'questoes')){
@@ -90,7 +89,7 @@ if($menu2 == 'index'){
                                 }
                                 */
                                 echo '
-                                <div class="input-group-prepend">
+                                <div class="input-group-prepend align-middle text-center">
                                         <button
                                                 class="btn btn-square btn-outline-secondary dropdown-toggle"
                                                 type="button"

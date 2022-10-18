@@ -2,6 +2,9 @@
 	--primary: #01a9ac;
 	--primary-hover: #019598;
 	--primary-darker: #007f82;
+	--secondary:#0d6efd;
+	--secondary-hover:#3987fc;
+	--secondary-darker:#0c5ace;
 	--dark-gray: #3d3d3d;
 	--almost-black: #312f2f;
 	--almost-black-darker: #242222;
@@ -47,7 +50,8 @@ a:hover {
 }
 
 p {
-	font-size: 13px;
+	font-size: 14px;
+	margin-bottom: 0.5rem;
 }
 
 .form-control {
@@ -103,8 +107,14 @@ ul {
 	border-bottom-color: #ccc;
 }
 
-table.dataTable {
+ table.dataTable.table.dataTable {
     border-spacing: 0;
+	margin-top: 20px !important;
+	margin-bottom: 20px !important;
+}
+
+.dropdown-menu {
+	padding: 5px 0;
 }
 
 .dataTable thead th {
@@ -309,7 +319,7 @@ form#form_candidatura button.btn-primary {
 
 .alert {
 	font-size: 15px;
-	margin-bottom: 2rem;
+	margin-bottom: 1.5rem;
 }
 
 .login-block {
@@ -378,6 +388,10 @@ footer.sticky-footer {
 	padding-right: 0rem;
 }
 
+.container{
+	background: transparent;
+}
+
 .navbar.navbar-expand.navbar-light.bg-white.topbar.mb-4.static-top.shadow {
 	margin-bottom: 0rem !important;
 }
@@ -407,7 +421,7 @@ footer.sticky-footer {
 }
 
 .table .btn-square, .table .badge {
-    font-size: 10px;
+    font-size: 12px;
 }
 
 /* GruposVagas/index Ações dropdown-menu */
@@ -418,4 +432,101 @@ footer.sticky-footer {
 /* Vagas resultados, mantem input pesquisa fora do scroll */
 .dt-responsive.table-responsive > div.dataTables_wrapper div.row {
 	overflow-x: auto;
+}
+
+/* Novas adaptações SEPLAG */
+.logo {
+	color: var(--primary-darker);
+}
+
+input[type="radio"].form-check-input:checked, input[type="checkbox"].form-check-input:checked  {
+	border-color: var(--primary);
+	background-color: var(--primary-darker);
+}
+
+form section div.row{
+	margin-bottom:1rem;
+}
+
+form section div.row div.col label:not(.form-check-label){
+	font-weight:600;
+}
+
+.btn-secondary {
+	background-color:var(--secondary);
+	border-color:var(--secondary);
+	color:#fff;
+}
+
+.btn-secondary:hover {
+	background-color:var(--secondary-hover);
+	border-color:var(--secondary-hover);
+	color:#fff;
+}
+
+.btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show>.btn-secondary.dropdown-toggle {
+	background-color:var(--secondary-darker);
+	border-color:var(--secondary-darker);
+	color:#fff;
+}
+
+.btn-secondary:focus {
+	background-color:var(--secondary-darker);
+	border-color:var(--secondary-darker);
+	color:#fff;
+}
+
+.table>:not(:last-child)>:last-child>* {
+	border-bottom-color: #ccc;
+}
+
+hr:not([size]) {
+	height:0;
+}
+
+.avaliacao-tabs button.tablinks {
+	padding: 15px 10px;
+}
+
+.avaliacao-tabs button.tablinks:hover {
+	background-color:var(--almost-black);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+	background-color: #fff;
+	color: #444;
+	padding: .375rem .75rem;
+    height: calc(1.5em + .75rem + 2px);
+}
+
+.form-label {
+	font-weight: 500;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+	font-weight:500;
+}
+
+.pagination {
+	justify-content: flex-end;
+}
+
+.table-responsive {
+	overflow-x: hidden;
+}
+
+.btn-outline-primary{
+	color: var(--primary);
+	border: 1px solid var(--primary);
+}
+
+.wizard ul, .tabcontrol ul .wizard ul, .tabcontrol ul{
+	margin-left: -0.5rem !important;
+	margin-right: -0.5rem !important;
+}
+
+.btn-outline-primary.disabled, .btn-outline-primary:disabled{
+	color: #c4c4c5;
+	background-color: #5a5c69;
+	border: 1px solid #5a5c69;
 }

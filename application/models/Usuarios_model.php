@@ -34,7 +34,7 @@ class Usuarios_model extends CI_Model {
                 if($query -> num_rows() == 1 && ($id != '' || $cpf != '')){
                         return $query -> row();
                 }
-                else if($query -> num_rows() > 1){
+                else if($query -> num_rows() >= 1){
                         return $query -> result();
                 }
                 else{
@@ -83,7 +83,7 @@ class Usuarios_model extends CI_Model {
                 if($query -> num_rows() == 1){
                         $row = $query -> row();
                         if($row -> in_erros > 3){
-                                $this -> session -> set_userdata('erro', 'Essa conta está bloqueada por muitas tentativas de acesso sem sucesso!');
+                                $this -> session -> set_userdata('erro', 'Essa conta está bloqueada por muitas tentativas de acesso sem sucesso. Para desbloquear sua conta, entre em contato pelo <a href=\"https://www.mg.gov.br/transforma-minas/fale-conosco\">Fale Conosco</a>');
                                 return NULL;
                         }
                         else if($row -> bl_removido == '1'){

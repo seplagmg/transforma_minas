@@ -484,7 +484,7 @@ $(document).ready(function() {
         ).draw();
     }
     $('#search-api').DataTable();
-
+    
     $('input.global_filter').on('keyup click', function() {
         filterGlobal();
     });

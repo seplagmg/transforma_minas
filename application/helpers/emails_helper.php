@@ -10,13 +10,13 @@ function getEmailEnvConfigs()
         'mailtype' => "html",
         'protocol' => "smtp",
         'smtp_auth' => true,
-        
+
         'smtp_host' => $_SERVER['ENV_SMTP_HOST'],
         'smtp_port' => $_SERVER['ENV_SMTP_PORT'],
         'smtp_user' => $_SERVER['ENV_SMTP_USER'],
         'smtp_pass' => $_SERVER['ENV_SMTP_PASS'],
     );
-    
+
 
     return $config;
 }
@@ -255,13 +255,12 @@ function loadAgendamentoDeEntrevistaHtml(
     $teste_hora,
     $documentacao
 ) {
-    if($tipoEntrevista == 'competencia'){
+    if ($tipoEntrevista == 'competencia') {
         $template = readTemplateFile("agendamentoDeEntrevista.html");
-    }
-    else{
+    } else {
         $template = readTemplateFile("agendamentoDeEntrevista2.html");
     }
-    
+
 
     $data_array = array(
         ":titulo" => $titulo,
@@ -405,7 +404,8 @@ function loadParticipacaoEmEntrevistaCanceladaHtml(
     return strtr($template, $data_array);
 }
 
-function loadChangeName($nome){
+function loadChangeName($nome)
+{
     $template = readTemplateFile("mudancaNome.html");
     $data_array = array(
         ":nome" => $nome

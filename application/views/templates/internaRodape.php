@@ -172,7 +172,7 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/transforma-minas-datetimepicker.css') ?>" />
     <?php endif ?>
 
-    <?php if(isset($adicionais['rangeslider'])): // Questoes/create ?>
+    <?php if(isset($adicionais['rangeslider'])): // Questoes/create?>
         <script type="text/javascript" src="<?= base_url('bower_components\seiyria-bootstrap-slider\js\bootstrap-slider.js') ?>"></script>
     <?php endif ?>
 
@@ -214,7 +214,7 @@
         if(isset($js)) {
             echo $js;
         }
-    ?>
+							?>
 </body>
 
 </html>

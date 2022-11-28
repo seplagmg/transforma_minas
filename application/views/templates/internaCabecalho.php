@@ -191,7 +191,7 @@ if (in_array($this->session->perfil, array_keys($perfilTypes))) {
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <?php if($this->session->perfil == "candidato"): //candidato ?>
+                                <?php if($this->session->perfil == "candidato"): //candidato?>
                                     <a class="dropdown-item" href="<?= base_url('Candidatos/index') ?>">
                                         <i class="fa fa-user"></i> Seus dados
                                     </a>
